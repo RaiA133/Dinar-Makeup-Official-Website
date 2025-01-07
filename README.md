@@ -1,4 +1,6 @@
-# Di Mohon jangan PUSH Langsung ke Branch "master"
+## Di Mohon jangan PUSH Langsung ke Branch "master" / "development"
+
+<br><br>
 
 ## Cara Branching (BackEnd)
 
