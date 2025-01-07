@@ -1,22 +1,22 @@
 ## Di Mohon jangan PUSH Langsung ke Branch "master" / "development"
 
-<br><br>
+<br>
 
-## Cara Branching (BackEnd)
+## Cara Branching (Backend)
 
 - Jika kamu bermaksud untuk meng-_improve_ atau memperbaharui
 
-  > `git checkout -b "improvement/apa-yang-di-improve`
+  > `git checkout -b "BE/improvement/apa-yang-di-improve`
 
 - Jika kamu bermaksud untuk _Bug Fixing_
 
-  > `git checkout -b "bugfix/apa-yang-di-fix`
+  > `git checkout -b "BE/bugfix/apa-yang-di-fix`
 
 - Jika kamu bermaksud untuk menambah _Feature_
 
-  > `git checkout -b "feature/fitur-apa-yang-di-buat`
+  > `git checkout -b "BE/feature/fitur-apa-yang-di-buat`
 
-## Cara Branching (FrontEnd)
+## Cara Branching (Frontend)
 
 - Jika kamu bermaksud untuk meng-_improve_ atau memperbaharui
 
