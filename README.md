@@ -1,14 +1,3 @@
-# # FINAL PROJECT | RAKAMIN ACADEMY | FSWD-5B
-
-## Kelompok 1
-
-- Raie Aswajjillah
-- Affan Maulana Zulkarnain
-- Muhammad Ikhsan Supriadi
-- Iffat Nabil Wiridana
-- Holid Muhamad Salman
-- Hadiyantrama Oscar Santoso
-
 ```bash
 npm install
 ```
