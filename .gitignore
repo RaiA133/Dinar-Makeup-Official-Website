@@ -1,0 +1,18 @@
+/node_modules
+.env
+/config/config.json
+assets/img/users/*.png
+assets/img/users/*.jpg
+assets/img/users/*.jpeg
+assets/img/users/*.gif
+
+# posisi ini harus dibawah assets/img/users/*.png
+!assets/img/users/default.png 
+
+assets/img/user_postingan/*.png
+assets/img/user_postingan/*.jpg
+assets/img/user_postingan/*.jpeg
+assets/img/user_postingan/*.gif
+
+# posisi ini harus dibawah assets/img/user_postingan/*.png
+!assets/img/user_postingan/default.png
