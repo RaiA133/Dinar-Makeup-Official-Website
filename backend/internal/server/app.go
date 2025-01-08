@@ -58,10 +58,10 @@ func (s *Server) Bootstrap() error {
 
 	// -----------------------------------------------------------------------------------------------------------
 	// setup routes
-	apiV1 := s.app.Group("/api/v1")
+	apiV1 := s.app.Group("/api")
 	{
 		// group user routes
-		userGroup := apiV1.Group("/user")
+		userGroup := apiV1.Group("/v1")
 		{
 			userRoute.MapAuthRoutes(userGroup, authController)
 			userRoute.MapUserRoutes(userGroup, usrController, middlewareManager)
