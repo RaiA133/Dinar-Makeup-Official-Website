@@ -2,8 +2,10 @@ package dto
 
 // Model DTO create new user
 type UserRegisterRequest struct {
-	Email     string `json:"email" validate:"required,max=100,email"`
-	Password  string `json:"password" validate:"required,min=8,max=100"`
+	Name     string `json:"name" validate:"required,max=100,alpha"`
+	Username string `json:"username" validate:"required,max=100,alpha"`
+	Email    string `json:"email" validate:"required,max=100,email"`
+	Password string `json:"password" validate:"required,min=8,max=100"`
 }
 
 // UserLoginRequest Model DTO login new user

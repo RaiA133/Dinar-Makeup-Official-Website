@@ -38,13 +38,16 @@ func (ac *authController) RegisterNewUser() gin.HandlerFunc {
 		if err := utils.ReadRequest(ctx, request, binding.JSON); err != nil {
 			utils.LogErrorResponse(ctx, ac.logger, err)
 			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
+			return
 		}
 
 		// register new user
 		entityUser := &model.User{
+			Name:     request.Name,
+			Username: request.Username,
 			Email:    request.Email,
 			Password: request.Password,
-			Avatar: "https://res.cloudinary.com/dyominih0/image/upload/v1697817852/default-avatar-icon-of-social-media-user-vector_p8sqa6.jpg",
+			Avatar:   "https://res.cloudinary.com/dyominih0/image/upload/v1697817852/default-avatar-icon-of-social-media-user-vector_p8sqa6.jpg",
 		}
 
 		userResponse, err := ac.service.Register(context.Background(), entityUser)
@@ -57,8 +60,9 @@ func (ac *authController) RegisterNewUser() gin.HandlerFunc {
 		ctx.JSON(http.StatusCreated, dto.ApiUserResponse{
 			Status:  http.StatusCreated,
 			Message: "Created",
-			Data:    gin.H{
-				"id": userResponse.Id,
+			
+			Data: gin.H{
+				"id":    userResponse.Id,
 				"email": userResponse.Email,
 			},
 		})
