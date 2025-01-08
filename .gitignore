@@ -1,0 +1,6 @@
+.env
+
+views/
+node_modules/
+config/
+
