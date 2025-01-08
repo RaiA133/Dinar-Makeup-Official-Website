@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+
+  app:
+    container_name: go-clean-architecture
+    image: "go-clean-architecture:0.0.1"
+    build:
+      context: ./
+      dockerfile: docker/Dockerfile
+    ports:
+      - "5000:5000"
+    restart: always
+    environment:
+      - config=docker
+    depends_on:
+      - postgresql
+      - redis
+    networks:
+      - web-api
+
+  postgresql:
+    image: postgres:16-alpine
+    container_name: api_postgresql
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=db_20102024
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    networks:
+      - web-api
+
+  redis:
+    image: redis:6.0.9-alpine
+    container_name: api_redis
+    ports:
+      - "6381:6379"
+    restart: always
+    networks:
+      - web-api
+
+
+volumes:
+  postgres-db-volume:
+
+networks:
+  web-api:
+    driver: "bridge"
