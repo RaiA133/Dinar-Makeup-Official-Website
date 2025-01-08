@@ -22,12 +22,11 @@ type JwtToken struct {
 // UserResponse Model DTO response user
 type UserResponse struct {
 	Id          uuid.UUID `json:"id"`
-	FirstName   string    `json:"first_name"`
-	LastName    string    `json:"last_name"`
+	Name        string    `json:"name"`
+	Username    string    `json:"username"`
 	Email       string    `json:"email"`
 	Password    string    `json:"password"`
 	Avatar      string    `json:"avatar"`
-	City        string    `json:"city"`
 	PhoneNumber string    `json:"phone_number"`
 	CreatedAt   int64     `json:"created_at"`
 	UpdatedAt   int64     `json:"updated_at"`

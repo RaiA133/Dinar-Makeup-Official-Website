@@ -47,7 +47,7 @@ func (u *userService) GetCurrentUser(ctx context.Context, id string) (*dto.UserR
 
 	cacheGetUser, err := u.rdRepo.Get(ctx, utils.GetRedisKey(basePrefix, id))
 	if err != nil {
-		return nil, httpErrors.NewInternalServerError(errors.Wrap(err, "UserService.GetCurrentUser.GetCache"))
+		u.logger.WithError(err).Debug("UserService.GetCurrentUser.redisRepo.Get")
 	}
 
 	if cacheGetUser != nil {
