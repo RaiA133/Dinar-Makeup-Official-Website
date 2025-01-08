@@ -58,10 +58,10 @@ function LoginPage() {
                     e.target.email.value,
                     e.target.password.value
                   );
-                  if (response.status[0] === 200) {
+                  if (response.status === 200) {
                     const successMessage = response.message;
                     window.localStorage.setItem('toastMessage', successMessage);
-                    window.localStorage.setItem("token", response.token);
+                    window.localStorage.setItem("token", response.jwt.access_Token);
                     navigate("/")
                   }
                 }

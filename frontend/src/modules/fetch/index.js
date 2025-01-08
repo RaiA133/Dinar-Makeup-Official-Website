@@ -47,7 +47,7 @@ async function login(email, password) {
     const response = await instance.post("/login", { email, password });
     return response.data;
   } catch (error) {
-    throw new Error(error.response.data.message || "Something went wrong");
+    throw new Error(error.message || "Something went wrong");
   }
 }
 

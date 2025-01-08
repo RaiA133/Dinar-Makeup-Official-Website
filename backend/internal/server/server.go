@@ -15,6 +15,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
+	"github.com/rs/cors"
 )
 
 const (
@@ -53,14 +54,23 @@ func NewServer(config *ServerConfig) *Server {
 
 // running server with SLL/TLS or not
 func (s *Server) Run() error {
+	// Create a CORS middleware with appropriate settings
+	corsMiddleware := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"}, // Adjust this to restrict allowed origins
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+	})
+
+	// Wrap the app handler with CORS middleware
 	server := http.Server{
 		Addr:         fmt.Sprintf("%s:%d", s.cfg.Server.Host, s.cfg.Server.Port),
 		ReadTimeout:  time.Second * s.cfg.Server.ReadTimeout,
 		WriteTimeout: time.Second * s.cfg.Server.WriteTimeout,
-		Handler:      s.app,
+		Handler:      corsMiddleware.Handler(s.app), // Apply CORS here
 	}
 
-	// setup semua komponen aplikasi
+	// Rest of the method remains unchanged
 	if err := s.Bootstrap(); err != nil {
 		return errors.Wrap(err, "Server.Run.Bootstrap")
 	}
