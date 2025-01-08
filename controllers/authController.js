@@ -51,7 +51,6 @@ class authController {
     }
   }
 
-
   // halaman LOGIN | GET, POST & UPDATE data user
   static login(req, res, next) {
     const { email, password } = req.body
