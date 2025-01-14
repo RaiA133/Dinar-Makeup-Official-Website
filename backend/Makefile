@@ -32,6 +32,10 @@ develop:
 
 # ==============================================================================
 # Go migrate postgresql
+
+sql:
+	migrate create -ext sql -dir migrations -seq $(name)
+
 migrate_up:
 	migrate -database=postgres://postgres:postgres@localhost:5444/db_20102024?sslmode=disable -path=migrations up
 
