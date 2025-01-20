@@ -9,6 +9,10 @@ import (
 	userRoute "github.com/RianIhsan/wedding-organizer-be/internal/user/controller/http"
 	userController "github.com/RianIhsan/wedding-organizer-be/internal/user/controller/http"
 	"github.com/gin-gonic/gin"
+	productRepository "github.com/RianIhsan/wedding-organizer-be/internal/products/repository"
+	productService "github.com/RianIhsan/wedding-organizer-be/internal/products/service"
+	productController "github.com/RianIhsan/wedding-organizer-be/internal/products/controller/http"
+	productRoute "github.com/RianIhsan/wedding-organizer-be/internal/products/controller/http"
 )
 
 func (s *Server) Bootstrap() error {
@@ -16,7 +20,7 @@ func (s *Server) Bootstrap() error {
 	// create a new instance repositories
 	userPostgresRepo := userRepository.NewUserPostgresRepository(s.db)
 	userRedisRepo := userRepository.NewUserRedisRepository(s.redisClient)
-
+	productPostgresRepo := productRepository.NewProductPostgresRepository(s.db)
 	// -----------------------------------------------------------------------------------------------------------
 	// create a new instance services
 	authSV := userService.NewAuthService(&userService.ServiceConfig{
@@ -28,6 +32,11 @@ func (s *Server) Bootstrap() error {
 		Logger:                 s.logger,
 		UserPostgresRepository: userPostgresRepo,
 		UserRedisRepository:    userRedisRepo,
+	})
+	productSV := productService.NewProductService(&productService.ServiceConfig{
+		PgRepo: productPostgresRepo,
+		Config: s.cfg,
+		Logger: s.logger,
 	})
 
 	
@@ -43,6 +52,11 @@ func (s *Server) Bootstrap() error {
 		Config:      s.cfg,
 		Logger:      s.logger,
 		UserService: userSV,
+	})
+	productController := productController.NewProductController(&productController.ControllerConfig{
+		Config:         s.cfg,
+		Logger: 	   s.logger,
+		ProductService: productSV,
 	})
 
 
@@ -65,6 +79,12 @@ func (s *Server) Bootstrap() error {
 		{
 			userRoute.MapAuthRoutes(userGroup, authController)
 			userRoute.MapUserRoutes(userGroup, usrController, middlewareManager)
+			
+		}
+		// group product routes
+		productGroup := apiV1.Group("/v1")
+		{
+			productRoute.MapProductRoutes(productGroup, productController)
 		}
 
 	}
