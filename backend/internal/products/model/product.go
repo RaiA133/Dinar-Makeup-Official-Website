@@ -9,7 +9,7 @@ type Product struct {
 	Description string         `gorm:"column:description"`
 	CreatedAt   int64          `gorm:"column:created_at;autoCreateTime:milli;<-:create"`
 	UpdatedAt   int64          `gorm:"column:updated_at;autoCreateTime:milli;autoUpdateTime:milli"`
-	DeletedAt   *int64         `gorm:"column:delete_at"`
+	DeletedAt   *int64         `gorm:"column:deleted_at"`
 	Images      []ProductImage `gorm:"foreignKey:ProductId;references:Id"`
 }
 
