@@ -82,3 +82,26 @@ func (pc *productController) GetProducts() gin.HandlerFunc {
 		})
 	}
 }
+
+func (pc *productController) GetProduct() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		id := ctx.Param("id")
+		parseUUID, err := utils.ParseUUID(id)
+		if err != nil {
+			utils.LogErrorResponse(ctx, pc.logger, err)
+			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
+			return
+		}
+		product, err := pc.service.GetProduct(context.Background(), parseUUID)
+		if err != nil {
+			utils.LogErrorResponse(ctx, pc.logger, err)
+			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
+			return
+		}
+		ctx.JSON(http.StatusOK, dto.ApiProductResponse{
+			Status: http.StatusOK,
+			Message: "Success",
+			Data: product,
+		})
+	}
+}

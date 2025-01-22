@@ -9,6 +9,7 @@ import (
 	"github.com/RianIhsan/wedding-organizer-be/internal/products/model/dto"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/httpErrors"
 	"github.com/pkg/errors"
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 )
 
@@ -56,4 +57,17 @@ func (p *productService) GetProducts(ctx context.Context) ([]dto.GetGetProductsR
 
 	}
 	return products, nil
+}
+
+func (p *productService) GetProduct(ctx context.Context, id uuid.UUID) (*dto.GetGetProductsResponse, error) {
+	getProduct, err := p.pgRepo.FindById(ctx, &model.Product{Id: id})
+	if err != nil {
+		return nil, httpErrors.NewInternalServerError(errors.Wrap(err, "ProductService.GetProduct.FindById"))
+	}
+	response := dto.GetGetProductsResponse{
+		Id:    getProduct.Id,
+		Name:  getProduct.Name,
+		Price: getProduct.Price,
+	}
+	return &response, nil
 }
