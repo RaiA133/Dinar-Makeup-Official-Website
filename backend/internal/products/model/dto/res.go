@@ -1,6 +1,10 @@
 package dto
 
-import "github.com/google/uuid"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type CreateProductResponse struct {
 	Id    uuid.UUID `json:"id"`
@@ -12,6 +16,15 @@ type GetGetProductsResponse struct {
 	Id    uuid.UUID `json:"id"`
 	Name  string    `json:"name"`
 	Price int64     `json:"price"`
+}
+
+type GetProductResponse struct {
+	Id          uuid.UUID `json:"id"`
+	Name        string    `json:"name"`
+	Price       int64     `json:"price"`
+	Description string    `json:"description"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
 type ApiProductResponse struct {

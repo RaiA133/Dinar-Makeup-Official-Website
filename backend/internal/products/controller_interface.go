@@ -5,4 +5,5 @@ import "github.com/gin-gonic/gin"
 type ProductController interface {
 	CreateProduct() gin.HandlerFunc
 	GetProducts() gin.HandlerFunc
+	GetProduct() gin.HandlerFunc
 }
