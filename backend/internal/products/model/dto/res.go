@@ -32,3 +32,9 @@ type ApiProductResponse struct {
 	Message string      `json:"message"`
 	Data    interface{} `json:"data,omitempty"`
 }
+
+
+
+type UpdateProductResponse struct {
+	Id          uuid.UUID `json:"id"`
+}

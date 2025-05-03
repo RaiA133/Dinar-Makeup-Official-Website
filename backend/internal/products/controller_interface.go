@@ -6,4 +6,5 @@ type ProductController interface {
 	CreateProduct() gin.HandlerFunc
 	GetProducts() gin.HandlerFunc
 	GetProduct() gin.HandlerFunc
+	UpdateProduct() gin.HandlerFunc
 }
