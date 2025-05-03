@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { register } from "../modules/fetch";
+// import { register } from "../modules/fetch";
 import toast, { Toaster } from 'react-hot-toast';
 
 function RegisterPage() {
@@ -89,10 +89,10 @@ function RegisterPage() {
 
             <form onSubmit={handleSubmit} >
 
-              <div className="form-control w-full max-w-xs">
+              <div className="form-control w-full">
                 <label className="label"><span className="label-text">Name</span></label>
                 <input 
-                  className="input input-bordered w-full max-w-xs" 
+                  className="input input-bordered w-full" 
                   type="text" 
                   name="name" 
                   placeholder="Name"
@@ -101,10 +101,10 @@ function RegisterPage() {
                   />
               </div>
 
-              <div className="form-control w-full max-w-xs">
+              <div className="form-control w-full mt-4">
                 <label className="label"><span className="label-text">Username</span></label>
                 <input 
-                  className="input input-bordered w-full max-w-xs" 
+                  className="input input-bordered w-full" 
                   type="text" 
                   name="username" 
                   placeholder="Username"
@@ -113,10 +113,10 @@ function RegisterPage() {
                   />
               </div>
 
-              <div className="form-control w-full max-w-xs">
+              <div className="form-control w-full mt-4">
                 <label className="label"><span className="label-text">Email</span></label>
                 <input 
-                  className="input input-bordered w-full max-w-xs" 
+                  className="input input-bordered w-full" 
                   type="email" 
                   name="email" 
                   placeholder="Email"
@@ -125,10 +125,10 @@ function RegisterPage() {
                 />
               </div>
 
-              <div className="form-control w-full max-w-xs">
+              <div className="form-control w-full mt-4">
                 <label className="label"><span className="label-text">Password</span></label>
                 <input
-                  className="input input-bordered w-full max-w-xs"
+                  className="input input-bordered w-full"
                   type={showPassword ? 'text' : 'password'}
                   onChange={(e) => setPassword(e.target.value)}
                   value={password}
@@ -143,10 +143,10 @@ function RegisterPage() {
                 </label>
               </div>
 
-              <div className="form-control w-full max-w-xs">
+              <div className="form-control w-full mt-4">
                 <label className="label"><span className="label-text">Confirm Password</span></label>
                 <input
-                  className="input input-bordered w-full max-w-xs"
+                  className="input input-bordered w-full"
                   type={showConfirmPassword ? 'text' : 'password'}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   value={confirmPassword}
@@ -165,15 +165,11 @@ function RegisterPage() {
               </div>
 
               <div className="card-actions justify-center mt-4">
-                <button className="btn btn-primary w-80" type="submit">Register</button>
+                <button className="btn btn-primary w-full" type="submit">Register</button>
                 <p className='text-sm text-center'>Already have account ?
                   <span className='underline text-sky-600 decoration-sky-600 ms-1' style={{ cursor: 'pointer' }} onClick={() => navigate("/login")}>Login</span>
                 </p>
               </div>
-                <p className='text-sm text-center mt-1'>
-                  <span className='underline text-sky-600 decoration-sky-600 ms-1' style={{ cursor: 'pointer' }} onClick={() => navigate("/verify-email/resend")}>Resend Email Verification</span>
-                </p>
-
             </form>
 
           </div>

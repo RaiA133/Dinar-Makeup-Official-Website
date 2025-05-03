@@ -1,21 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { resendVerifyUserEmail } from "../modules/fetch";
+// import { login } from "../modules/fetch";
 import toast, { Toaster } from 'react-hot-toast';
 
-function ResendVerificationPage() {
+function LoginPage() {
   const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   // toast akan muncul jika sesi login jwt berhakhir | ubah JWT_EXPIRED_TIME di .env untuk test
   useEffect(() => {
     const toastMessage = localStorage.getItem('toastMessage')
-    if (toastMessage) {
+    if (toastMessage && toastMessage !== "Email verifikasi terkirim, cek email anda") {
       toast.error(toastMessage, {
         duration: 2500,
       });
       localStorage.removeItem('toastMessage');
-    } 
-  }, []); 
+    }
+    if (toastMessage == "Email verifikasi terkirim, cek email anda") {
+      toast.success(toastMessage, {
+        duration: 2500,
+      });
+      localStorage.removeItem('toastMessage');
+    }
+  }, []);
 
   return (
     <div className='px-0'>
@@ -33,7 +41,7 @@ function ResendVerificationPage() {
 
           <div className="card-body gap-0">
             <div className="card-actions justify-between mb-5">
-              <h2 className="card-title text-2xl">Resend Email Verification</h2>
+              <h2 className="card-title text-2xl">Login</h2>
               <button className="btn btn-square btn-sm" onClick={() => navigate("/")}>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
@@ -46,13 +54,15 @@ function ResendVerificationPage() {
 
                 e.preventDefault();
                 try {
-                  const response = await resendVerifyUserEmail(
+                  const response = await login(
                     e.target.email.value,
+                    e.target.password.value
                   );
-                  if (response.status[0] === 200) {
+                  if (response.status === 200) {
                     const successMessage = response.message;
                     window.localStorage.setItem('toastMessage', successMessage);
-                    navigate("/login")
+                    window.localStorage.setItem("token", response.jwt.access_Token);
+                    navigate("/")
                   }
                 }
                 catch (error) {
@@ -64,26 +74,45 @@ function ResendVerificationPage() {
               }}
             >
 
-              <div className="form-control w-full max-w-xs">
+              <div className="form-control w-full">
                 <label className="label"><span className="label-text">Email</span></label>
                 <input
-                  className="input input-bordered w-full max-w-xs"
+                  className="input input-bordered w-full"
                   type="email"
                   name="email"
                   placeholder="Your Email"
                 />
               </div>
 
+              <div className="form-control w-full mt-4">
+                <label className="label"><span className="label-text">Password</span></label>
+                <input
+                  className="input input-bordered w-full"
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  autoComplete=''
+                  placeholder="Your Password"
+                  required
+                />
+                <label className="label place-content-end">
+                  <a onClick={togglePasswordVisibility} className="label-text-alt text-xs underline" style={{ cursor: 'pointer' }}>
+                    {showPassword ? 'Hide Password' : 'Show Password'}
+                  </a>
+                </label>
+              </div>
 
               <div className="card-actions justify-center mt-4">
                 <button
-                  className="btn btn-primary w-80"
+                  className="btn btn-primary w-full"
                   type="submit"
                   form="login-form"
                 >Login</button>
-                <p className='text-sm text-center'>Dont have account ?
-                  <span className='underline text-sky-600 decoration-sky-600 ms-1' style={{ cursor: 'pointer' }} onClick={() => navigate("/register")}>Register</span>
-                </p>
+                <div className='text-center'>
+                  <p className='text-sm text-center'>Dont have account ?
+                    <span className='underline text-sky-600 decoration-sky-600 ms-1' style={{ cursor: 'pointer' }} onClick={() => navigate("/register")}>Register</span>
+                  </p>
+                  <span className='underline text-sky-600 decoration-sky-600 ms-1' style={{ cursor: 'pointer' }} onClick={() => navigate("/forgot-password")}>Forgot Password ?</span>
+                </div>
               </div>
 
             </form>
@@ -96,4 +125,4 @@ function ResendVerificationPage() {
   )
 }
 
-export default ResendVerificationPage
+export default LoginPage
