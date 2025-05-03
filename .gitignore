@@ -3,6 +3,7 @@
 views/
 node_modules/
 config/
+_backup/
 
 /config/config.json
 assets/img/users/*.png
