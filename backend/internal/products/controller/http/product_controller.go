@@ -55,7 +55,7 @@ func (pc *productController) CreateProduct() gin.HandlerFunc {
 			return
 		}
 		ctx.JSON(http.StatusCreated, dto.ApiProductResponse{
-			Status: http.StatusCreated,
+			Status:  http.StatusCreated,
 			Message: "Created",
 			Data: gin.H{
 				"id":    productResp.Id,
@@ -66,7 +66,6 @@ func (pc *productController) CreateProduct() gin.HandlerFunc {
 	}
 }
 
-
 func (pc *productController) GetProducts() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		products, err := pc.service.GetProducts(context.Background())
@@ -76,9 +75,9 @@ func (pc *productController) GetProducts() gin.HandlerFunc {
 			return
 		}
 		ctx.JSON(http.StatusOK, dto.ApiProductResponse{
-			Status: http.StatusOK,
+			Status:  http.StatusOK,
 			Message: "Success",
-			Data: products,
+			Data:    products,
 		})
 	}
 }
@@ -99,9 +98,50 @@ func (pc *productController) GetProduct() gin.HandlerFunc {
 			return
 		}
 		ctx.JSON(http.StatusOK, dto.ApiProductResponse{
-			Status: http.StatusOK,
+			Status:  http.StatusOK,
 			Message: "Success",
-			Data: product,
+			Data:    product,
+		})
+	}
+}
+
+func (pc *productController) UpdateProduct() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		id := ctx.Param("id")
+		parseUUID, err := utils.ParseUUID(id)
+		if err != nil {
+			utils.LogErrorResponse(ctx, pc.logger, err)
+			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
+			return
+		}
+
+		request := new(dto.UpdateProductRequest)
+		if err := utils.ReadRequest(ctx, request, binding.JSON); err != nil {
+			utils.LogErrorResponse(ctx, pc.logger, err)
+			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
+			return
+		}
+
+		entitiyProduct := &model.Product{
+			Id:          parseUUID,
+			Name:        request.Name,
+			Price:       request.Price,
+			Description: request.Description,
+		}
+
+		updatedProduct, err := pc.service.UpdateProduct(context.Background(), entitiyProduct)
+		if err != nil {
+			utils.LogErrorResponse(ctx, pc.logger, err)
+			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
+			return
+		}
+
+		ctx.JSON(http.StatusOK, dto.ApiProductResponse{
+			Status:  http.StatusOK,
+			Message: "Updated",
+			Data: gin.H{
+				"id": updatedProduct.Id,
+			},
 		})
 	}
 }

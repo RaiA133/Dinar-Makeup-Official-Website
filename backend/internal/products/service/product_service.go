@@ -71,3 +71,31 @@ func (p *productService) GetProduct(ctx context.Context, id uuid.UUID) (*dto.Get
 	}
 	return &response, nil
 }
+
+func (p *productService) UpdateProduct(ctx context.Context, entity *model.Product) (*dto.UpdateProductResponse, error) {
+	getId, err := p.pgRepo.FindById(ctx, entity)
+	if err != nil {
+		return nil, httpErrors.NewInternalServerError(errors.Wrap(err, "ProductService.UpdateProduct.FindById"))
+	}
+
+	if getId.Name != "" {
+		getId.Name = entity.Name
+	}
+	if getId.Price != 0 {
+		getId.Price = entity.Price
+	}
+	if getId.Description != "" {
+		getId.Description = entity.Description
+	}
+	
+	updatedProduct, err := p.pgRepo.Update(ctx, getId)
+	if err != nil {
+		return nil, httpErrors.NewInternalServerError(errors.Wrap(err, "ProductService.UpdateProduct.Update"))
+	}
+
+	response := dto.UpdateProductResponse{
+		Id: updatedProduct.Id,
+
+	}
+	return &response, nil
+}

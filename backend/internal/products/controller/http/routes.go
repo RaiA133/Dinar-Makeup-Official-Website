@@ -9,4 +9,5 @@ func MapProductRoutes(productGroup *gin.RouterGroup, controller products.Product
 	productGroup.POST("/products", controller.CreateProduct())
 	productGroup.GET("/products", controller.GetProducts())
 	productGroup.GET("/products/:id", controller.GetProduct())
+	productGroup.PUT("/products/:id", controller.UpdateProduct())
 }

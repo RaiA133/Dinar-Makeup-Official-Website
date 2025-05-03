@@ -4,15 +4,20 @@ import (
 	"net/http"
 
 	"github.com/RianIhsan/wedding-organizer-be/internal/middleware"
-	userRepository "github.com/RianIhsan/wedding-organizer-be/internal/user/repository"
-	userService "github.com/RianIhsan/wedding-organizer-be/internal/user/service"
-	userRoute "github.com/RianIhsan/wedding-organizer-be/internal/user/controller/http"
-	userController "github.com/RianIhsan/wedding-organizer-be/internal/user/controller/http"
-	"github.com/gin-gonic/gin"
-	productRepository "github.com/RianIhsan/wedding-organizer-be/internal/products/repository"
-	productService "github.com/RianIhsan/wedding-organizer-be/internal/products/service"
 	productController "github.com/RianIhsan/wedding-organizer-be/internal/products/controller/http"
 	productRoute "github.com/RianIhsan/wedding-organizer-be/internal/products/controller/http"
+	productRepository "github.com/RianIhsan/wedding-organizer-be/internal/products/repository"
+	productService "github.com/RianIhsan/wedding-organizer-be/internal/products/service"
+	userController "github.com/RianIhsan/wedding-organizer-be/internal/user/controller/http"
+	userRoute "github.com/RianIhsan/wedding-organizer-be/internal/user/controller/http"
+	userRepository "github.com/RianIhsan/wedding-organizer-be/internal/user/repository"
+	userService "github.com/RianIhsan/wedding-organizer-be/internal/user/service"
+
+	galleryController "github.com/RianIhsan/wedding-organizer-be/internal/gallery/controller/http"
+	galleryRoute "github.com/RianIhsan/wedding-organizer-be/internal/gallery/controller/http"
+	galleryRepository "github.com/RianIhsan/wedding-organizer-be/internal/gallery/repository"
+	galleryService "github.com/RianIhsan/wedding-organizer-be/internal/gallery/service"
+	"github.com/gin-gonic/gin"
 )
 
 func (s *Server) Bootstrap() error {
@@ -21,6 +26,7 @@ func (s *Server) Bootstrap() error {
 	userPostgresRepo := userRepository.NewUserPostgresRepository(s.db)
 	userRedisRepo := userRepository.NewUserRedisRepository(s.redisClient)
 	productPostgresRepo := productRepository.NewProductPostgresRepository(s.db)
+	galleryPostgresRepo := galleryRepository.NewGalleryPostgresRepository(s.db)
 	// -----------------------------------------------------------------------------------------------------------
 	// create a new instance services
 	authSV := userService.NewAuthService(&userService.ServiceConfig{
@@ -38,8 +44,11 @@ func (s *Server) Bootstrap() error {
 		Config: s.cfg,
 		Logger: s.logger,
 	})
-
-	
+	gallerySV := galleryService.NewGalleryService(&galleryService.GalleryServiceConfig{
+		PgRepo: galleryPostgresRepo,
+		Config: s.cfg,
+		Logger: s.logger,
+	})
 
 	// -----------------------------------------------------------------------------------------------------------
 	// create a new instance controllers
@@ -55,10 +64,15 @@ func (s *Server) Bootstrap() error {
 	})
 	productController := productController.NewProductController(&productController.ControllerConfig{
 		Config:         s.cfg,
-		Logger: 	   s.logger,
+		Logger:         s.logger,
 		ProductService: productSV,
 	})
 
+	galleryController := galleryController.NewProductController(&galleryController.GalleryControllerConfig{
+		Config:         s.cfg,
+		Logger:         s.logger,
+		GalleryService: gallerySV,
+	})
 
 	// -----------------------------------------------------------------------------------------------------------
 	// create a new instance middleware
@@ -79,12 +93,18 @@ func (s *Server) Bootstrap() error {
 		{
 			userRoute.MapAuthRoutes(userGroup, authController)
 			userRoute.MapUserRoutes(userGroup, usrController, middlewareManager)
-			
+
 		}
 		// group product routes
 		productGroup := apiV1.Group("/v1")
 		{
 			productRoute.MapProductRoutes(productGroup, productController)
+		}
+
+		// group gallery routes
+		galleryGroup := apiV1.Group("/v1")
+		{
+			galleryRoute.MapGalleryRoutes(galleryGroup, galleryController)
 		}
 
 	}
