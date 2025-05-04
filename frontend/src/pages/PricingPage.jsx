@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import Weddings from '../components/Products/Wedings';
 import Makeups from '../components/Products/Makeups';
 
-function ProductPage() {
+function PricingPage() {
   const navigate = useNavigate()
 
 
@@ -20,4 +20,4 @@ function ProductPage() {
   )
 }
 
-export default ProductPage
+export default PricingPage

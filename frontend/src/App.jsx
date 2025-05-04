@@ -6,7 +6,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
 import HomePage from './pages/HomePage';
-import ProductPage from './pages/ProductPage';
+import PricingPage from './pages/PricingPage';
 import LoginPage from './pages/Auth/LoginPage';
 import RegisterPage from './pages/Auth/RegisterPage';
 import ForgotPasswordPage from './pages/Auth/ForgotPasswordPage';
@@ -37,7 +37,7 @@ function App() {
 
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<PageMotionWrapper><HomePage /></PageMotionWrapper>} />
-        <Route path="/product" element={<PageMotionWrapper><ProductPage /></PageMotionWrapper>} />
+        <Route path="/pricing" element={<PageMotionWrapper><PricingPage /></PageMotionWrapper>} />
         <Route path="/login" element={<PageMotionWrapper><LoginPage /></PageMotionWrapper>} />
         <Route path="/register" element={<PageMotionWrapper><RegisterPage /></PageMotionWrapper>} />
         <Route path="/forgot-password" element={<PageMotionWrapper><ForgotPasswordPage /></PageMotionWrapper>} />
