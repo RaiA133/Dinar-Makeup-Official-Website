@@ -24,36 +24,26 @@ function HomePage() {
             <p className="mb-5">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis laboriosam tenetur, repudiandae eum rerum quas distinctio fuga, hic autem quisquam possimus cupiditate neque nihil delectus est rem aliquam voluptatibus sequi quam dolorem explicabo assumenda! Facilis nemo excepturi cupiditate esse voluptate?
             </p>
-            <button onClick={() => navigate('/product')} className="btn px-12 btn-primary">Pilih Paket</button>
+            <button onClick={() => navigate('/pricing')} className="btn px-12 btn-primary">Pilih Paket</button>
             <div className="divider divider-warning"></div>
           </div>
         </div>
       </div>
 
       {/* About */}
-      <div className="mt-20 mx-20">
-        <About />
-      </div>
+      <About />
 
       {/* Gallery */}
-      <div className="mt-20 mx-20">
-        <Gallery />
-      </div>
+      <Gallery />
 
       {/* Pricing */}
-      <div className="mt-20 mx-20">
-        <Weddings />
-      </div>
+      <Weddings />
 
       {/* Rating */}
-      <div className="mt-20 mx-20">
-        <Rating />
-      </div>
+      <Rating />
 
       {/* Contact */}
-      <div className="mt-20 mx-20">
-        <Contact />
-      </div>
+      <Contact />
 
     </div>
   )

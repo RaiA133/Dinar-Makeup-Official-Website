@@ -1,10 +1,10 @@
 function Contact() {
   return (
-    <div>
+    <div className="mt-20 mx-1 sm:mx-20">
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
         <div className="p-2">
-          <div className="text-4xl font-semibold mb-2">About</div>
+          <div className="text-4xl font-semibold mb-2">Contact</div>
           <span className="">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, nam asperiores.
           </span>

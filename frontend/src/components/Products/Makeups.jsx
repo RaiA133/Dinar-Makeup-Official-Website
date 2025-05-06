@@ -1,10 +1,11 @@
 function Makeups() {
   return (
-    <>
-      <div className="divider mb-10"><span className="text-2xl sm:text-3xl lg:text-4xl xl-text-5xl">Makeups</span></div>
-      
+    <div className="mt-20 mx-1 sm:mx-20">
+
+    {location.pathname == "/pricing" && (<div className="divider text-3xl mb-10">Makeups</div>)}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-20">
-        
+
         <div className="card w-full bg-base-200 shadow-xl">
           <div className="card-body">
             <span className="badge badge-xs badge-warning">Most Popular</span>
@@ -123,7 +124,7 @@ function Makeups() {
         </div>
 
       </div>
-    </>
+    </div>
   )
 }
 

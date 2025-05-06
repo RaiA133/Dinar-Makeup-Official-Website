@@ -16,8 +16,12 @@ function Navbar() {
           <ul
             tabIndex={0}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-            <li><a onClick={() => navigate("/login")}>Login</a></li>
-            <li><a onClick={() => navigate("/register")}>Register</a></li>
+            <li><a onClick={() => navigate("/")} className={location.pathname == '/' ? 'menu-active' : ''}>Home</a></li>
+            <li><a onClick={() => navigate("/about")} className={location.pathname == '/about' ? 'menu-active' : ''}>About</a></li>
+            <li><a onClick={() => navigate("/gallery")} className={location.pathname == '/gallery' ? 'menu-active' : ''}>Gallery</a></li>
+            <li><a onClick={() => navigate("/pricing")} className={location.pathname == '/pricing' ? 'menu-active' : ''}>Pricing</a></li>
+            <li><a onClick={() => navigate("/rating")} className={location.pathname == '/rating' ? 'menu-active' : ''}>Rating</a></li>
+            <li><a onClick={() => navigate("/contact")} className={location.pathname == '/contact' ? 'menu-active' : ''}>Contact</a></li>
           </ul>
         </div>
         <a style={{ cursor: 'pointer' }} onClick={() => navigate("/")}>
@@ -26,11 +30,12 @@ function Navbar() {
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 gap-2">
-          <li><a onClick={() => navigate("/")} className={location.pathname == '/' ? 'menu-active' : '' }>Home</a></li>
-          <li><a onClick={() => navigate("/gallery")} className={location.pathname == '/gallery' ? 'menu-active' : '' }>Gallery</a></li>
-          <li><a onClick={() => navigate("/pricing")} className={location.pathname == '/pricing' ? 'menu-active' : '' }>Pricing</a></li>
-          <li><a onClick={() => navigate("/about")} className={location.pathname == '/about' ? 'menu-active' : '' }>About</a></li>
-          <li><a onClick={() => navigate("/contact")} className={location.pathname == '/contact' ? 'menu-active' : '' }>Contact</a></li>
+          <li><a onClick={() => navigate("/")} className={location.pathname == '/' ? 'menu-active' : ''}>Home</a></li>
+          <li><a onClick={() => navigate("/about")} className={location.pathname == '/about' ? 'menu-active' : ''}>About</a></li>
+          <li><a onClick={() => navigate("/gallery")} className={location.pathname == '/gallery' ? 'menu-active' : ''}>Gallery</a></li>
+          <li><a onClick={() => navigate("/pricing")} className={location.pathname == '/pricing' ? 'menu-active' : ''}>Pricing</a></li>
+          <li><a onClick={() => navigate("/rating")} className={location.pathname == '/rating' ? 'menu-active' : ''}>Rating</a></li>
+          <li><a onClick={() => navigate("/contact")} className={location.pathname == '/contact' ? 'menu-active' : ''}>Contact</a></li>
         </ul>
       </div>
       <div className="navbar-end">
