@@ -6,13 +6,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func MapProductRoutes(productGroup *gin.RouterGroup, controller products.ProductController, mw *middleware.MiddlewareManager) {
+func MapProductRoutes(router *gin.RouterGroup, controller products.ProductController, mw *middleware.MiddlewareManager) {
+	// Public routes (tanpa middleware auth)
+	router.GET("/products", controller.GetProducts())
+	router.GET("/products/:id", controller.GetProduct())
 
-	productGroup.Use(mw.AuthJwtMiddleware())
-	productGroup.POST("/products", controller.CreateProduct())
-	productGroup.GET("/products", controller.GetProducts())
-	productGroup.GET("/products/:id", controller.GetProduct())
-	productGroup.PUT("/products/:id", controller.UpdateProduct())
-
-	productGroup.POST("/products/:productId/images", controller.AddImageToProduct())
+	// Private routes (dengan middleware auth)
+	protected := router.Group("")
+	protected.Use(mw.AuthJwtMiddleware())
+	protected.POST("/products", controller.CreateProduct())
+	protected.PUT("/products/:id", controller.UpdateProduct())
+	protected.POST("/products/:productId/images", controller.AddImageToProduct())
 }
