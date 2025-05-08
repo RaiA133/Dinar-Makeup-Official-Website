@@ -2,9 +2,8 @@ package http
 
 import (
 	"context"
-	"net/http"
-
 	"github.com/RianIhsan/wedding-organizer-be/config"
+	"github.com/RianIhsan/wedding-organizer-be/internal/middleware"
 	"github.com/RianIhsan/wedding-organizer-be/internal/products"
 	"github.com/RianIhsan/wedding-organizer-be/internal/products/model"
 	"github.com/RianIhsan/wedding-organizer-be/internal/products/model/dto"
@@ -12,7 +11,11 @@ import (
 	"github.com/RianIhsan/wedding-organizer-be/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"net/http"
+	"path"
+	"strings"
 )
 
 type ControllerConfig struct {
@@ -43,12 +46,7 @@ func (pc *productController) CreateProduct() gin.HandlerFunc {
 			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
 			return
 		}
-		entitiyProduct := &model.Product{
-			Name:        request.Name,
-			Price:       request.Price,
-			Description: request.Description,
-		}
-		productResp, err := pc.service.CreateProduct(context.Background(), entitiyProduct)
+		productResp, err := pc.service.CreateProduct(context.Background(), request)
 		if err != nil {
 			utils.LogErrorResponse(ctx, pc.logger, err)
 			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
@@ -57,11 +55,7 @@ func (pc *productController) CreateProduct() gin.HandlerFunc {
 		ctx.JSON(http.StatusCreated, dto.ApiProductResponse{
 			Status:  http.StatusCreated,
 			Message: "Created",
-			Data: gin.H{
-				"id":    productResp.Id,
-				"name":  productResp.Name,
-				"price": productResp.Price,
-			},
+			Data:    productResp,
 		})
 	}
 }
@@ -84,6 +78,12 @@ func (pc *productController) GetProducts() gin.HandlerFunc {
 
 func (pc *productController) GetProduct() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		auth := middleware.GetAuth(ctx)
+		if auth.Role != "admin" {
+			utils.LogErrorResponse(ctx, pc.logger, errors.New("ACCESS DENIED!"))
+			ctx.JSON(httpErrors.ErrorResponse(ctx, errors.New("ACCESS DENIED!")))
+			return
+		}
 		id := ctx.Param("id")
 		parseUUID, err := utils.ParseUUID(id)
 		if err != nil {
@@ -142,6 +142,40 @@ func (pc *productController) UpdateProduct() gin.HandlerFunc {
 			Data: gin.H{
 				"id": updatedProduct.Id,
 			},
+		})
+	}
+}
+
+func (pc *productController) AddImageToProduct() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		productIdStr := ctx.Param("productId")
+		productId, err := utils.ParseUUID(productIdStr)
+		if err != nil {
+			utils.LogErrorResponse(ctx, pc.logger, err)
+			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
+			return
+		}
+
+		file, fileHeader, err := ctx.Request.FormFile("file")
+		if err != nil {
+			utils.LogErrorResponse(ctx, pc.logger, err)
+			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
+			return
+		}
+
+		ext := path.Ext(fileHeader.Filename)
+		fileName := strings.TrimSuffix(fileHeader.Filename, ext)
+
+		err = pc.service.AddImageToProduct(context.Background(), productId, file, fileName)
+		if err != nil {
+			utils.LogErrorResponse(ctx, pc.logger, err)
+			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
+			return
+		}
+
+		ctx.JSON(http.StatusOK, dto.ApiProductResponse{
+			Status:  http.StatusOK,
+			Message: "Image added successfully",
 		})
 	}
 }

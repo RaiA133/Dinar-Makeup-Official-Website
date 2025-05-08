@@ -1,6 +1,8 @@
 package server
 
 import (
+	"github.com/RianIhsan/wedding-organizer-be/pkg/cloudinary"
+	"github.com/pkg/errors"
 	"net/http"
 
 	"github.com/RianIhsan/wedding-organizer-be/internal/middleware"
@@ -27,6 +29,11 @@ func (s *Server) Bootstrap() error {
 	userRedisRepo := userRepository.NewUserRedisRepository(s.redisClient)
 	productPostgresRepo := productRepository.NewProductPostgresRepository(s.db)
 	galleryPostgresRepo := galleryRepository.NewGalleryPostgresRepository(s.db)
+
+	cldConfig, err := cloudinary.InitializeCloudinary(&s.cfg.Cloudinary)
+	if err != nil {
+		return errors.New("failed initialize cloudinary")
+	}
 	// -----------------------------------------------------------------------------------------------------------
 	// create a new instance services
 	authSV := userService.NewAuthService(&userService.ServiceConfig{
@@ -39,11 +46,16 @@ func (s *Server) Bootstrap() error {
 		UserPostgresRepository: userPostgresRepo,
 		UserRedisRepository:    userRedisRepo,
 	})
-	productSV := productService.NewProductService(&productService.ServiceConfig{
-		PgRepo: productPostgresRepo,
-		Config: s.cfg,
-		Logger: s.logger,
-	})
+	productSV := productService.NewProductService(
+		&productService.ServiceConfig{
+			PgRepo: productPostgresRepo,
+			Config: s.cfg,
+			Logger: s.logger,
+		},
+		cldConfig,
+		&s.cfg.Cloudinary,
+	)
+
 	gallerySV := galleryService.NewGalleryService(&galleryService.GalleryServiceConfig{
 		PgRepo: galleryPostgresRepo,
 		Config: s.cfg,
@@ -98,7 +110,7 @@ func (s *Server) Bootstrap() error {
 		// group product routes
 		productGroup := apiV1.Group("/v1")
 		{
-			productRoute.MapProductRoutes(productGroup, productController)
+			productRoute.MapProductRoutes(productGroup, productController, middlewareManager)
 		}
 
 		// group gallery routes

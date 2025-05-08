@@ -3,16 +3,17 @@ package middleware
 import (
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/httpErrors"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 )
 
 type auth struct {
 	Id    uuid.UUID
 	Email string
+	Role  string
 }
 
 // AuthJwtMiddleware is a middleware authentication request.
@@ -64,6 +65,7 @@ func (mw *MiddlewareManager) AuthJwtMiddleware() gin.HandlerFunc {
 		auth := &auth{
 			Id:    claims.ID,
 			Email: claims.Email,
+			Role:  claims.Role,
 		}
 		ctx.Set("auth", auth)
 

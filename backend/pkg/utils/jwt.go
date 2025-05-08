@@ -3,25 +3,26 @@ package utils
 import (
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/RianIhsan/wedding-organizer-be/config"
 	"github.com/RianIhsan/wedding-organizer-be/internal/user/model"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/httpErrors"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 )
 
 type Claim struct {
 	ID    uuid.UUID
 	Email string
+	Role  string
 	jwt.RegisteredClaims
 }
-
 
 func GenerateJwtToken(user *model.User, cfg *config.Config, expire time.Duration) (string, error) {
 	claims := Claim{
 		ID:    user.Id,
 		Email: user.Email,
+		Role:  user.Role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expire)),
 			Issuer:    "jwt",

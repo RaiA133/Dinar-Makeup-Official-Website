@@ -40,6 +40,12 @@ func (ac *authController) RegisterNewUser() gin.HandlerFunc {
 			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
 			return
 		}
+		var verifiedRole string
+		if request.Role == 1 {
+			verifiedRole = "admin"
+		} else if request.Role == 2 {
+			verifiedRole = "user"
+		}
 
 		// register new user
 		entityUser := &model.User{
@@ -47,6 +53,7 @@ func (ac *authController) RegisterNewUser() gin.HandlerFunc {
 			Username: request.Username,
 			Email:    request.Email,
 			Password: request.Password,
+			Role:     verifiedRole,
 			Avatar:   "https://res.cloudinary.com/dyominih0/image/upload/v1697817852/default-avatar-icon-of-social-media-user-vector_p8sqa6.jpg",
 		}
 
@@ -60,10 +67,11 @@ func (ac *authController) RegisterNewUser() gin.HandlerFunc {
 		ctx.JSON(http.StatusCreated, dto.ApiUserResponse{
 			Status:  http.StatusCreated,
 			Message: "Created",
-			
+
 			Data: gin.H{
 				"id":    userResponse.Id,
 				"email": userResponse.Email,
+				"role":  userResponse.Role,
 			},
 		})
 	}

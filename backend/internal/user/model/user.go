@@ -16,6 +16,7 @@ type User struct {
 	Password    string    `gorm:"column:password"`
 	PhoneNumber string    `gorm:"column:phone_number"`
 	Avatar      string    `gorm:"column:avatar"`
+	Role        string    `gorm:"column:role"`
 	CreatedAt   int64     `gorm:"column:created_at;autoCreateTime:milli;<-:create"` // allow read and create
 	UpdatedAt   int64     `gorm:"column:updated_at;autoCreateTime:milli;autoUpdateTime:milli"`
 }

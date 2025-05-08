@@ -35,6 +35,12 @@ aws:
   MinioSecretKey: qSHe9dzo0GlZtikQfrzH0ARiHOXojRcRYh3Q1sSk
   UseSSL: false
 
+cloudinary:
+  CloudName: dyominih0
+  APIKey: 587467277272875
+  APISecret: 4i5xGxc4z30AXgL10GMLQ5ynf70
+  FolderName: dinar-makeup
+
 #public MinIO cluster
 #aws:
 #  Endpoint: play.min.io

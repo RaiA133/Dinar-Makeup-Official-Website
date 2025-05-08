@@ -7,4 +7,7 @@ type ProductController interface {
 	GetProducts() gin.HandlerFunc
 	GetProduct() gin.HandlerFunc
 	UpdateProduct() gin.HandlerFunc
+
+	// AddImageToProduct Insert Image to product
+	AddImageToProduct() gin.HandlerFunc
 }

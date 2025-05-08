@@ -7,6 +7,7 @@ import (
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/pkg/errors"
 	"mime/multipart"
+	"time"
 )
 
 // InitializeCloudinary initializes the Cloudinary client
@@ -18,11 +19,12 @@ func InitializeCloudinary(cfg *config.CloudinaryConfig) (*cloudinary.Cloudinary,
 	return cld, nil
 }
 
-func UploadImage(cld *cloudinary.Cloudinary, file multipart.File, fileName string) (string, error) {
-
-	result, err := cld.Upload.Upload(context.Background(), file, uploader.UploadParams{
-		PublicID: fileName, // Optional: specify a public ID for the image
-		Folder:   "avatar", // Optional: specify a folder in Cloudinary
+func UploadImage(cld *cloudinary.Cloudinary, cfg *config.CloudinaryConfig, file multipart.File, fileName string) (string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	result, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{
+		PublicID: fileName,       // Optional: specify a public ID for the image
+		Folder:   cfg.FolderName, // Optional: specify a folder in Cloudinary
 	})
 	if err != nil {
 		return "", errors.Wrap(err, "upload image")
