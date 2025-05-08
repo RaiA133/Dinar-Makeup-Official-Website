@@ -1,0 +1,5 @@
+INSERT INTO "product_image" (product_id, image_url, created_at, updated_at) VALUES
+                                                                    ('09d2e8b7-6654-463c-b89d-8cda24543b5d', 'https://res.cloudinary.com/dyominih0/image/upload/v1746721137/dinar-makeup/banner/l5szf6adjv6jic5agn67.png', 1672531199,1672531199),
+                                                                    ('75896cf0-b853-4380-a77f-c9c759581f69', 'https://res.cloudinary.com/dyominih0/image/upload/v1746721145/dinar-makeup/banner/cbgpjfubjeuusvaljsk1.png', 1672531199,1672531199),
+                                                                    ('53f1c67d-7fdc-487f-be06-f6164c225359', 'https://res.cloudinary.com/dyominih0/image/upload/v1746721103/dinar-makeup/banner/vbk22qztgooghpelix1z.png', 1672531199,1672531199),
+                                                                    ('f9f8d2f1-d391-4266-8306-7c38dcca36d7', 'https://res.cloudinary.com/dyominih0/image/upload/v1746721149/dinar-makeup/banner/ibyhx3572lfn5g5xwkmq.png', 1672531199,1672531199);
