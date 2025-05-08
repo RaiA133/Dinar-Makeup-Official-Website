@@ -28,7 +28,7 @@ function App() {
   const hideOnRegisterLogin = location.pathname !== '/register' && location.pathname !== '/login' && location.pathname !== '/forgot-password'; // location.pathname : untuk cek current url
 
   return (
-    <div data-theme="light">
+    <div data-theme="winter">
 
       {/* NAVBAR */}
       <AnimatePresence mode="wait" initial={false}>
