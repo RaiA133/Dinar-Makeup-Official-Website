@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	"errors"
 	"github.com/RianIhsan/wedding-organizer-be/config"
 	"github.com/RianIhsan/wedding-organizer-be/internal/middleware"
 	"github.com/RianIhsan/wedding-organizer-be/internal/products"
@@ -11,7 +12,6 @@ import (
 	"github.com/RianIhsan/wedding-organizer-be/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"net/http"
 	"path"
@@ -40,6 +40,12 @@ func NewProductController(config *ControllerConfig) products.ProductController {
 
 func (pc *productController) CreateProduct() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		auth := middleware.GetAuth(ctx)
+		if auth.Role != "admin" {
+			utils.LogErrorResponse(ctx, pc.logger, errors.New("ACCESS DENIED!"))
+			ctx.JSON(httpErrors.ErrorResponse(ctx, errors.New("ACCESS DENIED!")))
+			return
+		}
 		request := new(dto.CreateProductRequest)
 		if err := utils.ReadRequest(ctx, request, binding.JSON); err != nil {
 			utils.LogErrorResponse(ctx, pc.logger, err)
@@ -78,12 +84,6 @@ func (pc *productController) GetProducts() gin.HandlerFunc {
 
 func (pc *productController) GetProduct() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		auth := middleware.GetAuth(ctx)
-		if auth.Role != "admin" {
-			utils.LogErrorResponse(ctx, pc.logger, errors.New("ACCESS DENIED!"))
-			ctx.JSON(httpErrors.ErrorResponse(ctx, errors.New("ACCESS DENIED!")))
-			return
-		}
 		id := ctx.Param("id")
 		parseUUID, err := utils.ParseUUID(id)
 		if err != nil {
@@ -107,6 +107,12 @@ func (pc *productController) GetProduct() gin.HandlerFunc {
 
 func (pc *productController) UpdateProduct() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		auth := middleware.GetAuth(ctx)
+		if auth.Role != "admin" {
+			utils.LogErrorResponse(ctx, pc.logger, errors.New("ACCESS DENIED!"))
+			ctx.JSON(httpErrors.ErrorResponse(ctx, errors.New("ACCESS DENIED!")))
+			return
+		}
 		id := ctx.Param("id")
 		parseUUID, err := utils.ParseUUID(id)
 		if err != nil {
@@ -148,6 +154,12 @@ func (pc *productController) UpdateProduct() gin.HandlerFunc {
 
 func (pc *productController) AddImageToProduct() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		auth := middleware.GetAuth(ctx)
+		if auth.Role != "admin" {
+			utils.LogErrorResponse(ctx, pc.logger, errors.New("ACCESS DENIED!"))
+			ctx.JSON(httpErrors.ErrorResponse(ctx, errors.New("ACCESS DENIED!")))
+			return
+		}
 		productIdStr := ctx.Param("productId")
 		productId, err := utils.ParseUUID(productIdStr)
 		if err != nil {
