@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/RianIhsan/wedding-organizer-be/internal/user"
 	"github.com/RianIhsan/wedding-organizer-be/internal/user/model"
-	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
@@ -23,7 +22,7 @@ func (u *userPostgresRepository) Create(ctx context.Context, entity *model.User)
 	VALUES (?,?,?,?,?,?) RETURNING "id"
 	*/
 	if err := db.Create(entity).Error; err != nil {
-		return nil, errors.Wrap(err, "UserPostgresRepository.Register.Create")
+		return nil, err
 	}
 	return entity, nil
 }
@@ -35,9 +34,18 @@ func (u *userPostgresRepository) Update(ctx context.Context, entity *model.User)
 	UPDATE "users" SET "email"=?,"password"=?,"first_name"=?,"last_name"=?,"avatar"=?,"city"=?,"phone_number"=?,"updated_at"=? WHERE id=?
 	*/
 	if err := DB.Model(model.User{}).Where("id = ?", entity.Id).Updates(entity).Error; err != nil {
-		return nil, errors.Wrap(err, "UserPostgresRepository.Update.Updates")
+		return nil, err
 	}
 	return entity, nil
+}
+
+func (u *userPostgresRepository) Delete(ctx context.Context, entity *model.User) error {
+	DB := u.db.WithContext(ctx)
+	if err := DB.Model(model.User{}).Where("id = ?", entity.Id).Delete(&model.User{}).Error; err != nil {
+		return err
+	}
+	return nil
+
 }
 
 func (u *userPostgresRepository) FindByEmail(ctx context.Context, entity *model.User) (*model.User, error) {
@@ -46,7 +54,7 @@ func (u *userPostgresRepository) FindByEmail(ctx context.Context, entity *model.
 
 	// SELECT * FROM "users" WHERE "users"."email" = ? LIMIT 1
 	if err := DB.Where(model.User{Email: entity.Email}).Take(user).Error; err != nil {
-		return nil, errors.Wrap(err, "UserPostgresRepository.FindByEmail.Take")
+		return nil, err
 	}
 	return user, nil
 }
@@ -57,7 +65,7 @@ func (u *userPostgresRepository) FindById(ctx context.Context, entity *model.Use
 
 	// SELECT * FROM "users" WHERE "users"."id" = ? LIMIT 1
 	if err := DB.Where(model.User{Id: entity.Id}).Take(user).Error; err != nil {
-		return nil, errors.Wrap(err, "UserPostgresRepository.FindById.Take")
+		return nil, err
 	}
 	return user, nil
 }
@@ -68,7 +76,24 @@ func (u *userPostgresRepository) FindAlreadyExistByEmail(ctx context.Context, en
 
 	// SELECT count(*) FROM "users" WHERE "users"."email" = ?
 	if err := DB.Model(model.User{}).Where(model.User{Email: entity.Email}).Count(&total).Error; err != nil {
-		return 0, errors.Wrap(err, "UserPostgresRepository.FindAlreadyExistByEmail.Count")
+		return 0, err
 	}
 	return total, nil
+}
+
+func (u *userPostgresRepository) FindUsers(ctx context.Context, offset, limit int) ([]*model.User, int, error) {
+	var users []*model.User
+	var total int64
+
+	DB := u.db.WithContext(ctx)
+
+	if err := DB.Model(&model.User{}).Where("role = ?", "user").Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	if err := DB.Where("role = ?", "user").Offset(offset).Limit(limit).Find(&users).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return users, int(total), nil
 }

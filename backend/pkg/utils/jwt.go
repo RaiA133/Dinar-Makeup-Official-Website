@@ -42,7 +42,7 @@ func GenerateJwtToken(user *model.User, cfg *config.Config, expire time.Duration
 
 // GenerateTokenPair generate JWT access token & refresh token
 func GenerateTokenPair(user *model.User, cfg *config.Config) (accToken, refToken string, err error) {
-	accToken, err = GenerateJwtToken(user, cfg, 15*time.Minute) // 15 minute
+	accToken, err = GenerateJwtToken(user, cfg, 30*time.Minute) // 30 minute
 	if err != nil {
 		return
 	}

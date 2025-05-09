@@ -30,17 +30,20 @@ type UpdateProductResponse struct {
 }
 
 type GetProductResponse struct {
-	Id           uuid.UUID                    `json:"id"`
-	Name         string                       `json:"name"`
-	Price        int64                        `json:"price"`
-	Currency     string                       `json:"currency"`
-	Description  string                       `json:"description"`
-	Notes        string                       `json:"notes"`
-	CreatedAt    string                       `json:"created_at"`
-	UpdatedAt    string                       `json:"updated_at"`
-	DeletedAt    *int64                       `json:"deleted_at"`
-	Images       []ProductImageResponse       `json:"images"`
-	DetailGroups []ProductDetailGroupResponse `json:"detail_groups"`
+	Id             uuid.UUID                    `json:"id"`
+	Name           string                       `json:"name"`
+	Price          int64                        `json:"price"`
+	Price30Percent int64                        `json:"price_30_percent"`
+	Price50Percent int64                        `json:"price_50_percent"`
+	Price80Percent int64                        `json:"price_80_percent"`
+	Currency       string                       `json:"currency"`
+	Description    string                       `json:"description"`
+	Notes          string                       `json:"notes"`
+	CreatedAt      string                       `json:"created_at"`
+	UpdatedAt      string                       `json:"updated_at"`
+	DeletedAt      *int64                       `json:"deleted_at"`
+	Images         []ProductImageResponse       `json:"images"`
+	DetailGroups   []ProductDetailGroupResponse `json:"detail_groups"`
 }
 
 type MappingProductDetailGroupResponse struct {

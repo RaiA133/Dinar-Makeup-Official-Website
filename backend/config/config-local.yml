@@ -41,6 +41,11 @@ cloudinary:
   APISecret: 4i5xGxc4z30AXgL10GMLQ5ynf70
   FolderName: dinar-makeup
 
+midtrans:
+  MerchantID: G816488272
+  ClientKey: SB-Mid-client-f9XowYwdEXQTJjvq
+  ServerKey: SB-Mid-server-J5OSRbclJ5IspnNGbHeRXENn
+
 #public MinIO cluster
 #aws:
 #  Endpoint: play.min.io

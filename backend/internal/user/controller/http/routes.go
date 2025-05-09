@@ -15,4 +15,7 @@ func MapAuthRoutes(authGroup *gin.RouterGroup, controller user.AuthController) {
 func MapUserRoutes(userGroup *gin.RouterGroup, controller user.UserController, mw *middleware.MiddlewareManager) {
 	userGroup.Use(mw.AuthJwtMiddleware())
 	userGroup.GET("/me", controller.GetCurrentUser())
+	userGroup.PUT("/user", controller.UpdateUser())
+	userGroup.DELETE("/user/:id", controller.DeleteUser())
+	userGroup.GET("/user", controller.GetUsers())
 }

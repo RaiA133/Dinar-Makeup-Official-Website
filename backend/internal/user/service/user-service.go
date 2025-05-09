@@ -68,26 +68,67 @@ func (u *userService) GetCurrentUser(ctx context.Context, id string) (*dto.UserR
 	return converter.ToUserResponse(currentUser), nil
 }
 
-// Update update current user
-// func (u *userService) Update(ctx context.Context, user *model.User) (*dto.UserResponse, error) {
-// 	userFound, err := u.pgRepo.FindById(ctx, &model.User{Id: user.Id})
-// 	if err != nil {
-// 		return nil, httpErrors.NewNotFoundError(errors.Wrap(err, "UserService.Update.FindById"))
-// 	}
+func (u *userService) Update(ctx context.Context, user *model.User, id string) (*dto.UserResponse, error) {
+	parseId, err := uuid.Parse(id)
+	if err != nil {
+		return nil, errors.New("failed parsing uuid")
+	}
 
-// 	if err := user.PrepareUpdate(userFound); err != nil {
-// 		return nil, httpErrors.NewInternalServerError(err)
-// 	}
+	userFound, err := u.pgRepo.FindById(ctx, &model.User{Id: parseId})
+	if err != nil {
+		return nil, errors.New("user not found")
+	}
 
-// 	updatedUser, err := u.pgRepo.Update(ctx, userFound)
-// 	if err != nil {
-// 		return nil, httpErrors.NewInternalServerError(errors.Wrap(err, "UserService.GetCurrentUser.Update"))
-// 	}
+	if err := user.PrepareUpdateUser(userFound); err != nil {
+		return nil, errors.New("failed preparing user")
+	}
 
-// 	// delete redis cache data
-// 	if err := u.redisRepo.Delete(ctx, utils.GetRedisKey(basePrefix, user.Id.String())); err != nil {
-// 		u.logger.WithError(err).Error("UserService.Update.redisRepo.Delete")
-// 	}
+	updatedUser, err := u.pgRepo.Update(ctx, userFound)
+	if err != nil {
+		return nil, errors.New("failed updating user")
+	}
 
-// 	return converter.ToUserResponse(updatedUser), nil
-// }
+	// delete redis cache data
+	if err := u.rdRepo.Delete(ctx, utils.GetRedisKey(basePrefix, id)); err != nil {
+		u.logger.WithError(err).Error("UserService.Update.redisRepo.Delete")
+	}
+
+	return converter.ToUserResponse(updatedUser), nil
+}
+
+func (u *userService) Delete(ctx context.Context, user *model.User) (string, error) {
+	userFound, err := u.pgRepo.FindById(ctx, &model.User{Id: user.Id})
+	if err != nil {
+		return "", errors.New("user not found")
+	}
+	// delete data from redis
+	if err := u.rdRepo.Delete(ctx, utils.GetRedisKey(basePrefix, user.Id.String())); err != nil {
+		return "", errors.New("failed deleting user from redis")
+	}
+
+	// delete data from db
+	if err := u.pgRepo.Delete(ctx, &model.User{Id: userFound.Id}); err != nil {
+		return "", errors.New("failed deleting user from postgres")
+	}
+	return "Success delete user", nil
+}
+
+func (u *userService) GetUsers(ctx context.Context, offset, limit int) ([]*dto.GetUsersResponse, int, error) {
+	users, total, err := u.pgRepo.FindUsers(ctx, offset, limit)
+	if err != nil {
+		return nil, 0, errors.New("failed fetching users")
+	}
+	var res []*dto.GetUsersResponse
+	for _, user := range users {
+		res = append(res, &dto.GetUsersResponse{
+			Id:          user.Id,
+			Name:        user.Name,
+			Email:       user.Email,
+			PhoneNumber: user.PhoneNumber,
+			Address:     user.Address,
+			Age:         user.Age,
+		})
+	}
+
+	return res, total, nil
+}

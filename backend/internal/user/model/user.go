@@ -16,6 +16,10 @@ type User struct {
 	Password    string    `gorm:"column:password"`
 	PhoneNumber string    `gorm:"column:phone_number"`
 	Avatar      string    `gorm:"column:avatar"`
+	Address     string    `gorm:"column:address"`
+	NIK         string    `gorm:"column:nik"`
+	DateOfBirth string    `gorm:"column:date_of_birth"`
+	Age         string    `gorm:"column:age"`
 	Role        string    `gorm:"column:role"`
 	CreatedAt   int64     `gorm:"column:created_at;autoCreateTime:milli;<-:create"` // allow read and create
 	UpdatedAt   int64     `gorm:"column:updated_at;autoCreateTime:milli;autoUpdateTime:milli"`
@@ -42,6 +46,29 @@ func (u *User) PrepareCreate() error {
 
 	if err := u.HashPassword(); err != nil {
 		return err
+	}
+	return nil
+}
+
+// prepare update user
+func (u *User) PrepareUpdateUser(oldData *User) error {
+	if u.Name != "" {
+		oldData.Name = u.Name
+	}
+	if u.PhoneNumber != "" {
+		oldData.PhoneNumber = u.PhoneNumber
+	}
+	if u.Address != "" {
+		oldData.Address = u.Address
+	}
+	if u.NIK != "" {
+		oldData.NIK = u.NIK
+	}
+	if u.DateOfBirth != "" {
+		oldData.DateOfBirth = u.DateOfBirth
+	}
+	if u.Age != "" {
+		oldData.Age = u.Age
 	}
 	return nil
 }

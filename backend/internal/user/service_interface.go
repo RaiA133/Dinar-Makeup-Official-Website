@@ -12,9 +12,10 @@ type AuthService interface {
 	Login(ctx context.Context, user *model.User) (*dto.JwtToken, error)
 }
 
-
 type UserService interface {
 	GetCurrentUser(ctx context.Context, id string) (*dto.UserResponse, error)
-	// Update(ctx context.Context, user *model.User) (*dto.UserResponse, error)
+	Update(ctx context.Context, user *model.User, id string) (*dto.UserResponse, error)
 	// UpdateAvatar(ctx context.Context, user *model.User) (*dto.UserResponse, error)
+	Delete(ctx context.Context, user *model.User) (string, error)
+	GetUsers(ctx context.Context, offset, limit int) ([]*dto.GetUsersResponse, int, error)
 }

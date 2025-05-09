@@ -2,16 +2,16 @@ package http
 
 import (
 	"context"
+	"github.com/RianIhsan/wedding-organizer-be/pkg/httpErrors/response"
+	validation "github.com/RianIhsan/wedding-organizer-be/pkg/validator"
 	"net/http"
 
 	"github.com/RianIhsan/wedding-organizer-be/config"
 	"github.com/RianIhsan/wedding-organizer-be/internal/user"
 	"github.com/RianIhsan/wedding-organizer-be/internal/user/model"
 	"github.com/RianIhsan/wedding-organizer-be/internal/user/model/dto"
-	"github.com/RianIhsan/wedding-organizer-be/pkg/httpErrors"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/utils"
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	"github.com/sirupsen/logrus"
 )
 
@@ -35,74 +35,67 @@ func (ac *authController) RegisterNewUser() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// read & validate
 		request := new(dto.UserRegisterRequest)
-		if err := utils.ReadRequest(ctx, request, binding.JSON); err != nil {
+		if err := ctx.ShouldBindJSON(request); err != nil {
 			utils.LogErrorResponse(ctx, ac.logger, err)
-			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
+			response.SendErrorResponse(ctx, http.StatusBadRequest, "invalid payload")
 			return
 		}
-		var verifiedRole string
-		if request.Role == 1 {
-			verifiedRole = "admin"
-		} else if request.Role == 2 {
-			verifiedRole = "user"
-		}
 
+		if err := validation.ValidateStruct(request); err != nil {
+			utils.LogErrorResponse(ctx, ac.logger, err)
+			response.SendErrorResponse(ctx, http.StatusBadRequest, err.Error())
+			return
+		}
 		// register new user
 		entityUser := &model.User{
 			Name:     request.Name,
 			Username: request.Username,
 			Email:    request.Email,
 			Password: request.Password,
-			Role:     verifiedRole,
+			Role:     "user",
 			Avatar:   "https://res.cloudinary.com/dyominih0/image/upload/v1697817852/default-avatar-icon-of-social-media-user-vector_p8sqa6.jpg",
 		}
 
-		userResponse, err := ac.service.Register(context.Background(), entityUser)
+		_, err := ac.service.Register(context.Background(), entityUser)
 		if err != nil {
 			utils.LogErrorResponse(ctx, ac.logger, err)
-			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
+			response.SendErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 			return
 		}
 
-		ctx.JSON(http.StatusCreated, dto.ApiUserResponse{
-			Status:  http.StatusCreated,
-			Message: "Created",
-
-			Data: gin.H{
-				"id":    userResponse.Id,
-				"email": userResponse.Email,
-				"role":  userResponse.Role,
-			},
-		})
+		response.SendSuccesResponse(ctx, http.StatusOK, "Register successfully", nil)
 	}
 }
 
 func (ac *authController) LoginNewUser() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		// read and validate request
+		// Membaca dan memvalidasi request
 		request := new(dto.UserLoginRequest)
-		if err := utils.ReadRequest(ctx, request, binding.JSON); err != nil {
+		if err := ctx.ShouldBindJSON(request); err != nil {
 			utils.LogErrorResponse(ctx, ac.logger, err)
-			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
+			response.SendErrorResponse(ctx, http.StatusBadRequest, "invalid payload")
 			return
 		}
 
-		// login
+		// Validasi request (jika ada validasi tambahan)
+		if err := validation.ValidateStruct(request); err != nil {
+			utils.LogErrorResponse(ctx, ac.logger, err)
+			response.SendErrorResponse(ctx, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		// Login
 		jwtToken, err := ac.service.Login(context.Background(), &model.User{
 			Email:    request.Email,
 			Password: request.Password,
 		})
 		if err != nil {
 			utils.LogErrorResponse(ctx, ac.logger, err)
-			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
+			response.SendErrorResponse(ctx, http.StatusUnauthorized, err.Error())
 			return
 		}
 
-		// return response token
-		ctx.JSON(http.StatusOK, dto.UserTokenResponse{
-			Status:  http.StatusOK,
-			Message: "OK",
-			Jwt:     *jwtToken,
-		})
+		// Mengembalikan respons token
+		response.SendSuccesResponse(ctx, http.StatusOK, "Login Success", *jwtToken)
 	}
 }
