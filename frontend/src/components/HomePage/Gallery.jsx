@@ -24,7 +24,7 @@ function Gallery() {
       )
       }
 
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-6'>
 
         <div className="card bg-base-100 w-full shadow-md">
           <figure>
@@ -70,6 +70,101 @@ function Gallery() {
           </div>
         </div>
 
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div class="grid gap-4">
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg object-cover object-center"
+              src={`/img/gallery/weddings/IMG_5814.PNG`}
+              alt="gallery-photo"
+            />
+          </div>
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg object-cover object-center "
+              src={`/img/gallery/makeups/IMG_5787.PNG`}
+              alt="gallery-photo"
+            />
+          </div>
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg object-cover object-center "
+              src={`/img/gallery/weddings/IMG_5819.PNG`}
+              alt="gallery-photo"
+            />
+          </div>
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg object-cover object-center"
+              src={`/img/gallery/weddings/IMG_5847.PNG`}
+              alt="gallery-photo"
+            />
+          </div>
+        </div>
+        <div class="grid gap-4">
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg object-cover object-center"
+              src={`/img/gallery/makeups/IMG_5777.PNG`}
+              alt="gallery-photo"
+            />
+          </div>
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg object-cover object-center"
+              src={`/img/gallery/weddings/IMG_5851.PNG`}
+              alt="gallery-photo"
+            />
+          </div>
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg object-cover object-center "
+              src={`/img/gallery/makeups/IMG_5786.PNG`}
+              alt="gallery-photo"
+            />
+          </div>
+        </div>
+        <div class="grid gap-4">
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg object-cover object-center"
+              src={`/img/gallery/weddings/IMG_5805.PNG`}
+              alt="gallery-photo"
+            />
+          </div>
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg object-cover object-center "
+              src={`/img/gallery/makeups/IMG_5794.PNG`}
+              alt="gallery-photo"
+            />
+          </div>
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg object-cover object-center"
+              src={`/img/gallery/weddings/IMG_5797.PNG`}
+              alt="gallery-photo"
+            />
+          </div>
+        </div>
+        <div class="grid gap-4">
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg object-cover object-center"
+              src={`/img/gallery/weddings/IMG_5848.PNG`}
+              alt="gallery-photo"
+            />
+          </div>
+          <div>
+            <img
+              class="h-auto max-w-full rounded-lg object-cover object-center"
+              src={`/img/gallery/weddings/IMG_5803.PNG`}
+              alt="gallery-photo"
+            />
+          </div>
+        </div>
       </div>
 
     </div>

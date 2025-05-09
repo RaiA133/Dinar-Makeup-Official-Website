@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import logoDinarMakeupCrop from '../assets/img/logo/logoDinarMakeupCrop.jpg';
+import logoDinarMakeupCrop from '/img/logo/logoDinarMakeupCrop.jpg';
 
 
 function Navbar() {
