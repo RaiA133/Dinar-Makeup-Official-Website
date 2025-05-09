@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { login } from "../modules/fetch";
+import { login } from "../../modules/fetch";
 import toast, { Toaster } from 'react-hot-toast';
 
 function LoginPage() {
@@ -59,14 +59,15 @@ function LoginPage() {
                     e.target.password.value
                   );
                   if (response.status === 200) {
-                    const successMessage = response.message;
+                    const successMessage = "Login Success";
                     window.localStorage.setItem('toastMessage', successMessage);
                     window.localStorage.setItem("token", response.jwt.access_Token);
                     navigate("/")
                   }
                 }
                 catch (error) {
-                  let failedMessage = error.message // data message dari authController BE
+                  console.log('asdasdasd', error);
+                  let failedMessage = error.message// data message dari authController BE
                   toast.error(failedMessage, {
                     duration: 2500,
                   });

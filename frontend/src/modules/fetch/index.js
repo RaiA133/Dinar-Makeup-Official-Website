@@ -6,7 +6,8 @@ async function register(name, username, email, password) {
     const response = await instance.post("/register", { name, username, email, password });
     return response.data;
   } catch (error) {
-    throw new Error(error.response.data.message || "Something went wrong");
+    console.log("Error : ", error);
+    throw (error || "Something went wrong");
   }
 }
 
@@ -16,7 +17,8 @@ async function login(email, password) {
     const response = await instance.post("/login", { email, password });
     return response.data;
   } catch (error) {
-    throw new Error(error.message || "Something went wrong");
+    // console.log("Error : ", error);
+    throw (error|| "Something went wrong");
   }
 }
 
@@ -26,7 +28,8 @@ async function getAllProducts() {
     const response = await instance.get("/products");
     return response.data;
   } catch (error) {
-    throw new Error(error.message || "Something went wrong");
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
   }
 }
 
@@ -36,7 +39,8 @@ async function getProductByID(id) {
     const response = await instance.get(`/products/${id}`);
     return response.data;
   } catch (error) {
-    throw new Error(error.message || "Something went wrong");
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
   }
 }
 
