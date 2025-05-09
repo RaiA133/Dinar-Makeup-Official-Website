@@ -81,17 +81,31 @@ func (p *productService) CreateProduct(ctx context.Context, req *dto.CreateProdu
 	}, nil
 }
 
-func (p *productService) GetProducts(ctx context.Context) ([]dto.GetGetProductsResponse, error) {
+func (p *productService) GetProducts(ctx context.Context) ([]dto.GetProductsResponse, error) {
 	getProduct, err := p.pgRepo.FindAll(ctx)
 	if err != nil {
 		return nil, httpErrors.NewInternalServerError(errors.Wrap(err, "ProductService.GetProducts.FindAll"))
 	}
-	var products []dto.GetGetProductsResponse
+	var products []dto.GetProductsResponse
 	for _, product := range getProduct {
-		products = append(products, dto.GetGetProductsResponse{
-			Id:    product.Id,
-			Name:  product.Name,
-			Price: product.Price,
+		var detailGroups []dto.MappingProductDetailGroupResponse
+		for _, dg := range product.DetailGroups {
+			detailGroups = append(detailGroups, dto.MappingProductDetailGroupResponse{
+				Name: dg.GroupName,
+			})
+		}
+
+		banner := ""
+		if len(product.Images) > 0 {
+			banner = product.Images[0].ImageURL
+		}
+
+		products = append(products, dto.GetProductsResponse{
+			Id:           product.Id,
+			Name:         product.Name,
+			Price:        product.Price,
+			Banner:       banner,
+			DetailGroups: detailGroups,
 		})
 
 	}
