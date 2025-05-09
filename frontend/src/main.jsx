@@ -2,11 +2,14 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router } from "react-router-dom";
 import App from './App.jsx'
+import { ProductsContextProvider } from './contexts/ProductsContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Router>
-      <App />
+      <ProductsContextProvider>
+        <App />
+      </ProductsContextProvider>
     </Router>
   </StrictMode>,
 )

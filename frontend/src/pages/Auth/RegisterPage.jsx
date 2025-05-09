@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { register } from "../modules/fetch";
+import { register } from "../../modules/fetch";
 import toast, { Toaster } from 'react-hot-toast';
 
 function RegisterPage() {
@@ -20,24 +20,7 @@ function RegisterPage() {
     if (password !== confirmPassword) {
       return;
     }
-    if (password.length < 6) {
-      toast.error('Password minimal 6 digit!', {
-        duration: 2500,
-      });
-      return
-    }
-    if(e.target.name.value.length > 25) {
-      toast.error('Nama Terlalu Panjang Max 25 digit!', {
-        duration: 2500,
-      });
-      return
-    }
-    if(e.target.username.value.length > 20) {
-      toast.error('Username Terlalu Panjang Max 20 digit!', {
-        duration: 2500,
-      });
-      return
-    }
+
     try {
       const response = await register(
         e.target.name.value,
@@ -45,22 +28,36 @@ function RegisterPage() {
         e.target.email.value,
         password
       );
-      if (response.status[0] === 201) {
-        const successMessage = response.message;
+      if (response.status === 201) {
+        const successMessage = "Register Success!";
         toast.success(successMessage, {
           duration: 6000,
         });
         setTimeout(() => {
           navigate("/login")
-        }, 3000)
+        }, 1000)
       } 
     }
-    catch (error) {
-      let failedMessage = error.message // data message dari authController BE
-      console.error(failedMessage)
-      toast.error(failedMessage, {
-        duration: 2500,
-      });
+    catch (err) {
+      if (err.response.data.error.status == 400) {
+        toast.error('Minimum password 8 digit!', {
+          duration: 2500,
+        });
+        return
+      }
+      if (err.response.data.error.status == 409) {
+        toast.error("Email is already exist!", {
+          duration: 2500,
+        });
+        return
+      }
+      if (err.response.data.error.status == 500) {
+        toast.error(err.response.data.error.message, {
+          duration: 2500,
+        });
+        return
+      }
+
     }
       
   }
@@ -156,7 +153,7 @@ function RegisterPage() {
                 />
                 <label className="label place-content-end">
                   {password !== confirmPassword && (
-                    <span className="label-text-alt text-red-600 me-28">Password tidak sama</span>
+                    <span className="label-text-alt text-red-600 me-28 mt-1">Password tidak sama</span>
                   )}
                   <a onClick={toggleConfirmPasswordVisibility} className="label-text-alt text-xs underline" style={{ cursor: 'pointer' }}>
                     {showConfirmPassword ? 'Hide Password' : 'Show Password'}
