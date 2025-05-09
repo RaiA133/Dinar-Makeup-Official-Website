@@ -63,19 +63,21 @@ function Weddings() {
                 ))}
               </ul>
 
-              <div className="mt-6 ">
-                <div className=" mb-5">
-                  <h2 className="text-3xl font-bold">{product?.name}</h2>
-                  <span className="text-xl">{productsByIDState?.currency} {productsByIDState?.price}</span>
-                </div>
-                {/* You can open the modal using document.getElementById('ID').showModal() method */}
-                <div className="flex gap-2">
-                  <button className="btn btn-primary w-1/2">Buy</button>
-                  <button className="btn w-1/2" onClick={() => {
-                    handleClickDetailProducts(product?.id);
-                    document.getElementById('my_modal_product').showModal();
-                  }
-                  }>Detail</button>
+              <div className="mt-6 h-full flex items-end">
+                <div className="w-full">
+                  <div className="mb-5 w-full">
+                    <h2 className="text-3xl font-bold">{product?.name}</h2>
+                    <span className="text-xl">{product?.currency} {product?.price}</span>
+                  </div>
+                  {/* You can open the modal using document.getElementById('ID').showModal() method */}
+                  <div className="w-full flex gap-2">
+                    <button className="btn btn-primary w-1/2">Buy</button>
+                    <button className="btn w-1/2" onClick={() => {
+                      handleClickDetailProducts(product?.id);
+                      document.getElementById('my_modal_product').showModal();
+                    }
+                    }>Detail</button>
+                  </div>
                 </div>
 
                 {/* MODAL DETAIl */}
@@ -127,7 +129,7 @@ function Weddings() {
                         </div>
 
                         {/* Product Details */}
-                        <div className="space-y-4 p-5">
+                        <div className="space-y-4 px-5">
                           {productsByIDState?.detail_groups?.map((group) => (
                             <div key={group.id} className="collapse collapse-plus bg-base-100 border border-base-300">
                               <input type="radio" name="product-accordion" />
