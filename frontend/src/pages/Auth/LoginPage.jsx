@@ -59,18 +59,17 @@ function LoginPage() {
                     e.target.password.value
                   );
                   if (response.status === 200) {
-                    const successMessage = "Login Success";
+                    const successMessage = "Login Success!";
                     window.localStorage.setItem('toastMessage', successMessage);
                     window.localStorage.setItem("token", response.jwt.access_Token);
                     navigate("/")
                   }
                 }
-                catch (error) {
-                  console.log('asdasdasd', error);
-                  let failedMessage = error.message// data message dari authController BE
-                  toast.error(failedMessage, {
+                catch (err) {
+                  toast.error(err.response.data.error.message, {
                     duration: 2500,
                   });
+                  return
                 }
               }}
             >

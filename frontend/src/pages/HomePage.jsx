@@ -5,14 +5,44 @@ import About from '../components/HomePage/About';
 import Gallery from '../components/HomePage/Gallery';
 import Rating from '../components/HomePage/Rating';
 import Contact from '../components/HomePage/Contact';
+import toast, { Toaster } from 'react-hot-toast';
+import { useEffect } from 'react';
 
 function HomePage() {
   const navigate = useNavigate()
 
+  useEffect(() => {
+    const toastMessage = localStorage.getItem('toastMessage')
+
+    // TOAST Login berhasil : Muncul ketika proses login berhasil
+    if (toastMessage == 'Login Success!') {
+      toast.success(toastMessage, {
+        duration: 2500,
+      });
+      localStorage.removeItem('toastMessage');
+    }
+
+    // TOAST Logout berhasil : Muncul ketika proses logout berhasil
+    if (toastMessage == 'Logout Success!') {
+      toast(toastMessage, {
+        duration: 2500,
+        icon: '👏',
+      });
+      localStorage.removeItem('toastMessage');
+    }
+  }, []);
 
   return (
 
     <div className="mx-3">
+
+      <Toaster
+        toastOptions={{
+          style: {
+            maxWidth: '600px'
+          }
+        }}
+      />
 
       {/* HERO */}
       <div className="hero min-h-screen" style={{ backgroundImage: 'url(https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg)' }}>

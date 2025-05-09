@@ -39,7 +39,6 @@ function RegisterPage() {
       } 
     }
     catch (err) {
-      console.log(err.response.data.error.status);
       if (err.response.data.error.status == 400) {
         toast.error('Minimum password 8 digit!', {
           duration: 2500,
@@ -47,7 +46,7 @@ function RegisterPage() {
         return
       }
       if (err.response.data.error.status == 409) {
-        toast.error(err.response.data.error.message, {
+        toast.error("Email is already exist!", {
           duration: 2500,
         });
         return
