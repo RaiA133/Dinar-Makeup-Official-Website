@@ -11,10 +11,12 @@ type CreateProductResponse struct {
 	Price int64     `json:"price"`
 }
 
-type GetGetProductsResponse struct {
-	Id    uuid.UUID `json:"id"`
-	Name  string    `json:"name"`
-	Price int64     `json:"price"`
+type GetProductsResponse struct {
+	Id           uuid.UUID                           `json:"id"`
+	Name         string                              `json:"name"`
+	Price        int64                               `json:"price"`
+	Banner       string                              `json:"banner"`
+	DetailGroups []MappingProductDetailGroupResponse `json:"detail_groups"`
 }
 
 type ApiProductResponse struct {
@@ -41,6 +43,9 @@ type GetProductResponse struct {
 	DetailGroups []ProductDetailGroupResponse `json:"detail_groups"`
 }
 
+type MappingProductDetailGroupResponse struct {
+	Name string `json:"name"`
+}
 type ProductImageResponse struct {
 	Id       uuid.UUID `json:"id"`
 	ImageURL string    `json:"image_url"`

@@ -11,7 +11,7 @@ import (
 
 type ProductService interface {
 	CreateProduct(ctx context.Context, entity *dto.CreateProductRequest) (*dto.CreateProductResponse, error)
-	GetProducts(ctx context.Context) ([]dto.GetGetProductsResponse, error)
+	GetProducts(ctx context.Context) ([]dto.GetProductsResponse, error)
 	GetProduct(ctx context.Context, id uuid.UUID) (*dto.GetProductResponse, error)
 	UpdateProduct(ctx context.Context, entity *model.Product) (*dto.UpdateProductResponse, error)
 

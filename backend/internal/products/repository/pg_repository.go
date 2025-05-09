@@ -65,7 +65,7 @@ func (p *productPostgresRepository) FindById(ctx context.Context, entity *model.
 
 func (p *productPostgresRepository) FindAll(ctx context.Context) ([]model.Product, error) {
 	var products []model.Product
-	if err := p.db.WithContext(ctx).Find(&products).Error; err != nil {
+	if err := p.db.WithContext(ctx).Preload("Images").Preload("DetailGroups").Find(&products).Error; err != nil {
 		return nil, errors.Wrap(err, "ProductPostgresRepository.FindAll.Find")
 	}
 	return products, nil
