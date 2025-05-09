@@ -14,6 +14,7 @@ type Config struct {
 	Redis      RedisConfig
 	AWS        AwsConfig
 	Cloudinary CloudinaryConfig
+	Midtrans   MidtransConfig
 }
 type ServerConfig struct {
 	Host         string
@@ -62,6 +63,12 @@ type CloudinaryConfig struct {
 	APIKey     string
 	APISecret  string
 	FolderName string
+}
+
+type MidtransConfig struct {
+	MerchantID string
+	ClientKey  string
+	SecretKey  string
 }
 
 func NewAppConfig(configPath string) (*Config, error) {

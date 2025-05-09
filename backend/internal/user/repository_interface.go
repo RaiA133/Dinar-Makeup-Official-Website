@@ -18,6 +18,10 @@ type UserPostgresRepository interface {
 	FindById(ctx context.Context, entity *model.User) (*model.User, error)
 
 	FindAlreadyExistByEmail(ctx context.Context, entity *model.User) (int64, error)
+
+	Delete(ctx context.Context, entity *model.User) error
+
+	FindUsers(ctx context.Context, offset, limit int) ([]*model.User, int, error)
 }
 
 // UserRedisRepository defines methods the services layer expects.

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"github.com/RianIhsan/wedding-organizer-be/internal/user"
 	"github.com/RianIhsan/wedding-organizer-be/internal/user/model"
-	"github.com/pkg/errors"
 	"github.com/redis/go-redis/v9"
 	"time"
 )
@@ -24,11 +23,11 @@ func NewUserRedisRepository(redisClient *redis.Client) user.UserRedisRepository 
 func (u *userRedisRepository) Set(ctx context.Context, key string, expiration time.Duration, value *model.User) error {
 	userBytes, err := json.Marshal(value)
 	if err != nil {
-		return errors.Wrap(err, "UserRedisRepository.Set.json.Marshal")
+		return err
 	}
 
 	if err := u.redisClient.Set(ctx, key, userBytes, time.Second*expiration).Err(); err != nil {
-		return errors.Wrap(err, "UserRedisRepository.Set.redisClient.Set")
+		return err
 	}
 	return nil
 }
@@ -37,12 +36,12 @@ func (u *userRedisRepository) Set(ctx context.Context, key string, expiration ti
 func (u *userRedisRepository) Get(ctx context.Context, key string) (*model.User, error) {
 	userBytes, err := u.redisClient.Get(ctx, key).Bytes()
 	if err != nil {
-		return nil, errors.Wrap(err, "UserRedisRepository.Get.redisClient.Get")
+		return nil, err
 	}
 
 	user := new(model.User)
 	if err := json.Unmarshal(userBytes, user); err != nil {
-		return nil, errors.Wrap(err, "UserRedisRepository.Get.Unmarshall")
+		return nil, err
 	}
 	return user, nil
 }
@@ -50,7 +49,7 @@ func (u *userRedisRepository) Get(ctx context.Context, key string) (*model.User,
 // Delete cache data
 func (u *userRedisRepository) Delete(ctx context.Context, key string) error {
 	if err := u.redisClient.Del(ctx, key).Err(); err != nil {
-		return errors.Wrap(err, "UserRedisRepository.Delete.redisClient.Del")
+		return err
 	}
 	return nil
 }

@@ -1,9 +1,11 @@
 package middleware
 
 import (
+	"github.com/RianIhsan/wedding-organizer-be/pkg/httpErrors/response"
+	"github.com/pkg/errors"
+	"net/http"
 	"strings"
 
-	"github.com/RianIhsan/wedding-organizer-be/pkg/httpErrors"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -32,9 +34,9 @@ func (mw *MiddlewareManager) AuthJwtMiddleware() gin.HandlerFunc {
 		if authorizationHeader != "" {
 			headerParts := strings.Split(authorizationHeader, " ") // ['Bearer','token']
 			if len(headerParts) < 2 {
-				errResponse := httpErrors.NewUnauthorizedError("MiddlewareManager.AuthJwtMiddleware.Split")
+				errResponse := errors.New("Authorization header is invalid")
 				utils.LogErrorResponse(ctx, mw.logger, errResponse)
-				ctx.JSON(httpErrors.ErrorResponse(ctx, errResponse))
+				response.SendErrorResponse(ctx, http.StatusUnauthorized, "Unauthorized header")
 				ctx.Abort()
 				return
 			}
@@ -43,25 +45,37 @@ func (mw *MiddlewareManager) AuthJwtMiddleware() gin.HandlerFunc {
 			// cara authentikasi menggunakan cookie, jika tidak ada authorization header
 			cookie, err := ctx.Cookie("jwt-token") // setcookie dengan jwt belum diimplemntasikan
 			if err != nil {
-				errResponse := httpErrors.NewUnauthorizedError(err)
+				errResponse := errors.New("Authorization header is invalid (cookie)")
 				utils.LogErrorResponse(ctx, mw.logger, errResponse)
-				ctx.JSON(httpErrors.ErrorResponse(ctx, errResponse))
+				response.SendErrorResponse(ctx, http.StatusUnauthorized, "Unauthorized cookie")
 				ctx.Abort()
 				return
 			}
 			tokenString = cookie
 		}
 
-		// verifikasi jwt token dan mengambil claims dari token
-		claims, err := utils.ValidateJwtToken(tokenString, mw.cfg)
-		if err != nil {
-			utils.LogErrorResponse(ctx, mw.logger, err)
-			ctx.JSON(httpErrors.ErrorResponse(ctx, err))
+		if tokenString == "" || len(strings.Split(tokenString, ".")) != 3 {
+			response.SendErrorResponse(ctx, http.StatusUnauthorized, "invalid token format")
 			ctx.Abort()
 			return
 		}
 
-		// menyimpan claims kedalam context gin
+		claims, err := utils.ValidateJwtToken(tokenString, mw.cfg)
+
+		if err != nil {
+			utils.LogErrorResponse(ctx, mw.logger, err)
+
+			if strings.Contains(err.Error(), "token is expired") {
+				response.SendErrorResponse(ctx, http.StatusUnauthorized, "token is expired")
+			} else if strings.Contains(err.Error(), "signature is invalid") {
+				response.SendErrorResponse(ctx, http.StatusUnauthorized, "invalid token, please check your token")
+			} else {
+				response.SendErrorResponse(ctx, http.StatusUnauthorized, "invalid token, please check your token")
+			}
+			ctx.Abort()
+			return
+		}
+
 		auth := &auth{
 			Id:    claims.ID,
 			Email: claims.Email,

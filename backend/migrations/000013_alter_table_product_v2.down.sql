@@ -1,0 +1,5 @@
+ALTER TABLE product
+    DROP COLUMN IF EXISTS address,
+    DROP COLUMN IF EXISTS nik,
+    DROP COLUMN IF EXISTS date_of_birth,
+    DROP COLUMN IF EXISTS age;

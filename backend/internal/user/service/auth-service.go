@@ -2,14 +2,11 @@ package service
 
 import (
 	"context"
-	"net/http"
-
 	"github.com/RianIhsan/wedding-organizer-be/config"
 	"github.com/RianIhsan/wedding-organizer-be/internal/user"
 	"github.com/RianIhsan/wedding-organizer-be/internal/user/model"
 	"github.com/RianIhsan/wedding-organizer-be/internal/user/model/dto"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/converter"
-	"github.com/RianIhsan/wedding-organizer-be/pkg/httpErrors"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/utils"
 	"github.com/pkg/errors"
 )
@@ -29,32 +26,31 @@ func NewAuthService(cfg *ServiceConfig) user.AuthService {
 func (a *authService) Register(ctx context.Context, user *model.User) (*dto.UserResponse, error) {
 	result, err := a.pgRepo.FindByEmail(ctx, user)
 	if result != nil && err == nil {
-		return nil, httpErrors.NewError(http.StatusConflict, httpErrors.EmailAlreadyExistsMsg, err)
+		return nil, errors.New("Email already exist")
 	}
 
 	if err := user.PrepareCreate(); err != nil {
-		return nil, httpErrors.NewInternalServerError(errors.Wrap(err, "AuthService.Register.PrepareCreate"))
+		return nil, errors.New("Failed to prepare create user")
 	}
 
 	createdUser, err := a.pgRepo.Create(ctx, user)
 	if err != nil {
-		return nil, httpErrors.NewInternalServerError(errors.Wrap(err, "AuthService.Register.Create"))
+		return nil, errors.New("Failed to create user")
 	}
 	return converter.ToUserResponse(createdUser), nil
 }
 
-
 func (a *authService) Login(ctx context.Context, user *model.User) (*dto.JwtToken, error) {
 	foundUser, err := a.pgRepo.FindByEmail(ctx, user)
 	if err != nil {
-		return nil, httpErrors.NewInternalServerError(errors.Wrap(err, "AuthService.Login.FindByEmail"))
+		return nil, errors.New("Failed to find user by email")
 	}
 	if err := user.ComparePassword(foundUser.Password); err != nil {
-		return nil, httpErrors.NewError(http.StatusBadRequest, httpErrors.InvalidEmailOrPasswordMsg, err)
+		return nil, errors.New("Invalid password")
 	}
 	accessToken, refreshToken, err := utils.GenerateTokenPair(foundUser, a.cfg)
 	if err != nil {
-		return nil, httpErrors.NewInternalServerError(errors.Wrap(err, "AuthService.Login.GenerateTokenPair"))
+		return nil, errors.New("Failed to generate access token")
 	}
 
 	return &dto.JwtToken{
@@ -62,4 +58,3 @@ func (a *authService) Login(ctx context.Context, user *model.User) (*dto.JwtToke
 		RefreshToken: refreshToken,
 	}, nil
 }
-

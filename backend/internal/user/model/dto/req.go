@@ -6,13 +6,22 @@ type UserRegisterRequest struct {
 	Username string `json:"username" validate:"required,max=100,alpha"`
 	Email    string `json:"email" validate:"required,max=100,email"`
 	Password string `json:"password" validate:"required,min=8,max=100"`
-	Role     int    `json:"role" validate:"min=1,max=2"`
 }
 
 // UserLoginRequest Model DTO login new user
 type UserLoginRequest struct {
 	Email    string `json:"email" validate:"required,max=100,email"`
 	Password string `json:"password" validate:"required,max=100,min=8"`
+}
+
+// Update User
+type UserUpdateRequest struct {
+	Name        string `json:"name"`
+	Phone       string `json:"phone"`
+	Address     string `json:"address"`
+	NIK         string `json:"nik" validate:"required,min=16,max=16,alpha"`
+	DateOfBirth string `json:"date_of_birth"`
+	Age         string `json:"age"`
 }
 
 // // UserUpdateRequest Model DTO update user
