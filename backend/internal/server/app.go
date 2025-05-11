@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/RianIhsan/wedding-organizer-be/pkg/cloudinary"
+	"github.com/RianIhsan/wedding-organizer-be/pkg/payment"
 	"github.com/pkg/errors"
 	"net/http"
 
@@ -19,6 +20,11 @@ import (
 	galleryRoute "github.com/RianIhsan/wedding-organizer-be/internal/gallery/controller/http"
 	galleryRepository "github.com/RianIhsan/wedding-organizer-be/internal/gallery/repository"
 	galleryService "github.com/RianIhsan/wedding-organizer-be/internal/gallery/service"
+
+	orderController "github.com/RianIhsan/wedding-organizer-be/internal/order/controller/http"
+	orderRoute "github.com/RianIhsan/wedding-organizer-be/internal/order/controller/http"
+	orderRepository "github.com/RianIhsan/wedding-organizer-be/internal/order/repository"
+	orderService "github.com/RianIhsan/wedding-organizer-be/internal/order/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,6 +35,8 @@ func (s *Server) Bootstrap() error {
 	userRedisRepo := userRepository.NewUserRedisRepository(s.redisClient)
 	productPostgresRepo := productRepository.NewProductPostgresRepository(s.db)
 	galleryPostgresRepo := galleryRepository.NewGalleryPostgresRepository(s.db)
+	orderPostgresRepo := orderRepository.NewOrderPGRepository(s.db)
+	InitMidtrans := payment.InitMidtransCore(*s.cfg)
 
 	cldConfig, err := cloudinary.InitializeCloudinary(&s.cfg.Cloudinary)
 	if err != nil {
@@ -62,6 +70,16 @@ func (s *Server) Bootstrap() error {
 		Logger: s.logger,
 	})
 
+	orderSV := orderService.NewOrderService(&orderService.ServiceConfig{
+		OrderRepo:      orderPostgresRepo,
+		UserService:    userSV,
+		ProductService: productSV,
+		Config:         s.cfg,
+		Logger:         s.logger,
+	},
+		InitMidtrans,
+	)
+
 	// -----------------------------------------------------------------------------------------------------------
 	// create a new instance controllers
 	authController := userController.NewAuthController(&userController.ControllerConfig{
@@ -86,6 +104,11 @@ func (s *Server) Bootstrap() error {
 		GalleryService: gallerySV,
 	})
 
+	orderController := orderController.NewOrderController(&orderController.OrderControllerConfig{
+		Config:       s.cfg,
+		Logger:       s.logger,
+		OrderService: orderSV,
+	})
 	// -----------------------------------------------------------------------------------------------------------
 	// create a new instance middleware
 	middlewareManager := middleware.NewMiddlewareManager(&middleware.MiddlewareConfig{
@@ -117,6 +140,12 @@ func (s *Server) Bootstrap() error {
 		galleryGroup := apiV1.Group("/v1")
 		{
 			galleryRoute.MapGalleryRoutes(galleryGroup, galleryController)
+		}
+
+		// group order routes
+		orderGroup := apiV1.Group("/v1")
+		{
+			orderRoute.MapOrderRoutes(orderGroup, orderController, middlewareManager)
 		}
 
 	}

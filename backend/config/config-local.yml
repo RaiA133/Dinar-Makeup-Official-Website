@@ -44,7 +44,7 @@ cloudinary:
 midtrans:
   MerchantID: G816488272
   ClientKey: SB-Mid-client-f9XowYwdEXQTJjvq
-  ServerKey: SB-Mid-server-J5OSRbclJ5IspnNGbHeRXENn
+  SecretKey: SB-Mid-server-J5OSRbclJ5IspnNGbHeRXENn
 
 #public MinIO cluster
 #aws:
