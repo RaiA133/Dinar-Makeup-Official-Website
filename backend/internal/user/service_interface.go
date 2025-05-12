@@ -10,6 +10,7 @@ import (
 type AuthService interface {
 	Register(ctx context.Context, user *model.User) (*dto.UserResponse, error)
 	Login(ctx context.Context, user *model.User) (*dto.JwtToken, error)
+	LoginWithGoogle(ctx context.Context, idToken string) (*dto.JwtToken, error)
 }
 
 type UserService interface {

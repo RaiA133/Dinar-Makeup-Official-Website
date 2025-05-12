@@ -7,6 +7,7 @@ import "github.com/gin-gonic/gin"
 type AuthController interface {
 	RegisterNewUser() gin.HandlerFunc
 	LoginNewUser() gin.HandlerFunc
+	LoginGoogle() gin.HandlerFunc
 }
 
 // UserController defines methods the routes expects

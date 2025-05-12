@@ -10,6 +10,7 @@ import (
 func MapAuthRoutes(authGroup *gin.RouterGroup, controller user.AuthController) {
 	authGroup.POST("/register", controller.RegisterNewUser())
 	authGroup.POST("/login", controller.LoginNewUser())
+	authGroup.POST("/login/google", controller.LoginGoogle())
 }
 
 func MapUserRoutes(userGroup *gin.RouterGroup, controller user.UserController, mw *middleware.MiddlewareManager) {
