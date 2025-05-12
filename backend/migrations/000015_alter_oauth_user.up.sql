@@ -1,0 +1,5 @@
+ALTER TABLE users
+    ADD COLUMN google_id VARCHAR(100),
+    ADD COLUMN login_provider VARCHAR(50),
+    ADD COLUMN is_oauth BOOLEAN DEFAULT FALSE,
+    ADD COLUMN verified_email BOOLEAN DEFAULT FALSE;

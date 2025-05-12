@@ -32,3 +32,7 @@ type UserUpdateRequest struct {
 // 	City        string `json:"city" validate:"omitempty,max=100,alpha"`
 // 	PhoneNumber string `json:"phone_number" validate:"omitempty,max=13,numeric"`
 // }
+
+type LoginGoogleRequest struct {
+	IDToken string `json:"id_token" validate:"required"`
+}

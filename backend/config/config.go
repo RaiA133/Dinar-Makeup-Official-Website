@@ -15,6 +15,7 @@ type Config struct {
 	AWS        AwsConfig
 	Cloudinary CloudinaryConfig
 	Midtrans   MidtransConfig
+	Google     GoogleConfig
 }
 type ServerConfig struct {
 	Host         string
@@ -69,6 +70,11 @@ type MidtransConfig struct {
 	MerchantID string
 	ClientKey  string
 	SecretKey  string
+}
+
+type GoogleConfig struct {
+	ClientID  string
+	SecretKey string
 }
 
 func NewAppConfig(configPath string) (*Config, error) {

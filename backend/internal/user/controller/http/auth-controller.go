@@ -99,3 +99,30 @@ func (ac *authController) LoginNewUser() gin.HandlerFunc {
 		response.SendSuccesResponse(ctx, http.StatusOK, "Login Success", *jwtToken)
 	}
 }
+
+func (ac *authController) LoginGoogle() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		req := new(dto.LoginGoogleRequest)
+		if err := c.ShouldBindJSON(req); err != nil {
+			utils.LogErrorResponse(c, ac.logger, err)
+			response.SendErrorResponse(c, http.StatusBadRequest, "invalid payload id token")
+			return
+		}
+
+		if err := validation.ValidateStruct(req); err != nil {
+			utils.LogErrorResponse(c, ac.logger, err)
+			response.SendErrorResponse(c, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		jwtToken, err := ac.service.LoginWithGoogle(c, req.IDToken)
+		if err != nil {
+			utils.LogErrorResponse(c, ac.logger, err)
+			response.SendErrorResponse(c, http.StatusUnauthorized, err.Error())
+			return
+		}
+
+		response.SendSuccesResponse(c, http.StatusOK, "Login with google Success", *jwtToken)
+
+	}
+}
