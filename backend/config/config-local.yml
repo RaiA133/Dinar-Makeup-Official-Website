@@ -46,6 +46,9 @@ midtrans:
   ClientKey: SB-Mid-client-f9XowYwdEXQTJjvq
   SecretKey: SB-Mid-server-J5OSRbclJ5IspnNGbHeRXENn
 
+google:
+  ClientID: 921257807914-182f8d3n65gi8pecgcd17o5ah6vp237r.apps.googleusercontent.com
+  SecretKey: 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
 
 #public MinIO cluster
 #aws:
