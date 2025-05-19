@@ -97,30 +97,32 @@ function Weddings() {
                         </div>
 
                         {/* Thumbnail Grid */}
-                        <div className="mt-4 grid grid-cols-4 gap-2">
-                          {productsByIDState?.images?.map((image, index) => (
-                            <button
-                              key={index}
-                              className="aspect-square overflow-hidden rounded-lg border-2 border-transparent hover:border-primary transition-all"
-                              onClick={() => {
-                                document.getElementById('main-image').src = image.image_url;
-                              }}
-                            >
-                              <img
-                                src={image.image_url}
-                                alt={`Thumbnail ${index + 1}`}
-                                className="h-full w-full object-cover"
-                              />
-                            </button>
-                          ))}
-                        </div>
+                        {productsByIDState?.images?.length > 1 && (
+                          <div className="mt-4 grid grid-cols-4 gap-2">
+                            {productsByIDState?.images?.map((image, index) => (
+                              <button
+                                key={index}
+                                className="aspect-square overflow-hidden rounded-lg border-2 border-transparent hover:border-primary transition-all"
+                                onClick={() => {
+                                  document.getElementById('main-image').src = image.image_url;
+                                }}
+                              >
+                                <img
+                                  src={image.image_url}
+                                  alt={`Thumbnail ${index + 1}`}
+                                  className="h-full w-full object-cover"
+                                />
+                              </button>
+                            ))}
+                          </div>
+                        )}
 
                       </div>
 
                       {/* Product Details Section */}
                       <div className="overflow-y-auto max-h-[90vh]">
                         {/* Product Title */}
-                        <div className="sticky top-0 bg-white p-5 z-10">
+                        <div className="sticky top-0 bg-base-100 p-5 z-10">
                           <h2 className="text-3xl font-bold">{productsByIDState?.name}</h2>
                           <span className="text-xl font-semibold text-primary">
                             {productsByIDState?.currency} {productsByIDState?.price}
@@ -148,7 +150,7 @@ function Weddings() {
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="modal-action sticky bottom-0 bg-white p-5">
+                        <div className="modal-action sticky bottom-0 bg-base-100 p-5">
                           <form method="dialog" className="w-full flex gap-2">
                             <button className="btn btn-primary flex-1">Buy Now</button>
                             <button className="btn flex-1">Close</button>
