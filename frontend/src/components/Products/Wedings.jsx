@@ -82,45 +82,49 @@ function Weddings() {
 
                 {/* MODAL DETAIl */}
                 <dialog id="my_modal_product" className="modal">
-                  <div className="modal-box w-11/12 max-w-7xl max-h-11/12 overflow-y-auto">
+                  <div className="modal-box w-11/12 max-w-7xl max-h-11/12 overflow-y-auto rounded-4xl">
                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-0'>
                       {/* Image Gallery Section */}
-                      <div className="relative bg-base-200 p-3 shadow-xl z-20">
+                      <div className="relative z-20">
                         {/* Main Image */}
-                        <div className="relative aspect-square w-full max-h-96 overflow-hidden">
+                        <div className="overflow-hidden">
                           <img
                             src={productsByIDState?.images?.[0]?.image_url}
                             alt="Main product image"
-                            className="h-full w-full object-contain transition-opacity duration-300"
+                            className="object-contain transition-opacity duration-300"
                             id="main-image"
                           />
                         </div>
 
                         {/* Thumbnail Grid */}
                         {productsByIDState?.images?.length > 1 && (
-                          <div className="mt-4 grid grid-cols-4 gap-2">
-                            {productsByIDState?.images?.map((image, index) => (
-                              <button
-                                key={index}
-                                className="aspect-square overflow-hidden rounded-lg border-2 border-transparent hover:border-primary transition-all"
-                                onClick={() => {
-                                  document.getElementById('main-image').src = image.image_url;
-                                }}
-                              >
-                                <img
-                                  src={image.image_url}
-                                  alt={`Thumbnail ${index + 1}`}
-                                  className="h-full w-full object-cover"
-                                />
-                              </button>
-                            ))}
-                          </div>
+                          <section>
+                            <div className="divider"></div>
+                            <div className="mt-4 grid grid-cols-6 gap-2">
+                              {productsByIDState?.images?.map((image, index) => (
+                                <button
+                                  key={index}
+                                  className="aspect-square overflow-hidden rounded-lg border-2 border-transparent hover:border-primary transition-all"
+                                  onClick={() => {
+                                    document.getElementById('main-image').src = image.image_url;
+                                  }}
+                                >
+                                  <img
+                                    src={image.image_url}
+                                    alt={`Thumbnail ${index + 1}`}
+                                    className="h-full w-full object-cover"
+                                  />
+                                </button>
+                              ))}
+                            </div>
+                            <div className="divider"></div>
+                          </section>
                         )}
 
                       </div>
 
                       {/* Product Details Section */}
-                      <div className="overflow-y-auto max-h-[90vh]">
+                      <div className="overflow-y-auto max-h-[85vh]">
                         {/* Product Title */}
                         <div className="sticky top-0 bg-base-100 p-5 z-10">
                           <h2 className="text-3xl font-bold">{productsByIDState?.name}</h2>
