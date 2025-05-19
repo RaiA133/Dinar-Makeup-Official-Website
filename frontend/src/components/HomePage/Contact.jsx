@@ -13,7 +13,7 @@ function Contact() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
         <div>
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3211.1459651311807!2d107.64228604005275!3d-6.924532276515779!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e7debe338885%3A0xa8ccdf80a557fad9!2sJl.%20Jembatan%20Opat%2C%20Kec.%20Batununggal%2C%20Kota%20Bandung%2C%20Jawa%20Barat!5e0!3m2!1sen!2sid!4v1746374922013!5m2!1sen!2sid" width="600" height="450" style={{ color: 'red' }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3959.6053260868666!2d107.7463964!3d-7.055574699999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68c728715530df%3A0x852616ff78dd6bc4!2sDinarMakeUp!5e0!3m2!1sen!2sid!4v1746799906670!5m2!1sen!2sid" width="600" height="450" style={{ color: 'red' }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
         </div>
 
         <div>

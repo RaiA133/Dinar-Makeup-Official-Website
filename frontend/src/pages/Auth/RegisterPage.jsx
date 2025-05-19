@@ -39,25 +39,10 @@ function RegisterPage() {
       } 
     }
     catch (err) {
-      if (err.response.data.error.status == 400) {
-        toast.error('Minimum password 8 digit!', {
-          duration: 2500,
-        });
-        return
-      }
-      if (err.response.data.error.status == 409) {
-        toast.error("Email is already exist!", {
-          duration: 2500,
-        });
-        return
-      }
-      if (err.response.data.error.status == 500) {
-        toast.error(err.response.data.error.message, {
-          duration: 2500,
-        });
-        return
-      }
-
+      toast.error(err.response.data.error.message, {
+        duration: 2500,
+      });
+      return
     }
       
   }
