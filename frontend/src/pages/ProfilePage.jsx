@@ -11,9 +11,19 @@ function ProfilePage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const formData = new FormData(e.target);
+    const data = {
+      name: e.target.name.value,
+      username: e.target.username.value,
+      email: e.target.email.value,
+      phone_number: e.target.phone_number.value,
+      date_of_birth: e.target.date_of_birth.value,
+      age: e.target.age.value,
+      nik: e.target.nik.value,
+      address: e.target.address.value
+    };
+
     try {
-      const response = await updateProfile(formData);
+      const response = await updateProfile(data);
       if (response.status === 200) {
         const toastMessage = response.message;
         toast.success(
@@ -37,22 +47,22 @@ function ProfilePage() {
     <>
       <div className="p-5">
 
-        <form action="" onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
 
-            <Toaster
-              toastOptions={{
-                style: {
-                  maxWidth: '600px'
-                }
-              }}
-            />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
 
-            <ProfilePreview />
+          <Toaster
+            toastOptions={{
+              style: {
+                maxWidth: '600px'
+              }
+            }}
+          />
 
-            {/* FORM EDIT PROFILE */}
-            <div className="row-span-3 col-span-2">
+          <ProfilePreview />
 
+          {/* FORM EDIT PROFILE */}
+          <div className="row-span-3 col-span-2">
+            <form action="" onSubmit={handleSubmit}>
               <div className='p-10 bg-base-100 card shadow-md'>
                 <div className="flex justify-between">
                   <p className="text-4xl font-bold">Edit Profile</p>
@@ -148,15 +158,14 @@ function ProfilePage() {
                       defaultValue={userState.address}
                     />
                   </div>
-                  </div>
                 </div>
-
               </div>
-              {/* END FORM EDIT PROFILE */}
+            </form>
+          </div>
+          {/* END FORM EDIT PROFILE */}
 
-            </div>
+        </div>
 
-        </form>
 
       </div>
     </>

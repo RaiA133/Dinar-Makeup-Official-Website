@@ -77,10 +77,9 @@ function ProfilePreview() {
                       </svg>
                       <input
                         type="url"
-                        required
                         placeholder="https://"
-                        pattern="^(https?://)?([a-zA-Z0-9]([a-zA-Z0-9\-].*[a-zA-Z0-9])?\.)+[a-zA-Z].*$"
-                        title="Must be valid URL"
+                        // pattern="^(https?://)?([a-zA-Z0-9]([a-zA-Z0-9\-].*[a-zA-Z0-9])?\.)+[a-zA-Z].*$"
+                        // title="Must be valid URL"
                       />
                     </label>
                   </div>
