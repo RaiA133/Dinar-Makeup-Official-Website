@@ -88,6 +88,7 @@ function ProfilePage() {
                   <div className="form-control w-full">
                     <label className="label"><span className="label-text">Username</span></label>
                     <input
+                      disabled
                       className="input input-bordered w-full"
                       type="text"
                       name="username"
