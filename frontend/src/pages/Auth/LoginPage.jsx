@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from "../../modules/fetch";
 import toast, { Toaster } from 'react-hot-toast';
+import Cookies from "js-cookie";
 
 function LoginPage() {
   const navigate = useNavigate()
@@ -59,14 +60,27 @@ function LoginPage() {
                     e.target.password.value
                   );
                   if (response.status === 200) {
-                    const successMessage = "Login Success!";
-                    window.localStorage.setItem('toastMessage', successMessage);
-                    window.localStorage.setItem("token", response.jwt.access_Token);
+                    const successMessage = response.message;
+                    // window.localStorage.setItem('toastMessage', successMessage);
+
+                    toast.success(successMessage, {
+                      duration: 2500,
+                    });
+                    
+                    // Set cookie
+                    Cookies.set("token", response.data.access_Token, {
+                      expires: 1, // 1 hari
+                      path: "/",
+                      secure: true,
+                      sameSite: "strict",
+                    });
+
                     navigate("/")
                   }
                 }
-                catch (err) {
-                  toast.error(err.response.data.error.message, {
+                catch (error) {
+                  console.log(error);
+                  toast.error(error.response.data.message, {
                     duration: 2500,
                   });
                   return
