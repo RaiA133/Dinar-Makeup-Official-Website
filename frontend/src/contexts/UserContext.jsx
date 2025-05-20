@@ -25,7 +25,7 @@ export const UserContextProvider = ({ children }) => {
         }
       }
       catch (err) {
-        console.log(err)
+        // console.log(err)
       }
     };
     fetchData();

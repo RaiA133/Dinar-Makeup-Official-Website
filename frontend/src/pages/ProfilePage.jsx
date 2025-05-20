@@ -3,17 +3,41 @@ import ProfilePreview from '../components/ProfilePreview'
 import toast, { Toaster } from 'react-hot-toast';
 import { useContext } from 'react';
 import { UserContext } from '../contexts/UserContext';
+import { updateProfile } from '../modules/fetch';
 
 function ProfilePage() {
   const navigate = useNavigate()
-
   const { userState } = useContext(UserContext)
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    try {
+      const response = await updateProfile(formData);
+      if (response.status === 200) {
+        const toastMessage = response.message;
+        toast.success(
+          <>
+            <span className='leading-normal'>{toastMessage}</span>
+          </>,
+          { duration: 2500 }
+        )
+      }
+    } catch (error) {
+      let failedMessage = error.message
+      console.log(error)
+      console.error(failedMessage)
+      toast.error(failedMessage, {
+        duration: 2500,
+      });
+    }
+  }
 
   return (
     <>
       <div className="p-5">
 
-        <form action="" onSubmit="">
+        <form action="" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
 
             <Toaster

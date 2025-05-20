@@ -17,6 +17,7 @@ import LoginPage from './pages/Auth/LoginPage';
 import ForgotPasswordPage from './pages/Auth/ForgotPasswordPage';
 
 import ProfilePage from './pages/ProfilePage';
+import PrivateRoute from './components/PrivateRoute';
 
 // Framer Motion (Efek Transisi Faded Perpindahan Page)
 const PageMotionWrapper = ({ children }) => (
@@ -55,7 +56,7 @@ function App() {
           <Route path="/register" element={<PageMotionWrapper><RegisterPage /></PageMotionWrapper>} />
           <Route path="/forgot-password" element={<PageMotionWrapper><ForgotPasswordPage /></PageMotionWrapper>} />
 
-          <Route path="/profile" element={<PageMotionWrapper><ProfilePage /></PageMotionWrapper>} />
+          <Route path="/profile" element={<PrivateRoute><PageMotionWrapper><ProfilePage /></PageMotionWrapper></PrivateRoute>} />
         </Routes>
       </AnimatePresence>
 

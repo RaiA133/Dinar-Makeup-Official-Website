@@ -34,6 +34,7 @@ function ProfilePreview() {
             <ul className="ms-1 p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-56 overflow-hidden">
               <li>
                 <input
+                  // disabled
                   className="w-full input-sm"
                   type="file"
                   name="file"
@@ -116,7 +117,7 @@ function ProfilePreview() {
       <div className="mt-3 mb-1 flex items-center gap-2">
         <p className="font-bold">{userState.username || 'Username'}</p>
         {isAdmin && (
-          <div class="badge badge-primary badge-xs">Administrator ✓</div>
+          <div className="badge badge-primary badge-xs">Administrator ✓</div>
         )}
       </div>
       <div className="flex justify-center">
