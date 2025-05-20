@@ -76,13 +76,14 @@ function ProfilePage() {
 
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 pb-5'>
                   <div className="form-control w-full">
-                    <label className="label"><span className="label-text">Name</span></label>
+                    <label className="label"><span className="label-text">Email</span></label>
                     <input
                       className="input input-bordered w-full"
-                      type="text"
-                      name="name"
-                      placeholder="Your Name"
-                      defaultValue={userState.name}
+                      type="email"
+                      name="email"
+                      placeholder="Your Email"
+                      defaultValue={userState.email}
+                      disabled
                     />
                   </div>
                   <div className="form-control w-full">
@@ -97,14 +98,13 @@ function ProfilePage() {
                     />
                   </div>
                   <div className="form-control w-full">
-                    <label className="label"><span className="label-text">Email</span></label>
+                    <label className="label"><span className="label-text">Name</span></label>
                     <input
                       className="input input-bordered w-full"
-                      type="email"
-                      name="email"
-                      placeholder="Your Email"
-                      defaultValue={userState.email}
-                      disabled
+                      type="text"
+                      name="name"
+                      placeholder="Your Name"
+                      defaultValue={userState.name}
                     />
                   </div>
                   <div className="form-control w-full">
