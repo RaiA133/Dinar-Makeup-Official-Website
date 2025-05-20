@@ -53,7 +53,9 @@ func (s *Server) Bootstrap() error {
 		Logger:                 s.logger,
 		UserPostgresRepository: userPostgresRepo,
 		UserRedisRepository:    userRedisRepo,
-	})
+	}, cldConfig,
+		&s.cfg.Cloudinary,
+	)
 	productSV := productService.NewProductService(
 		&productService.ServiceConfig{
 			PgRepo: productPostgresRepo,

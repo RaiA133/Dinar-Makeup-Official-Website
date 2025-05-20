@@ -8,6 +8,8 @@ import (
 	"github.com/RianIhsan/wedding-organizer-be/pkg/pagination"
 	"github.com/google/uuid"
 	"net/http"
+	"path"
+	"strings"
 
 	"github.com/RianIhsan/wedding-organizer-be/config"
 	"github.com/RianIhsan/wedding-organizer-be/internal/middleware"
@@ -129,6 +131,36 @@ func (u *userController) GetUsers() gin.HandlerFunc {
 		}
 
 		response.SendSuccessResponseWithPagination(ctx, http.StatusOK, "Success get data users", data, paginationMeta)
+
+	}
+}
+
+func (u *userController) UpdateAvatar() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		auth := middleware.GetAuth(ctx)
+		if auth.Role != "user" && auth.Role != "admin" {
+			utils.LogErrorResponse(ctx, u.logger, errors.New("access denied"))
+			response.SendErrorResponse(ctx, http.StatusForbidden, "access denied")
+			return
+		}
+
+		file, fileHeader, err := ctx.Request.FormFile("file")
+		if err != nil {
+			utils.LogErrorResponse(ctx, u.logger, err)
+			response.SendErrorResponse(ctx, http.StatusBadRequest, "failed request form file")
+			return
+		}
+
+		ext := path.Ext(fileHeader.Filename)
+		fileName := strings.TrimSuffix(fileHeader.Filename, ext)
+
+		err = u.service.UpdateAvatar(ctx, auth.Id.String(), file, fileName)
+		if err != nil {
+			utils.LogErrorResponse(ctx, u.logger, err)
+			response.SendErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+			return
+		}
+		response.SendSuccesResponse(ctx, http.StatusOK, "Success update avatar", nil)
 
 	}
 }
