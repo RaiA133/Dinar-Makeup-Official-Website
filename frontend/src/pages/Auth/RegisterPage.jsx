@@ -28,8 +28,8 @@ function RegisterPage() {
         e.target.email.value,
         password
       );
-      if (response.status === 201) {
-        const successMessage = "Register Success!";
+      if (response.status === 200) {
+        const successMessage = response.message ;
         toast.success(successMessage, {
           duration: 6000,
         });
