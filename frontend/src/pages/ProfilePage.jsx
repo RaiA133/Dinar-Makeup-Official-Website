@@ -1,0 +1,130 @@
+import { useNavigate } from 'react-router-dom';
+import ProfilePreview from '../components/ProfilePreview'
+import toast, { Toaster } from 'react-hot-toast';
+import { useContext } from 'react';
+import { UserContext } from '../contexts/UserContext';
+
+function ProfilePage() {
+  const navigate = useNavigate()
+
+  const { userState } = useContext(UserContext)
+
+  return (
+    <>
+      <div className="p-5">
+
+        <form action="" onSubmit="">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
+
+            <Toaster
+              toastOptions={{
+                style: {
+                  maxWidth: '600px'
+                }
+              }}
+            />
+
+            {/* <ProfilePreview /> */}
+
+            {/* FORM EDIT PROFILE */}
+            <div className="row-span-3 col-span-2">
+
+              <div className='p-10 bg-base-100 card shadow-md'>
+                <div className="flex justify-between">
+                  <p className="text-4xl font-bold">Edit Profile</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button className="btn max-[640px]:px-10 max-[640px]:btn-sm btn-neutral px-10" type='submit'>SIMPAN</button>
+                    <button className="btn max-[640px]:px-10 max-[640px]:btn-sm btn-neutral px-10" onClick={() => navigate("..", { relative: "path" })}>BATAL</button>
+                  </div>
+                </div>
+
+                <div className='divider' />
+
+                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 pb-5'>
+                  <div className="form-control w-full">
+                    <label className="label"><span className="label-text">Name</span></label>
+                    <input
+                      className="input input-bordered w-full"
+                      type="text"
+                      name="name"
+                      placeholder="Your Name"
+                      defaultValue={userState.name}
+                    />
+                  </div>
+                  <div className="form-control w-full">
+                    <label className="label"><span className="label-text">Username</span></label>
+                    <input
+                      className="input input-bordered w-full"
+                      type="text"
+                      name="username"
+                      placeholder="Your Username"
+                      defaultValue={userState.username}
+                    />
+                  </div>
+                  <div className="form-control w-full">
+                    <label className="label"><span className="label-text">Email</span></label>
+                    <input
+                      className="input input-bordered w-full"
+                      type="email"
+                      name="email"
+                      placeholder="Your Email"
+                      defaultValue={userState.email}
+                      disabled
+                    />
+                  </div>
+                  <div className="form-control w-full">
+                    <label className="label"><span className="label-text">Phone Number</span></label>
+                    <input
+                      className="input input-bordered w-full"
+                      type="text"
+                      name="phone_number"
+                      placeholder="Your Phone Number"
+                      defaultValue={userState.phone_number}
+                    />
+                  </div>
+                  <div className="form-control w-full">
+                    <label className="label"><span className="label-text">Birth Date</span></label>
+                    <input
+                      className="input input-bordered w-full"
+                      type="date"
+                      name="birth_date"
+                      placeholder=""
+                      defaultValue={userState.date_of_birth}
+                    />
+                  </div>
+                  <div className="form-control w-full">
+                    <label className="label"><span className="label-text">Birth Place</span></label>
+                    <input
+                      className="input input-bordered w-full"
+                      type="text"
+                      name="birth_place"
+                      placeholder="Your Birth Place"
+                      defaultValue={userState.birth_place}
+                    />
+                  </div>
+                </div>
+                <div className="form-control w-full">
+                  <label className="label"><span className="label-text">Address</span></label>
+                  <input
+                    className="input input-bordered w-full"
+                    type="text"
+                    name="address"
+                    placeholder="Your Address"
+                    defaultValue={userState.address}
+                  />
+                </div>
+              </div>
+
+            </div>
+            {/* END FORM EDIT PROFILE */}
+
+          </div>
+
+        </form>
+
+      </div>
+    </>
+  )
+}
+
+export default ProfilePage

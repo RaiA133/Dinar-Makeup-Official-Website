@@ -1,10 +1,22 @@
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import logoDinarMakeupCrop from '/img/logo/logoDinarMakeupCrop.jpg';
+import toast, { Toaster } from 'react-hot-toast';
+import Cookies from "js-cookie";
 
 
 function Navbar() {
   let location = useLocation();
   const navigate = useNavigate()
+
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (token) {
+      setIsLogin(true);
+    }
+  }, []);
 
   return (
     <div className="navbar bg-base-100 shadow-sm">
@@ -39,7 +51,54 @@ function Navbar() {
         </ul>
       </div>
       <div className="navbar-end">
-        <a onClick={() => navigate("/login")} className="btn btn-primary">Login</a>
+        {!isLogin ? (
+          <a onClick={() => navigate("/login")} className="btn btn-primary">Login</a>
+        ) : (
+
+          <div className="flex-noneblock gap-2">
+
+            <div className="dropdown dropdown-end me-5">
+              <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                <div className="w-10 rounded-full">
+                  <img alt="Tailwind CSS Navbar component" src={import.meta.env.VITE_PROFILE_DEFAULT} />
+                </div>
+              </label>
+              <ul tabIndex={0} className="mt-5 z-[50] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+                <li>
+                  <div className="avatar" onClick={() => navigate("/profile")}>
+                    <div className="w-8 rounded-full">
+                      <img src={import.meta.env.VITE_PROFILE_DEFAULT} alt="profile" />
+                    </div>
+                    <span className="overflow-hidden">
+                      <p className="text-xs font-bold"> {'username'} </p>
+                      <p className="text-xs"> {'email@gmail.com'}  </p>
+                    </span>
+                  </div>
+                </li>
+
+                <li><a>Settings</a></li>
+
+                {/* {isAdmin && (
+                <li><a onClick={() => navigate("/administrator")}>Administrator</a></li>
+              )} */}
+
+                <li><a
+                  onClick={() => {
+                    setIsLogin(false);
+                    Cookies.remove("token");
+                    navigate('/')
+                    toast("You have been logout", {
+                      icon: '👏',
+                      duration: 2500,
+                    });
+                  }}
+                  className="text-red-600 "
+                >Logout</a></li>
+              </ul>
+            </div>
+
+          </div>
+        )}
       </div>
     </div>
   );
