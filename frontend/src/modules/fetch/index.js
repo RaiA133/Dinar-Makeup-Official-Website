@@ -34,9 +34,10 @@ async function getMe() {
 }
 
 //Update Profile
-async function updateProfile(formData) {
+async function updateProfile(data) {
+  console.log(data);
   try {
-    const response = await instance.put('/user', formData,);
+    const response = await instance.put('/user', data);
     return response.data;
   }
   catch (error) {

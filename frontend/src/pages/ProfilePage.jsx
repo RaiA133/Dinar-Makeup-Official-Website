@@ -15,7 +15,7 @@ function ProfilePage() {
       name: e.target.name.value,
       username: e.target.username.value,
       email: e.target.email.value,
-      phone_number: e.target.phone_number.value,
+      phone: e.target.phone.value,
       date_of_birth: e.target.date_of_birth.value,
       age: e.target.age.value,
       nik: e.target.nik.value,
@@ -112,7 +112,7 @@ function ProfilePage() {
                     <input
                       className="input input-bordered w-full"
                       type="text"
-                      name="phone_number"
+                      name="phone"
                       placeholder="Your Phone Number"
                       defaultValue={userState.phone_number}
                     />
