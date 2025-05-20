@@ -24,7 +24,7 @@ function ProfilePage() {
               }}
             />
 
-            {/* <ProfilePreview /> */}
+            <ProfilePreview />
 
             {/* FORM EDIT PROFILE */}
             <div className="row-span-3 col-span-2">
@@ -33,8 +33,8 @@ function ProfilePage() {
                 <div className="flex justify-between">
                   <p className="text-4xl font-bold">Edit Profile</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button className="btn max-[640px]:px-10 max-[640px]:btn-sm btn-neutral px-10" type='submit'>SIMPAN</button>
-                    <button className="btn max-[640px]:px-10 max-[640px]:btn-sm btn-neutral px-10" onClick={() => navigate("..", { relative: "path" })}>BATAL</button>
+                    <button className="btn max-[640px]:px-10 max-[640px]:btn-sm btn-neutral px-10" type='submit'>SAVE</button>
+                    <button className="btn max-[640px]:px-10 max-[640px]:btn-sm btn-neutral px-10" onClick={() => navigate("..", { relative: "path" })}>CENCEL</button>
                   </div>
                 </div>
 
@@ -87,38 +87,50 @@ function ProfilePage() {
                     <input
                       className="input input-bordered w-full"
                       type="date"
-                      name="birth_date"
+                      name="date_of_birth"
                       placeholder=""
                       defaultValue={userState.date_of_birth}
                     />
                   </div>
                   <div className="form-control w-full">
-                    <label className="label"><span className="label-text">Birth Place</span></label>
+                    <label className="label"><span className="label-text">Age</span></label>
                     <input
                       className="input input-bordered w-full"
                       type="text"
-                      name="birth_place"
-                      placeholder="Your Birth Place"
-                      defaultValue={userState.birth_place}
+                      name="age"
+                      placeholder="Your Age"
+                      defaultValue={userState.age}
                     />
                   </div>
                 </div>
-                <div className="form-control w-full">
-                  <label className="label"><span className="label-text">Address</span></label>
-                  <input
-                    className="input input-bordered w-full"
-                    type="text"
-                    name="address"
-                    placeholder="Your Address"
-                    defaultValue={userState.address}
-                  />
+                <div className='grid grid-cols-1 gap-4 pb-5'>
+                  <div className="form-control w-full">
+                    <label className="label"><span className="label-text">NIK</span></label>
+                    <input
+                      className="input input-bordered w-full"
+                      type="text"
+                      name="nik"
+                      placeholder="Your NIK"
+                      defaultValue={userState.nik}
+                    />
+                  </div>
+                  <div className="form-control w-full">
+                    <label className="label"><span className="label-text">Address</span></label>
+                    <input
+                      className="input input-bordered w-full"
+                      type="text"
+                      name="address"
+                      placeholder="Your Address"
+                      defaultValue={userState.address}
+                    />
+                  </div>
+                  </div>
                 </div>
+
               </div>
+              {/* END FORM EDIT PROFILE */}
 
             </div>
-            {/* END FORM EDIT PROFILE */}
-
-          </div>
 
         </form>
 

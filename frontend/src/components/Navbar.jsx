@@ -1,13 +1,16 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import logoDinarMakeupCrop from '/img/logo/logoDinarMakeupCrop.jpg';
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from "js-cookie";
+import { UserContext } from '../contexts/UserContext';
 
 
 function Navbar() {
   let location = useLocation();
   const navigate = useNavigate()
+
+  const { userState, img_profile_link, set_img_profile_link, isAdmin } = useContext(UserContext)
 
   const [isLogin, setIsLogin] = useState(false);
 
@@ -60,27 +63,27 @@ function Navbar() {
             <div className="dropdown dropdown-end me-5">
               <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 rounded-full">
-                  <img alt="Tailwind CSS Navbar component" src={import.meta.env.VITE_PROFILE_DEFAULT} />
+                  <img alt="Tailwind CSS Navbar component" src={userState.avatar || import.meta.env.VITE_PROFILE_DEFAULT} />
                 </div>
               </label>
               <ul tabIndex={0} className="mt-5 z-[50] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
                 <li>
                   <div className="avatar" onClick={() => navigate("/profile")}>
                     <div className="w-8 rounded-full">
-                      <img src={import.meta.env.VITE_PROFILE_DEFAULT} alt="profile" />
+                      <img src={userState.avatar || import.meta.env.VITE_PROFILE_DEFAULT} alt="profile" />
                     </div>
                     <span className="overflow-hidden">
-                      <p className="text-xs font-bold"> {'username'} </p>
-                      <p className="text-xs"> {'email@gmail.com'}  </p>
+                      <p className="text-xs font-bold"> {userState.username} </p>
+                      <p className="text-xs"> {userState.email}  </p>
                     </span>
                   </div>
                 </li>
 
                 <li><a>Settings</a></li>
 
-                {/* {isAdmin && (
-                <li><a onClick={() => navigate("/administrator")}>Administrator</a></li>
-              )} */}
+                {isAdmin && (
+                  <li><a onClick={() => navigate("/administrator")}>Administrator</a></li>
+                )}
 
                 <li><a
                   onClick={() => {

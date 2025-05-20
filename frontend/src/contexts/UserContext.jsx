@@ -15,7 +15,6 @@ export const UserContextProvider = ({ children }) => {
     const fetchData = async () => {
       try {
         const response = await getMe(); // get semua data profile mu
-        console.log("res", response);
         if (response.status === 200) {
           if (response.data.role == "admin") { // kondisi admin / bukan ada disini
             setIsAdmin(true)
@@ -26,7 +25,7 @@ export const UserContextProvider = ({ children }) => {
         }
       }
       catch (err) {
-        // console.log(err)
+        console.log(err)
       }
     };
     fetchData();
