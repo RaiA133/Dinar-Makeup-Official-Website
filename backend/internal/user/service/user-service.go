@@ -2,6 +2,9 @@ package service
 
 import (
 	"context"
+	"github.com/RianIhsan/wedding-organizer-be/pkg/cloudinary"
+	cloudinary2 "github.com/cloudinary/cloudinary-go/v2"
+	"mime/multipart"
 
 	"github.com/RianIhsan/wedding-organizer-be/config"
 	"github.com/RianIhsan/wedding-organizer-be/internal/user"
@@ -26,16 +29,20 @@ type userService struct {
 	pgRepo user.UserPostgresRepository
 	rdRepo user.UserRedisRepository
 	logger *logrus.Logger
+	cld    *cloudinary2.Cloudinary
+	cfg2   *config.CloudinaryConfig
 }
 
 // initialize user service
 
-func NewUserService(config *ServiceConfig) user.UserService {
+func NewUserService(config *ServiceConfig, cld *cloudinary2.Cloudinary, cfg *config.CloudinaryConfig) user.UserService {
 	return &userService{
 		cfg:    config.Config,
 		pgRepo: config.UserPostgresRepository,
 		rdRepo: config.UserRedisRepository,
 		logger: config.Logger,
+		cld:    cld,
+		cfg2:   cfg,
 	}
 }
 
@@ -131,4 +138,19 @@ func (u *userService) GetUsers(ctx context.Context, offset, limit int) ([]*dto.G
 	}
 
 	return res, total, nil
+}
+
+func (u *userService) UpdateAvatar(ctx context.Context, userId string, file multipart.File, fileName string) error {
+	imageURL, err := cloudinary.UploadImage(u.cld, u.cfg2, file, fileName)
+	if err != nil {
+		return errors.New("failed to upload image (cloudinary)")
+	}
+
+	err = u.pgRepo.UpdateAvatarUser(ctx, userId, imageURL)
+	if err != nil {
+		return errors.New("failed updating user")
+	}
+
+	return nil
+
 }

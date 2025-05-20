@@ -9,18 +9,18 @@ server:
 
 postgres:
   User: postgres # Required
-  Password: postgres # Required
-  Host: localhost # Required
-  Port: 5444 # Required
-  Dbname: db_20102024 # Required
+  Password: KXNQQfiiAuZtLnfdyLoLwSDvtkGpvzpP # Required
+  Host: postgres.railway.internal # Required
+  Port: 5432 # Required
+  Dbname: railway # Required
 
 redis:
-  Addr: localhost:6379
+  Addr: redis.railway.internal:6379
   DB: 0
   MinIdleConns: 200
   PoolSize: 12000
   PoolTimeout: 240
-  Password: ""
+  Password: eICYITvgylNjrVCnyjsLxbViJMxLhSif
 
 logger:
   Level: trace # Required [trace, debug, info, warn, error, fatal, panic]
@@ -40,3 +40,18 @@ cloudinary:
   APIKey: 587467277272875
   APISecret: 4i5xGxc4z30AXgL10GMLQ5ynf70
   FolderName: dinar-makeup
+
+midtrans:
+  MerchantID: G816488272
+  ClientKey: SB-Mid-client-f9XowYwdEXQTJjvq
+  SecretKey: SB-Mid-server-J5OSRbclJ5IspnNGbHeRXENn
+
+google:
+  ClientID: 921257807914-182f8d3n65gi8pecgcd17o5ah6vp237r.apps.googleusercontent.com
+  SecretKey: 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
+
+#public MinIO cluster
+#aws:
+#  Endpoint: play.min.io
+#  MinioAccessKey: Q3AM3UQ867SPQQA43P2F
+#  MinioSecretKey: zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG

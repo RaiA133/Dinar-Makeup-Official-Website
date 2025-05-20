@@ -17,4 +17,5 @@ type UserController interface {
 	UpdateUser() gin.HandlerFunc
 	DeleteUser() gin.HandlerFunc
 	GetUsers() gin.HandlerFunc
+	UpdateAvatar() gin.HandlerFunc
 }

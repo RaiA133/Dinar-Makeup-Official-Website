@@ -19,4 +19,5 @@ func MapUserRoutes(userGroup *gin.RouterGroup, controller user.UserController, m
 	userGroup.PUT("/user", controller.UpdateUser())
 	userGroup.DELETE("/user/:id", controller.DeleteUser())
 	userGroup.GET("/user", controller.GetUsers())
+	userGroup.PUT("/user/avatar", controller.UpdateAvatar())
 }

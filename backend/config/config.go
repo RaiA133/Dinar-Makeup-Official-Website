@@ -1,7 +1,6 @@
 package config
 
 import (
-	"errors"
 	"fmt"
 	"github.com/spf13/viper"
 	"time"
@@ -78,35 +77,72 @@ type GoogleConfig struct {
 }
 
 func NewAppConfig(configPath string) (*Config, error) {
-	configFiles := map[string]string{
-		"docker":     "./config/config-docker",
-		"staging":    "",
-		"production": "",
-	}
-
-	filename, isOk := configFiles[configPath]
-	if !isOk {
-		//return nil, fmt.Errorf("environment '%s' is not recognized", configPath)
-		filename = "./config/config-local"
-	}
+	// Cek config path yang diberikan
 	v := viper.New()
-	v.SetConfigName(filename)
-	v.AddConfigPath(".")
+
+	// Baca dari file .env
+	v.SetConfigFile(".env")
+	v.SetConfigType("env")
 	v.AutomaticEnv()
 
 	if err := v.ReadInConfig(); err != nil {
-		var configFileNotFoundError viper.ConfigFileNotFoundError
-		if errors.As(err, &configFileNotFoundError) {
-			return nil, fmt.Errorf("config file '%s' not found", filename)
-		}
-		return nil, fmt.Errorf("error reading config file, %v", err)
+		return nil, fmt.Errorf("error reading .env file: %v", err)
 	}
 
-	// parse config
+	// Binding env ke struct
 	cfg := new(Config)
-	if err := v.Unmarshal(cfg); err != nil {
-		return nil, fmt.Errorf("unable to decode into struct, %v", err)
-	}
+
+	// Server
+	cfg.Server.Host = v.GetString("SERVER_HOST")
+	cfg.Server.Port = v.GetInt("SERVER_PORT")
+	cfg.Server.ReadTimeout = time.Duration(v.GetInt("SERVER_READ_TIMEOUT")) * time.Second
+	cfg.Server.WriteTimeout = time.Duration(v.GetInt("SERVER_WRITE_TIMEOUT")) * time.Second
+	cfg.Server.Mode = v.GetString("SERVER_MODE")
+	cfg.Server.SSL = v.GetBool("SERVER_SSL")
+	cfg.Server.JWTSecretKey = v.GetString("SERVER_JWT_SECRET_KEY")
+
+	// Postgres
+	cfg.Postgres.User = v.GetString("POSTGRES_USER")
+	cfg.Postgres.Password = v.GetString("POSTGRES_PASSWORD")
+	cfg.Postgres.Host = v.GetString("POSTGRES_HOST")
+	cfg.Postgres.Port = v.GetInt("POSTGRES_PORT")
+	cfg.Postgres.Dbname = v.GetString("POSTGRES_DBNAME")
+
+	// Redis
+	cfg.Redis.Addr = v.GetString("REDIS_ADDR")
+	cfg.Redis.DB = v.GetInt("REDIS_DB")
+	cfg.Redis.MinIdleConns = v.GetInt("REDIS_MIN_IDLE_CONNS")
+	cfg.Redis.PoolSize = v.GetInt("REDIS_POOL_SIZE")
+	cfg.Redis.PoolTimeout = time.Duration(v.GetInt("REDIS_POOL_TIMEOUT")) * time.Second
+	cfg.Redis.Password = v.GetString("REDIS_PASSWORD")
+
+	// Logger
+	cfg.Logger.Level = v.GetString("LOGGER_LEVEL")
+	cfg.Logger.Caller = v.GetBool("LOGGER_CALLER")
+	cfg.Logger.Encoding = v.GetString("LOGGER_ENCODING")
+	cfg.Logger.Development = v.GetBool("LOGGER_DEVELOPMENT")
+
+	// AWS
+	cfg.AWS.Endpoint = v.GetString("AWS_ENDPOINT")
+	cfg.AWS.MinioEndpoint = v.GetString("MINIO_ENDPOINT")
+	cfg.AWS.MinioAccessKey = v.GetString("MINIO_ACCESS_KEY")
+	cfg.AWS.MinioSecretKey = v.GetString("MINIO_SECRET_KEY")
+	cfg.AWS.UseSSL = v.GetBool("MINIO_USE_SSL")
+
+	// Cloudinary
+	cfg.Cloudinary.CloudName = v.GetString("CLOUDINARY_CLOUD_NAME")
+	cfg.Cloudinary.APIKey = v.GetString("CLOUDINARY_API_KEY")
+	cfg.Cloudinary.APISecret = v.GetString("CLOUDINARY_API_SECRET")
+	cfg.Cloudinary.FolderName = v.GetString("CLOUDINARY_FOLDER_NAME")
+
+	// Midtrans
+	cfg.Midtrans.MerchantID = v.GetString("MIDTRANS_MERCHANT_ID")
+	cfg.Midtrans.ClientKey = v.GetString("MIDTRANS_CLIENT_KEY")
+	cfg.Midtrans.SecretKey = v.GetString("MIDTRANS_SECRET_KEY")
+
+	// Google
+	cfg.Google.ClientID = v.GetString("GOOGLE_CLIENT_ID")
+	cfg.Google.SecretKey = v.GetString("GOOGLE_SECRET_KEY")
 
 	return cfg, nil
 }
