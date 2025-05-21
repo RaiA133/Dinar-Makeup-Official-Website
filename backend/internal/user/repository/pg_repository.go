@@ -97,3 +97,12 @@ func (u *userPostgresRepository) FindUsers(ctx context.Context, offset, limit in
 
 	return users, int(total), nil
 }
+
+func (u *userPostgresRepository) UpdateAvatarUser(ctx context.Context, id, avatar string) error {
+	DB := u.db.WithContext(ctx)
+	if err := DB.Model(model.User{}).Where("id = ?", id).Update("avatar", avatar).Error; err != nil {
+		return err
+	}
+
+	return nil
+}

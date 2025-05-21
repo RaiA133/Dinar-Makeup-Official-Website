@@ -13,7 +13,7 @@ func NewRedisClient(cfg *config.Config) *redis.Client {
 		MinIdleConns: cfg.Redis.MinIdleConns,
 		PoolSize:     cfg.Redis.PoolSize,
 		PoolTimeout:  cfg.Redis.PoolTimeout * time.Second,
-		Password:     cfg.Postgres.Password,
+		Password:     cfg.Redis.Password,
 	})
 
 	return client
