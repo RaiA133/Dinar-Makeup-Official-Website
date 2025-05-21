@@ -103,6 +103,7 @@ func (p *productService) GetProducts(ctx context.Context) ([]dto.GetProductsResp
 			Id:           product.Id,
 			Name:         product.Name,
 			Price:        product.Price,
+			Currency:     product.Currency,
 			Banner:       banner,
 			DetailGroups: detailGroups,
 		})

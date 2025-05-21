@@ -18,12 +18,13 @@ const (
 )
 
 func NewPostgresConnection(cfg *config.Config) (*gorm.DB, error) {
-	connString := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v sslmode=require TimeZone=Asia/Jakarta",
+	connString := fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v sslmode=%v TimeZone=Asia/Jakarta",
 		cfg.Postgres.Host,
 		cfg.Postgres.User,
 		cfg.Postgres.Password,
 		cfg.Postgres.Dbname,
 		cfg.Postgres.Port,
+		cfg.Postgres.SSLMode,
 	)
 
 	db, err := gorm.Open(postgres.Open(connString), &gorm.Config{
