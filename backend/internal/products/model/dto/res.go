@@ -14,6 +14,7 @@ type CreateProductResponse struct {
 type GetProductsResponse struct {
 	Id           uuid.UUID                           `json:"id"`
 	Name         string                              `json:"name"`
+	Currency     string                              `json:"currency"`
 	Price        int64                               `json:"price"`
 	Banner       string                              `json:"banner"`
 	DetailGroups []MappingProductDetailGroupResponse `json:"detail_groups"`

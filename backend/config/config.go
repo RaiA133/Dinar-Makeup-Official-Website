@@ -33,6 +33,7 @@ type PostgresConfig struct {
 	Host     string
 	Port     int
 	Dbname   string
+	SSLMode  string
 }
 
 type LoggerConfig struct {
@@ -110,6 +111,7 @@ func NewAppConfig(configPath string) (*Config, error) {
 	cfg.Postgres.Host = v.GetString("POSTGRES_HOST")
 	cfg.Postgres.Port = v.GetInt("POSTGRES_PORT")
 	cfg.Postgres.Dbname = v.GetString("POSTGRES_DBNAME")
+	cfg.Postgres.SSLMode = v.GetString("POSTGRES_SSL_MODE")
 
 	// Redis
 	cfg.Redis.Addr = v.GetString("REDIS_ADDR")
