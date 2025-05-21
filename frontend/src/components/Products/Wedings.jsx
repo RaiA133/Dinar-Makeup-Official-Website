@@ -66,8 +66,14 @@ function Weddings() {
               <div className="mt-6 h-full flex items-end">
                 <div className="w-full">
                   <div className="mb-5 w-full">
-                    <h2 className="text-3xl font-bold">{product?.name}</h2>
-                    <span className="text-xl">{product?.currency} {product?.price}</span>
+                    <h2 className="text-3xl font-bold mb-2">{product?.name}</h2>
+                    <span className="text-xl">
+                      {new Intl.NumberFormat('id-ID', {
+                        style: 'currency',
+                        currency: product?.currency|| 'IDR',
+                        minimumFractionDigits: 0
+                      }).format(product?.price || 0)}
+                    </span>
                   </div>
                   {/* You can open the modal using document.getElementById('ID').showModal() method */}
                   <div className="w-full flex gap-2">
@@ -127,9 +133,13 @@ function Weddings() {
                       <div className="overflow-y-auto max-h-[85vh]">
                         {/* Product Title */}
                         <div className="sticky top-0 bg-base-100 p-5 z-10">
-                          <h2 className="text-3xl font-bold">{productsByIDState?.name}</h2>
+                          <h2 className="text-3xl font-bold mb-2">{productsByIDState?.name}</h2>
                           <span className="text-xl font-semibold text-primary">
-                            {productsByIDState?.currency} {productsByIDState?.price}
+                            {new Intl.NumberFormat('id-ID', {
+                              style: 'currency',
+                              currency: product?.currency || 'IDR',
+                              minimumFractionDigits: 0
+                            }).format(product?.price || 0)}
                           </span>
                           <div className="divider my-2"></div>
                         </div>
