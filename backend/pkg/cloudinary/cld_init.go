@@ -10,6 +10,11 @@ import (
 	"time"
 )
 
+type cloudinaryResponse struct {
+	ImageURL string `json:"image_url"`
+	PublicID string `json:"public_id"`
+}
+
 // InitializeCloudinary initializes the Cloudinary client
 func InitializeCloudinary(cfg *config.CloudinaryConfig) (*cloudinary.Cloudinary, error) {
 	cld, err := cloudinary.NewFromParams(cfg.CloudName, cfg.APIKey, cfg.APISecret)
@@ -19,7 +24,7 @@ func InitializeCloudinary(cfg *config.CloudinaryConfig) (*cloudinary.Cloudinary,
 	return cld, nil
 }
 
-func UploadImage(cld *cloudinary.Cloudinary, cfg *config.CloudinaryConfig, file multipart.File, fileName string) (string, error) {
+func UploadImage(cld *cloudinary.Cloudinary, cfg *config.CloudinaryConfig, file multipart.File, fileName string) (cloudinaryResponse, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	result, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{
@@ -27,8 +32,13 @@ func UploadImage(cld *cloudinary.Cloudinary, cfg *config.CloudinaryConfig, file 
 		Folder:   cfg.FolderName, // Optional: specify a folder in Cloudinary
 	})
 	if err != nil {
-		return "", errors.Wrap(err, "upload image")
+		return cloudinaryResponse{}, errors.Wrap(err, "upload image")
 	}
 
-	return result.SecureURL, nil
+	resp := cloudinaryResponse{
+		ImageURL: result.SecureURL,
+		PublicID: result.PublicID,
+	}
+
+	return resp, nil
 }

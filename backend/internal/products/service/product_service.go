@@ -8,6 +8,7 @@ import (
 	"github.com/RianIhsan/wedding-organizer-be/internal/products/model/dto"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/cloudinary"
 	cloudinary2 "github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -171,16 +172,39 @@ func (p *productService) UpdateProduct(ctx context.Context, entity *model.Produc
 
 func (p *productService) AddImageToProduct(ctx context.Context, productId uuid.UUID, file multipart.File, fileName string) error {
 
-	imageURL, err := cloudinary.UploadImage(p.cld, p.cfg, file, fileName)
+	dataCloudinary, err := cloudinary.UploadImage(p.cld, p.cfg, file, fileName)
 	if err != nil {
 		return errors.New("failed to upload image (cloudinary)")
 	}
 	err = p.pgRepo.CreateProductImage(ctx, &model.ProductImage{
 		ProductId: productId,
-		ImageURL:  imageURL,
+		ImageURL:  dataCloudinary.ImageURL,
+		PublicId:  dataCloudinary.PublicID,
 	})
 	if err != nil {
 		return errors.New("failed to create product image")
+	}
+	return nil
+}
+
+func (p *productService) DeleteProductImage(ctx context.Context, imageId string) error {
+	parse, err := uuid.Parse(imageId)
+	if err != nil {
+		return err
+	}
+
+	image, err := p.pgRepo.GetProductImageById(ctx, parse)
+	if err != nil {
+		return errors.New("product image not found")
+	}
+
+	_, err = p.cld.Upload.Destroy(ctx, uploader.DestroyParams{
+		PublicID: image.PublicId,
+	})
+
+	err = p.pgRepo.DeleteProductImage(ctx, image.Id)
+	if err != nil {
+		return errors.New("failed to delete product image")
 	}
 	return nil
 }

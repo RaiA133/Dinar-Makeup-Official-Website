@@ -17,4 +17,5 @@ type ProductService interface {
 
 	// Product Image
 	AddImageToProduct(ctx context.Context, productId uuid.UUID, file multipart.File, fileName string) error
+	DeleteProductImage(ctx context.Context, imageId string) error
 }

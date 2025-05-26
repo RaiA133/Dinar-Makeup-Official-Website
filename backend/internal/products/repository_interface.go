@@ -3,6 +3,7 @@ package products
 import (
 	"context"
 	"github.com/RianIhsan/wedding-organizer-be/internal/products/model"
+	"github.com/google/uuid"
 )
 
 type ProductPostgresRepository interface {
@@ -16,4 +17,6 @@ type ProductPostgresRepository interface {
 
 	// Product Image
 	CreateProductImage(ctx context.Context, data *model.ProductImage) error
+	DeleteProductImage(ctx context.Context, id uuid.UUID) error
+	GetProductImageById(ctx context.Context, id uuid.UUID) (*model.ProductImage, error)
 }
