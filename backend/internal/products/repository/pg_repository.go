@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"github.com/google/uuid"
 	"time"
 
 	"github.com/RianIhsan/wedding-organizer-be/internal/products"
@@ -87,6 +88,21 @@ func (p *productPostgresRepository) CreateProductImage(ctx context.Context, data
 		return err
 	}
 	return nil
+}
+
+func (p *productPostgresRepository) DeleteProductImage(ctx context.Context, id uuid.UUID) error {
+	if err := p.db.WithContext(ctx).Where("id = ?", id).Delete(&model.ProductImage{}).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *productPostgresRepository) GetProductImageById(ctx context.Context, id uuid.UUID) (*model.ProductImage, error) {
+	var productImage model.ProductImage
+	if err := p.db.WithContext(ctx).Where("id = ?", id).First(&productImage).Error; err != nil {
+		return nil, err
+	}
+	return &productImage, nil
 }
 
 // Helper function to return a pointer to an int64

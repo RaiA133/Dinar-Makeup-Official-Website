@@ -175,3 +175,22 @@ func (pc *productController) AddImageToProduct() gin.HandlerFunc {
 		response.SendSuccesResponse(ctx, http.StatusOK, "Success add image to product", nil)
 	}
 }
+
+func (pc *productController) DeleteImageFromProduct() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		auth := middleware.GetAuth(ctx)
+		if auth.Role != "admin" {
+			utils.LogErrorResponse(ctx, pc.logger, errors.New("access denied"))
+			response.SendErrorResponse(ctx, http.StatusForbidden, "access denied")
+			return
+		}
+		imageId := ctx.Param("imageId")
+		err := pc.service.DeleteProductImage(context.Background(), imageId)
+		if err != nil {
+			utils.LogErrorResponse(ctx, pc.logger, err)
+			response.SendErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+			return
+		}
+		response.SendSuccesResponse(ctx, http.StatusOK, "Success delete image from product", nil)
+	}
+}

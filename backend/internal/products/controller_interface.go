@@ -10,4 +10,5 @@ type ProductController interface {
 
 	// AddImageToProduct Insert Image to product
 	AddImageToProduct() gin.HandlerFunc
+	DeleteImageFromProduct() gin.HandlerFunc
 }

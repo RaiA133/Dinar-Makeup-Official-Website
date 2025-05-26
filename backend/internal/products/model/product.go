@@ -19,6 +19,7 @@ type Product struct {
 type ProductImage struct {
 	Id        uuid.UUID `gorm:"column:id;primary_key;default:uuid_generate_v4();<-:create" json:"id"`
 	ProductId uuid.UUID `gorm:"column:product_id" json:"product_id"`
+	PublicId  string    `gorm:"column:public_id" json:"public_id"`
 	ImageURL  string    `gorm:"column:image_url" json:"image_url"`
 	CreatedAt int64     `gorm:"column:created_at;autoCreateTime:milli;<-:create" json:"created_at"`
 	UpdatedAt int64     `gorm:"column:updated_at;autoCreateTime:milli;autoUpdateTime:milli" json:"updated_at"`
