@@ -141,12 +141,12 @@ func (u *userService) GetUsers(ctx context.Context, offset, limit int) ([]*dto.G
 }
 
 func (u *userService) UpdateAvatar(ctx context.Context, userId string, file multipart.File, fileName string) error {
-	imageURL, err := cloudinary.UploadImage(u.cld, u.cfg2, file, fileName)
+	data, err := cloudinary.UploadImage(u.cld, u.cfg2, file, fileName)
 	if err != nil {
 		return errors.New("failed to upload image (cloudinary)")
 	}
 
-	err = u.pgRepo.UpdateAvatarUser(ctx, userId, imageURL)
+	err = u.pgRepo.UpdateAvatarUser(ctx, userId, data.ImageURL)
 	if err != nil {
 		return errors.New("failed updating user")
 	}
