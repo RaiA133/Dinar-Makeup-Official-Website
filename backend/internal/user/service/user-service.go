@@ -151,6 +151,10 @@ func (u *userService) UpdateAvatar(ctx context.Context, userId string, file mult
 		return errors.New("failed updating user")
 	}
 
+	if err := u.rdRepo.Delete(ctx, utils.GetRedisKey(basePrefix, userId)); err != nil {
+		u.logger.WithError(err).Error("UserService.Update.redisRepo.Delete")
+	}
+
 	return nil
 
 }
