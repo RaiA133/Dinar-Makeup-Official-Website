@@ -46,6 +46,26 @@ async function updateProfile(data) {
   }
 }
 
+//Update Profile
+async function updateProfileAvatar(formData) {
+  // console.log('formData', formData.file.size);
+  // const formDataObject = Object.fromEntries(formData.entries());
+  try {
+    const response = await instance.put('/user/avatar', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  } 
+  catch (error) {
+    const file = formData.get('file');
+    if (file && file.size > 2000000) {
+      throw new Error('File size should not exceed 2MB');
+    }
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
 // Function for get all data products
 async function getAllProducts() {
   try {
@@ -71,6 +91,6 @@ async function getProductByID(id) {
 export {
   register, login,
   getAllProducts, getProductByID,
-  getMe, updateProfile
+  getMe, updateProfile, updateProfileAvatar
 };
 
