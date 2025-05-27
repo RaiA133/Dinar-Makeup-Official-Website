@@ -6,7 +6,7 @@ async function register(name, username, email, password) {
     const response = await instance.post("/register", { name, username, email, password });
     return response.data;
   } catch (error) {
-    console.log("Error : ", error);
+    // console.log("Error : ", error);
     throw (error || "Something went wrong");
   }
 }
@@ -86,9 +86,34 @@ async function getProductByID(id) {
   }
 }
 
+// ADMIN : Function for get all user
+async function getAllUsers(params = {}) {
+  try {
+    const response = await instance.get(`/user`, {
+      params: params
+    });
+    return response;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
+async function deleteUserByID(id) {
+  try {
+    const response = await instance.delete(`/user/${id}`);
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
 export {
   register, login,
   getAllProducts, getProductByID,
-  getMe, updateProfile, updateProfileAvatar
+  getMe, updateProfile, updateProfileAvatar,
+  getAllUsers, 
+  deleteUserByID,
 };
 

@@ -1,10 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { getAllDataUserAdmin, getUserRoleAdmin } from "../modules/fetch";
-import { useNavigate } from 'react-router-dom';
-import { UserContext } from "../contexts/UserContext";
+import { createContext, useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
-export const AdminContext = createContext();
+export const AdminRouteContext = createContext();
 
+// AdminRoute akan selalu berjalan di page yg dibungkus oleh route ini
 function AdminRoute({
   children,
   ...rest
@@ -12,27 +12,17 @@ function AdminRoute({
   const navigate = useNavigate();
   const { isAdmin, setIsAdmin } = useContext(UserContext);
 
-  useEffect(() => {
-    const checkAdminStatus = async () => {
-      try {
-        if (decodedTokenState.user_role_id !== 1) {
-          navigate("/");
-        }
-      } catch (err) {
-        console.error('Error checking admin status:', err);
-        navigate("/");
-      }
-    };
-    checkAdminStatus();
-  }, [navigate]);
+  if (!isAdmin) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div>Your not an Admin</div>
+      </div>
+    );
+  }
 
   return (
     <div>
-      <AdminContext.Provider value={{
-        allUser, setAllUser,
-        tableRole, setTableRole,
-        getRole, setGetRole,
-      }}>
+      <AdminRouteContext.Provider value={{}}>
         {isAdmin ? (
           children
         ) : (
@@ -41,7 +31,7 @@ function AdminRoute({
             <span className="loading loading-spinner loading-lg"></span>
           </div>
         )}
-      </AdminContext.Provider>
+      </AdminRouteContext.Provider>
 
     </div>
   );

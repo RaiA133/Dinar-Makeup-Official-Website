@@ -40,7 +40,7 @@ function ForgotPasswordPage() {
                   if (response.status === 200) {
                     const successMessage = response.message;
                     window.localStorage.setItem('toastMessage', successMessage);
-                    window.localStorage.setItem("token", response.jwt.access_Token);
+                    // window.localStorage.setItem("token", response.jwt.access_Token);
                     navigate("/")
                   }
                 }

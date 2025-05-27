@@ -1,6 +1,6 @@
 function TransactionManagementPage() {
   return (
-    <div>Transaction Management Page</div>
+    <div className="h-screen">Transaction Management Page</div>
   );
 }
 

@@ -1,39 +1,35 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { UserContext } from "../../contexts/UserContext";
 
-export const DecodedTokenContext = createContext();
+export const LoginRouteContext = createContext();
 
+// LoginRoute akan selalu berjalan di page yg dibungkus oleh route ini
 function LoginRoute({
   children,
   ...rest
 }) {
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(false);
-  const [decodedTokenState, setDecodedTokenState] = useState()
+  const {isLogin, setIsLogin} = useContext(UserContext);
 
   useEffect(() => {
-    const checkLoginStatus = async () => {
-      try {
-        const token = Cookies.get("token");
-        if (!token) {
-          navigate("/login");
-          return;
-        } else {
-          setIsLogin(true);
-        }
-      } catch (error) {
-        console.error('Error checking login status:', error);
-      }
-    };
-
-    checkLoginStatus();
-  }, [navigate]);
+    try {
+      const token = Cookies.get("token");
+      if (!token) {
+        localStorage.setItem('toastMessage', 'token is expired')
+        navigate("/login");
+        return;
+      } else setIsLogin(true);
+    } catch (error) {
+      console.error('Error checking login status:', error);
+    }
+  }, []);
 
 
   return (
     <div>
-      <DecodedTokenContext.Provider value={{ decodedTokenState, setDecodedTokenState }}>
+      <LoginRouteContext.Provider value={{}}>
         {isLogin ? (
           children
         ) : (
@@ -42,7 +38,7 @@ function LoginRoute({
             <span className="loading loading-spinner loading-lg"></span> 
           </div>
         )}
-      </DecodedTokenContext.Provider>
+      </LoginRouteContext.Provider>
     </div>
   );
 }

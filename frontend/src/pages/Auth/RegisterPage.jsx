@@ -14,6 +14,36 @@ function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  function formatMixedErrors(rawError) {
+    return rawError.split(';')
+      .map(err => err.trim())
+      .filter(Boolean)
+      .map(error => {
+        // Check if it's the direct format (like password error)
+        const directFormatMatch = error.match(/Field '(.*?)' (.*)/);
+        if (directFormatMatch) {
+          return `${directFormatMatch[1]} ${directFormatMatch[2]}`;
+        }
+
+        // Process standard validation format
+        const fieldMatch = error.match(/field '(.*?)'/i);
+        const tagMatch = error.match(/tag '(.*?)'/i);
+
+        const field = fieldMatch ? fieldMatch[1] : 'This field';
+        const tag = tagMatch ? tagMatch[1] : 'default';
+
+        // Custom messages for each validation type
+        const messages = {
+          'alpha': 'must contain only letters',
+          'email': 'must be a valid email address',
+          'required': 'is required',
+          'default': 'has an invalid value'
+        };
+
+        return `${field} ${messages[tag] || messages['default']}`;
+      });
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault(); // menghilankan refresh halaman jika tombol simpan di klik
 
@@ -29,22 +59,32 @@ function RegisterPage() {
         password
       );
       if (response.status === 200) {
-        const successMessage = response.message ;
+        const successMessage = response.message;
         toast.success(successMessage, {
           duration: 6000,
         });
         setTimeout(() => {
           navigate("/login")
         }, 1000)
-      } 
+      }
     }
-    catch (err) {
-      toast.error(err.response.data.error.message, {
-        duration: 2500,
-      });
-      return
+    catch (error) {
+      if (error.response.data.status === 400) { // error validation
+        const rawError = error.response.data.message;
+        const errorMessages = formatMixedErrors(rawError);
+        errorMessages.forEach(message => {
+          toast.error(message, {
+            duration: 2500,
+          });
+        });
+      } else if (error.response.data.status === 500) { // email already exist
+        toast.error(error.response.data.message, {
+          duration: 6000,
+        });
+      }
+      return;
     }
-      
+
   }
 
   return (
@@ -53,10 +93,10 @@ function RegisterPage() {
       <div className="h-screen flex justify-center items-center">
         <div className="card w-96 bg-base-100 shadow-xl">
 
-          <Toaster 
+          <Toaster
             toastOptions={{
               style: {
-                maxWidth:'600px'
+                maxWidth: '600px'
               }
             }}
           />
@@ -73,34 +113,34 @@ function RegisterPage() {
 
               <div className="form-control w-full">
                 <label className="label"><span className="label-text">Name</span></label>
-                <input 
-                  className="input input-bordered w-full" 
-                  type="text" 
-                  name="name" 
+                <input
+                  className="input input-bordered w-full"
+                  type="text"
+                  name="name"
                   placeholder="Name"
                   autoComplete='off'
                   required
-                  />
+                />
               </div>
 
               <div className="form-control w-full mt-4">
                 <label className="label"><span className="label-text">Username</span></label>
-                <input 
-                  className="input input-bordered w-full" 
-                  type="text" 
-                  name="username" 
+                <input
+                  className="input input-bordered w-full"
+                  type="text"
+                  name="username"
                   placeholder="Username"
                   autoComplete='off'
-                  required 
-                  />
+                  required
+                />
               </div>
 
               <div className="form-control w-full mt-4">
                 <label className="label"><span className="label-text">Email</span></label>
-                <input 
-                  className="input input-bordered w-full" 
-                  type="email" 
-                  name="email" 
+                <input
+                  className="input input-bordered w-full"
+                  type="email"
+                  name="email"
                   placeholder="Email"
                   autoComplete='off'
                   required

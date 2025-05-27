@@ -2,6 +2,8 @@ import './App.css'
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import LoginRoute from './components/ValidationRoute/LoginRoute';
+import AdminRoute from './components/ValidationRoute/AdminRoute';
+import AdminSidebar from './components/Admin/AdminSidebar';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -65,11 +67,11 @@ function App() {
           <Route path="/profile" element={<LoginRoute><PageMotionWrapper><ProfilePage /></PageMotionWrapper></LoginRoute>} />
 
           {/* Admin Route */}
-          <Route path="/admin/" element={<LoginRoute><PageMotionWrapper><DashboardPage /></PageMotionWrapper></LoginRoute>} />
-          <Route path="/admin/dashboard" element={<LoginRoute><PageMotionWrapper><DashboardPage /></PageMotionWrapper></LoginRoute>} />
-          <Route path="/admin/product-management" element={<LoginRoute><PageMotionWrapper><ProductManagementPage /></PageMotionWrapper></LoginRoute>} />
-          <Route path="/admin/transaction-management" element={<LoginRoute><PageMotionWrapper><TransactionManagementPage /></PageMotionWrapper></LoginRoute>} />
-          <Route path="/admin/user-management" element={<LoginRoute><PageMotionWrapper><UserManagementPage /></PageMotionWrapper></LoginRoute>} />
+          <Route path="/admin/" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><DashboardPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
+          <Route path="/admin/dashboard" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><DashboardPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
+          <Route path="/admin/product-management" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><ProductManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
+          <Route path="/admin/transaction-management" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><TransactionManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
+          <Route path="/admin/user-management" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><UserManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
         </Routes>
       </AnimatePresence>
 

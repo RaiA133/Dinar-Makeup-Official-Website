@@ -12,18 +12,6 @@ function LoginPage() {
   // toast akan muncul jika sesi login jwt berhakhir | ubah JWT_EXPIRED_TIME di .env untuk test
   useEffect(() => {
     const toastMessage = localStorage.getItem('toastMessage')
-    if (toastMessage && toastMessage !== "Email verifikasi terkirim, cek email anda") {
-      toast.error(toastMessage, {
-        duration: 2500,
-      });
-      localStorage.removeItem('toastMessage');
-    }
-    if (toastMessage == "Email verifikasi terkirim, cek email anda") {
-      toast.success(toastMessage, {
-        duration: 2500,
-      });
-      localStorage.removeItem('toastMessage');
-    }
     if (toastMessage == "token is expired") {
       toast.error("Login Session is Expired", {
         duration: 2500,
@@ -85,7 +73,6 @@ function LoginPage() {
                   }
                 }
                 catch (error) {
-                  console.log(error);
                   toast.error(error.response.data.message, {
                     duration: 2500,
                   });

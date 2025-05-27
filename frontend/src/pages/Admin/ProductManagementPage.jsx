@@ -1,6 +1,6 @@
 function ProductManagementPage() {
   return (
-    <div>Product Management Page</div>
+    <div className="h-screen">Product Management Page</div>
   );
 }
 
