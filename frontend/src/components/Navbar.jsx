@@ -82,7 +82,7 @@ function Navbar() {
                 <li><a>Settings</a></li>
 
                 {isAdmin && (
-                  <li><a onClick={() => navigate("/administrator")}>Administrator</a></li>
+                  <li><a onClick={() => navigate("/admin")}>Administrator</a></li>
                 )}
 
                 <li><a

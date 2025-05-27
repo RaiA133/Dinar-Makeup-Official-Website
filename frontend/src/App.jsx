@@ -1,6 +1,7 @@
 import './App.css'
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import LoginRoute from './components/ValidationRoute/LoginRoute';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -17,7 +18,11 @@ import LoginPage from './pages/Auth/LoginPage';
 import ForgotPasswordPage from './pages/Auth/ForgotPasswordPage';
 
 import ProfilePage from './pages/ProfilePage';
-import PrivateRoute from './components/PrivateRoute';
+
+import DashboardPage from './pages/Admin/DashboardPage';
+import ProductManagementPage from './pages/Admin/ProductManagementPage';
+import TransactionManagementPage from './pages/Admin/TransactionManagementPage';
+import UserManagementPage from './pages/Admin/UserManagementPage';
 
 // Framer Motion (Efek Transisi Faded Perpindahan Page)
 const PageMotionWrapper = ({ children }) => (
@@ -56,7 +61,15 @@ function App() {
           <Route path="/register" element={<PageMotionWrapper><RegisterPage /></PageMotionWrapper>} />
           <Route path="/forgot-password" element={<PageMotionWrapper><ForgotPasswordPage /></PageMotionWrapper>} />
 
-          <Route path="/profile" element={<PrivateRoute><PageMotionWrapper><ProfilePage /></PageMotionWrapper></PrivateRoute>} />
+          {/* Login Route */}
+          <Route path="/profile" element={<LoginRoute><PageMotionWrapper><ProfilePage /></PageMotionWrapper></LoginRoute>} />
+
+          {/* Admin Route */}
+          <Route path="/admin/" element={<LoginRoute><PageMotionWrapper><DashboardPage /></PageMotionWrapper></LoginRoute>} />
+          <Route path="/admin/dashboard" element={<LoginRoute><PageMotionWrapper><DashboardPage /></PageMotionWrapper></LoginRoute>} />
+          <Route path="/admin/product-management" element={<LoginRoute><PageMotionWrapper><ProductManagementPage /></PageMotionWrapper></LoginRoute>} />
+          <Route path="/admin/transaction-management" element={<LoginRoute><PageMotionWrapper><TransactionManagementPage /></PageMotionWrapper></LoginRoute>} />
+          <Route path="/admin/user-management" element={<LoginRoute><PageMotionWrapper><UserManagementPage /></PageMotionWrapper></LoginRoute>} />
         </Routes>
       </AnimatePresence>
 

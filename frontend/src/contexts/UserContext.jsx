@@ -16,16 +16,21 @@ export const UserContextProvider = ({ children }) => {
       try {
         const response = await getMe(); // get semua data profile mu
         if (response.status === 200) {
+          console.log('asdasd');
           if (response.data.role == "admin") { // kondisi admin / bukan ada disini
             setIsAdmin(true)
           } else {
             setIsAdmin(false)
           }
-          setUserState(response.data); //mengerim response get diatas ke react context
+          setUserState(response.data); //mengirim response get diatas ke react context
         }
       }
-      catch (err) {
-        // console.log(err)
+      catch (err) { // Auto Logout ketika SESSION Habis
+        if (err.status === 401) { // navigate ke halaman login ketika token habis
+          localStorage.setItem("toastMessage", "token is expired");
+          Cookies.remove("token");
+          navigate('/login')
+        }
       }
     };
     fetchData();

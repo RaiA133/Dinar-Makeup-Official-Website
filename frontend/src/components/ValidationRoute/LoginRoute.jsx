@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 
 export const DecodedTokenContext = createContext();
 
-function PrivateRoute({
+function LoginRoute({
   children,
   ...rest
 }) {
@@ -23,11 +23,7 @@ function PrivateRoute({
           setIsLogin(true);
         }
       } catch (error) {
-        const successMessage = error.message;
-        window.localStorage.setItem('toastMessage', successMessage); // toast yang dikirim ke halaman login jika sesi login berakhir
-        Cookies.remove("token");
         console.error('Error checking login status:', error);
-        navigate("/login");
       }
     };
 
@@ -51,4 +47,4 @@ function PrivateRoute({
   );
 }
 
-export default PrivateRoute
+export default LoginRoute

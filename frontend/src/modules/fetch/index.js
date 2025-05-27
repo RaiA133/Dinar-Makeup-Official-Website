@@ -48,8 +48,6 @@ async function updateProfile(data) {
 
 //Update Profile
 async function updateProfileAvatar(formData) {
-  // console.log('formData', formData.file.size);
-  // const formDataObject = Object.fromEntries(formData.entries());
   try {
     const response = await instance.put('/user/avatar', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },

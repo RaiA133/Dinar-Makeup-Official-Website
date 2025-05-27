@@ -24,6 +24,12 @@ function LoginPage() {
       });
       localStorage.removeItem('toastMessage');
     }
+    if (toastMessage == "token is expired") {
+      toast.error("Login Session is Expired", {
+        duration: 2500,
+      });
+      localStorage.removeItem('toastMessage');
+    }
   }, []);
 
   return (
