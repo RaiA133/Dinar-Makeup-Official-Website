@@ -68,7 +68,7 @@ async function updateProfileAvatar(formData) {
 async function getAllProducts() {
   try {
     const response = await instance.get("/products");
-    return response.data;
+    return response;
   } catch (error) {
     // console.log("Error : ", error);
     throw (error || "Something went wrong");

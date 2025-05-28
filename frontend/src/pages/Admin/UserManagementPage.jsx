@@ -8,13 +8,12 @@ function UserManagementPage() {
   let location = useLocation();
   const navigate = useNavigate();
   const { usersState, setUsersState, refreshCallback } = useContext(AdminContext);
-  console.log(usersState);
 
   const totalPages = usersState?.metadata?.total_pages || 0;
   const currentPage = usersState?.metadata?.current_page || 1;
 
   return (
-    <div className="h-screen mx-1 sm:mx-3">
+    <div className="h-screen m-3 sm:m-5">
       <div className="my-3">
 
         <Toaster
@@ -26,12 +25,12 @@ function UserManagementPage() {
         />
 
         <div className="flex justify-center">
-          <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 mb-3 w-fit shadow-sm">
+          <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 mb-3 w-full shadow-sm">
             <table className="table table-xs sm:table-md table-zebra">
               {/* head */}
               <thead>
                 <tr>
-                  <th>No</th>
+                  <th>#</th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Action</th>
@@ -44,13 +43,13 @@ function UserManagementPage() {
                     <td>{user.name}</td>
                     <td>{user.email}</td>
                     <td className="flex gap-2">
-                      <button className="btn btn-xs" onClick={() => document.getElementById(`users_modal_${user.id}`).showModal()}>
+                      <button className="btn btn-xs btn-ghost" onClick={() => document.getElementById(`users_modal_${user.id}`).showModal()}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
                       </button>
-                      <button className="btn btn-xs text-error" onClick={() => document.getElementById(`users_delete_modal_${user.id}`).showModal()}>
+                      <button className="btn btn-xs btn-ghost text-error" onClick={() => document.getElementById(`users_delete_modal_${user.id}`).showModal()}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
@@ -100,7 +99,7 @@ function UserManagementPage() {
               <dialog key={`delete_${user.id}`} id={`users_delete_modal_${user.id}`} className="modal">
                 <div className="modal-box">
                   <h3 className="font-bold text-lg">Confirm Deletion</h3>
-                  <p className="py-4">Are you sure you want to delete user {user.username}?</p>
+                  <p className="py-4">Are you sure you want to delete user {user.email}?</p>
                   <div className="modal-action">
                     <form method="dialog">
                       <button className="btn">Cancel</button>

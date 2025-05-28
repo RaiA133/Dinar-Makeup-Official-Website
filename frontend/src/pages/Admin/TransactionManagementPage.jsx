@@ -13,7 +13,7 @@ function TransactionManagementPage() {
   const currentPage = transcactionState?.metadata?.current_page || 1;
 
   return (
-    <div className="h-screen mx-1 sm:mx-3">
+    <div className="h-screen m-3 sm:m-5">
       <div className="my-3">
 
         <Toaster
@@ -25,7 +25,7 @@ function TransactionManagementPage() {
         />
 
         <div className="flex justify-center">
-          <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 mb-3 w-fit shadow-sm">
+          <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 mb-3 w-full shadow-sm">
             <div className="overflow-x-auto">
               <table className="table table-xs sm:table-md table-zebra">
                 {/* Table Header */}
@@ -43,7 +43,7 @@ function TransactionManagementPage() {
                     <tr key={transaction.id} className="hover">
                       <td>{index + 1}</td>
                       <td>
-                        <span className="badge badge-outline badge-primary badge-xs sm:badge-md">
+                        <span className="py-7 sm:py-0 badge badge-outline badge-primary badge-xs sm:badge-md text-center">
                           {transaction.order_id}
                         </span>
                       </td>
@@ -55,7 +55,7 @@ function TransactionManagementPage() {
                       <td>{transaction.wedding_date}</td>
                       <td className="flex gap-1">
                         <button
-                          className="btn btn-xs"
+                          className="btn btn-xs btn-ghost"
                           onClick={() => document.getElementById(`transaction_modal_${transaction.id}`).showModal()}
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -65,7 +65,7 @@ function TransactionManagementPage() {
                         </button>
 
                         <button
-                          className="btn btn-xs text-error"
+                          className="btn btn-xs btn-ghost text-error"
                           onClick={() => document.getElementById(`transaction_delete_modal_${transaction.id}`).showModal()}
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

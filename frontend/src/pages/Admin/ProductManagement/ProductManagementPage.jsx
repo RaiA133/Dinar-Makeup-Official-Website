@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ProductsContext } from "../../contexts/ProductsContext";
-import { getProductByID } from "../../modules/fetch";
+import { ProductsContext } from "../../../contexts/ProductsContext";
+import { getProductByID } from "../../../modules/fetch";
 
-function Weddings() {
+function ProductManagementPage() {
   let location = useLocation();
   const navigate = useNavigate();
   const {
@@ -21,7 +21,7 @@ function Weddings() {
   };
 
   return (
-    <div className="mt-20 mx-1 sm:mx-20">
+    <div className="m-3 sm:m-5">
 
       {/* Judul (hanya ada di menu home) */}
       {location.pathname == "/" && (
@@ -77,7 +77,7 @@ function Weddings() {
                   </div>
                   {/* You can open the modal using document.getElementById('ID').showModal() method */}
                   <div className="w-full flex gap-2">
-                    <button className="btn btn-primary w-1/2">Buy</button>
+                    <button className="btn btn-warning w-1/2" onClick={() => navigate("/admin/product-management/edit/" + product?.id)}>Edit</button>
                     <button className="btn w-1/2" onClick={() => {
                       handleClickDetailProducts(product?.id);
                       document.getElementById('my_modal_product').showModal();
@@ -186,4 +186,4 @@ function Weddings() {
   )
 }
 
-export default Weddings
+export default ProductManagementPage;

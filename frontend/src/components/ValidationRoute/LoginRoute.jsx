@@ -16,7 +16,8 @@ function LoginRoute({
   useEffect(() => {
     try {
       const token = Cookies.get("token");
-      if (!token || !isLogin) {
+      // if (!token || !isLogin) {
+      if (!token) {
         localStorage.setItem('toastMessage', 'token is expired')
         navigate("/login");
         return;
