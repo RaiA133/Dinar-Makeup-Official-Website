@@ -12,11 +12,11 @@ function LoginRoute({
 }) {
   const navigate = useNavigate();
   const {isLogin, setIsLogin} = useContext(UserContext);
-
+  
   useEffect(() => {
     try {
       const token = Cookies.get("token");
-      if (!token) {
+      if (!token || !isLogin) {
         localStorage.setItem('toastMessage', 'token is expired')
         navigate("/login");
         return;
@@ -24,7 +24,7 @@ function LoginRoute({
     } catch (error) {
       console.error('Error checking login status:', error);
     }
-  }, []);
+  }, [isLogin]);
 
 
   return (

@@ -99,6 +99,7 @@ async function getAllUsers(params = {}) {
   }
 }
 
+// ADMIN : Function for delete user by ID
 async function deleteUserByID(id) {
   try {
     const response = await instance.delete(`/user/${id}`);
@@ -109,11 +110,24 @@ async function deleteUserByID(id) {
   }
 }
 
+// ADMIN : Function for get all transaction
+async function getAllTrasaction(params = {}) {
+  try {
+    const response = await instance.get(`/order`, {
+      params: params
+    });
+    return response;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
 export {
   register, login,
   getAllProducts, getProductByID,
   getMe, updateProfile, updateProfileAvatar,
-  getAllUsers, 
-  deleteUserByID,
+  getAllUsers, deleteUserByID,
+  getAllTrasaction,
 };
 
