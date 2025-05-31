@@ -62,7 +62,7 @@ func (rp *orderPGRepository) CheckTransaction(ctx context.Context, orderId strin
 
 func (rp *orderPGRepository) GetOrderByID(ctx context.Context, orderId string) (*model.Order, error) {
 	var data model.Order
-	if err := rp.db.WithContext(ctx).Preload("User").Where("id = ?", orderId).First(&data).Error; err != nil {
+	if err := rp.db.WithContext(ctx).Preload("User").Where("id_order = ?", orderId).First(&data).Error; err != nil {
 		return nil, err
 	}
 	return &data, nil
