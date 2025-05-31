@@ -214,6 +214,60 @@ func (or *orderService) GetOrders(ctx context.Context, offset, limit int) ([]*dt
 	return res, int(total), nil
 }
 
+func (or *orderService) Callback(ctx context.Context, notifPayload map[string]interface{}) error {
+	orderID, exists := notifPayload["order_id"].(string)
+	if !exists {
+		return errors.New("order id is required")
+	}
+	status, err := or.pgRepo.CheckTransaction(ctx, orderID)
+	if err != nil {
+		return errors.New("failed to check transaction")
+	}
+
+	dataOrder, err := or.pgRepo.GetOrderByID(ctx, orderID)
+	if err != nil {
+		return errors.New("failed to fetch order data")
+	}
+	if status == "success" {
+		if err := or.ConfirmPayment(ctx, dataOrder.IdOrder); err != nil {
+			return errors.New("failed to confirm payment")
+		}
+	} else if status == "failed" {
+		if err := or.ConfirmPayment(ctx, dataOrder.IdOrder); err != nil {
+			return errors.New("failed to confirm payment")
+		}
+	}
+	return nil
+}
+
+func (or *orderService) ConfirmPayment(ctx context.Context, orderID string) error {
+	data, err := or.pgRepo.GetOrderByID(ctx, orderID)
+	if err != nil {
+		return errors.New("failed to fetch order data")
+	}
+	data.PaymentStatus = "success"
+	if err := or.pgRepo.ConfirmPayment(ctx, data.IdOrder, data.PaymentStatus); err != nil {
+		return errors.New("failed to confirm payment")
+	}
+	return nil
+}
+
+func (or *orderService) CancelPayment(ctx context.Context, orderID string) error {
+	data, err := or.pgRepo.GetOrderByID(ctx, orderID)
+
+	if err != nil {
+		return errors.New("failed to fetch order data")
+	}
+
+	data.PaymentStatus = "failed"
+
+	if err := or.pgRepo.ConfirmPayment(ctx, data.IdOrder, data.PaymentStatus); err != nil {
+		return errors.New("failed to cancel payment")
+	}
+
+	return nil
+}
+
 func isValidPaymentMethod(method string) bool {
 	validPaymentMethods := map[string]bool{
 		"qris":          true,

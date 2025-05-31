@@ -4,16 +4,21 @@ import (
 	"context"
 	"github.com/RianIhsan/wedding-organizer-be/internal/order"
 	"github.com/RianIhsan/wedding-organizer-be/internal/order/model"
+	"github.com/RianIhsan/wedding-organizer-be/pkg/payment"
+	"github.com/midtrans/midtrans-go/coreapi"
+	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
 type orderPGRepository struct {
-	db *gorm.DB
+	db         *gorm.DB
+	coreClient coreapi.Client
 }
 
-func NewOrderPGRepository(db *gorm.DB) order.RepositoryInterface {
+func NewOrderPGRepository(db *gorm.DB, cCL coreapi.Client) order.RepositoryInterface {
 	return &orderPGRepository{
-		db: db,
+		db:         db,
+		coreClient: cCL,
 	}
 }
 
@@ -39,4 +44,34 @@ func (rp *orderPGRepository) FindOrdersData(ctx context.Context, offset, limit i
 	}
 
 	return orders, total, nil
+}
+
+func (rp *orderPGRepository) CheckTransaction(ctx context.Context, orderId string) (string, error) {
+	var paymentStatus string
+	transactionStatus, err := rp.coreClient.CheckTransaction(orderId)
+	if err != nil {
+		return "", err
+	} else {
+		if transactionStatus != nil {
+			paymentStatus = payment.TransactionStatus(transactionStatus)
+			return paymentStatus, nil
+		}
+	}
+	return "", errors.New("transaction not found")
+}
+
+func (rp *orderPGRepository) GetOrderByID(ctx context.Context, orderId string) (*model.Order, error) {
+	var data model.Order
+	if err := rp.db.WithContext(ctx).Preload("User").Where("id = ?", orderId).First(&data).Error; err != nil {
+		return nil, err
+	}
+	return &data, nil
+}
+
+func (rp *orderPGRepository) ConfirmPayment(ctx context.Context, orderID, paymentStatus string) error {
+	var data model.Order
+	if err := rp.db.WithContext(ctx).Model(data).Where("order_id = ?", orderID).Update("payment_status", paymentStatus).Error; err != nil {
+		return err
+	}
+	return nil
 }

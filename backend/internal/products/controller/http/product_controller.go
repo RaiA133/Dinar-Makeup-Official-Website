@@ -57,13 +57,13 @@ func (pc *productController) CreateProduct() gin.HandlerFunc {
 			response.SendErrorResponse(ctx, http.StatusBadRequest, err.Error())
 			return
 		}
-		_, err := pc.service.CreateProduct(context.Background(), request)
+		data, err := pc.service.CreateProduct(context.Background(), request)
 		if err != nil {
 			utils.LogErrorResponse(ctx, pc.logger, err)
 			response.SendErrorResponse(ctx, http.StatusBadRequest, err.Error())
 			return
 		}
-		response.SendSuccesResponse(ctx, http.StatusOK, "Product Successfully created", nil)
+		response.SendSuccesResponse(ctx, http.StatusOK, "Product Successfully created", data)
 	}
 }
 
@@ -128,14 +128,14 @@ func (pc *productController) UpdateProduct() gin.HandlerFunc {
 			Description: request.Description,
 		}
 
-		_, err = pc.service.UpdateProduct(context.Background(), entitiyProduct)
+		data, err := pc.service.UpdateProduct(context.Background(), entitiyProduct)
 		if err != nil {
 			utils.LogErrorResponse(ctx, pc.logger, err)
 			response.SendErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 			return
 		}
 
-		response.SendSuccesResponse(ctx, http.StatusOK, "Success Update Product", nil)
+		response.SendSuccesResponse(ctx, http.StatusOK, "Success Update Product", data)
 	}
 }
 

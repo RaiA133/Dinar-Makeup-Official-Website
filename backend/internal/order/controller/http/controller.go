@@ -83,3 +83,22 @@ func (oc *orderController) GetBookingWedding() gin.HandlerFunc {
 		response.SendSuccessResponseWithPagination(c, http.StatusOK, "Success Get All Transaction orders", data, paginationMeta)
 	}
 }
+
+func (oc *orderController) CallbackURL() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var notifPayload map[string]any
+		if err := c.ShouldBindJSON(&notifPayload); err != nil {
+			utils.LogErrorResponse(c, oc.logger, err)
+			response.SendErrorResponse(c, http.StatusBadRequest, "Invalid payload")
+			return
+		}
+
+		err := oc.service.Callback(c, notifPayload)
+		if err != nil {
+			utils.LogErrorResponse(c, oc.logger, err)
+			response.SendErrorResponse(c, http.StatusInternalServerError, err.Error())
+			return
+		}
+		response.SendSuccesResponse(c, http.StatusOK, "success callback url", notifPayload)
+	}
+}

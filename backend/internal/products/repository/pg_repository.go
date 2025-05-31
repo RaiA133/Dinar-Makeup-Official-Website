@@ -18,11 +18,11 @@ func NewProductPostgresRepository(db *gorm.DB) products.ProductPostgresRepositor
 	return &productPostgresRepository{db: db}
 }
 
-func (p *productPostgresRepository) Create(ctx context.Context, product *model.Product) error {
+func (p *productPostgresRepository) Create(ctx context.Context, product *model.Product) (uuid.UUID, error) {
 	if err := p.db.WithContext(ctx).Create(product).Error; err != nil {
-		return err
+		return uuid.Nil, err
 	}
-	return nil
+	return product.Id, nil
 }
 
 func (r *productPostgresRepository) CreateGroup(ctx context.Context, group *model.ProductDetailGroup) error {
