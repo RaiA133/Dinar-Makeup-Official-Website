@@ -22,7 +22,7 @@ function Contact() {
               <div className="bg-neutral-content text-neutral w-12 rounded-full">
               </div>
             </div>
-            <div>Jalan Merpati No. 45, Kelurahan Sukamaju, Kecamatan Cempaka, Kota Bunga, 12345, Indonesia</div>
+            <div>KP Pangakalan Raja, Jl. Pangkalan Raja, RT.001/RW.005 Desa, Sukamukti, Kec. Majalaya, Kabupaten Bandung, Jawa Barat 40382</div>
           </div>
 
           <div className="flex items-center gap-5 mb-10">
@@ -30,7 +30,7 @@ function Contact() {
               <div className="bg-neutral-content text-neutral w-12 rounded-full">
               </div>
             </div>
-            <div>0813 2913 1020 4010</div>
+            <div>0898-0000-845</div>
           </div>
 
           <div className="flex items-center gap-5 mb-10">
@@ -38,7 +38,15 @@ function Contact() {
               <div className="bg-neutral-content text-neutral w-12 rounded-full">
               </div>
             </div>
-            <div>weddingonline@gmail.com</div>
+            <div>dinar.dumilah@gmail.com</div>
+          </div>
+
+          <div className="flex items-center gap-5 mb-10">
+            <div className="avatar avatar-placeholder">
+              <div className="bg-neutral-content text-neutral w-12 rounded-full">
+              </div>
+            </div>
+            <div>IG : @dinarmakeup</div>
           </div>
 
           <div className="flex items-center gap-5 mb-3">

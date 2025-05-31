@@ -13,6 +13,7 @@ function EditProductManagementPage() {
   const [detailGroups, setDetailGroups] = useState([]);
   const [images, setImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchProductByID = async () => {
@@ -168,24 +169,34 @@ function EditProductManagementPage() {
 
   return (
     <div className="m-3 sm:m-5">
-      <div className="row-span-3 col-span-2">
-        <form onSubmit={handleSubmit}>
-          <div className="p-10 bg-base-100 card shadow-md">
-            <div className="flex justify-between">
-              <p className="text-4xl font-bold">Edit Product</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <button className="btn max-[640px]:px-10 max-[640px]:btn-sm btn-neutral px-10" type="submit">
-                  SAVE
-                </button>
-                <button
-                  className="btn max-[640px]:px-10 max-[640px]:btn-sm btn-neutral px-10"
-                  onClick={() => navigate("..", { relative: "path" })}
-                  type="button"
-                >
-                  CANCEL
-                </button>
-              </div>
+    <div className="row-span-3 col-span-2">
+      <form onSubmit={handleSubmit}>
+        <div className="p-10 bg-base-100 card shadow-md">
+          
+          <div className="flex justify-between">
+            <p className="text-4xl font-bold">Edit Product</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <button 
+                className="btn max-[640px]:px-10 max-[640px]:btn-sm btn-neutral px-10" 
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "SAVE"
+                )}
+              </button>
+              <button
+                className="btn max-[640px]:px-10 max-[640px]:btn-sm btn-neutral px-10"
+                onClick={() => navigate("/admin/product-management")}
+                type="button"
+                disabled={isSubmitting}
+              >
+                CANCEL
+              </button>
             </div>
+          </div>
 
             <div className="divider" />
 

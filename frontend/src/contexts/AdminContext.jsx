@@ -16,11 +16,13 @@ export const AdminContextProvider = ({ children }) => {
   const [transcactionState, setTranscactionState] = useState([]);
 
   const [refresh, setRefresh] = useState(0); // use this on useEffect that set from callback below
+  
 
-  // ----------------------------------------------------------------------------------------------------------------------------------
+  useEffect(() => { 
 
-  useEffect(() => { // path = /admin/user-management
-    const fetchData = async () => {
+    // ----------------------------------------------------------------------------------------------------------------------------------
+
+    const fetchDataUserManagement = async () => { // path = /admin/user-management
       try {
         // console.log('refresh /admin/user-management');
         let page = parseInt(searchParams.get("page"));
@@ -32,13 +34,11 @@ export const AdminContextProvider = ({ children }) => {
         console.error("Error : ", error);
       }
     };
-    if (location.pathname == "/admin/user-management") fetchData();
-  }, [navigate, searchParams, refresh]);
+    if (location.pathname == "/admin/user-management") fetchDataUserManagement();
 
-  // ----------------------------------------------------------------------------------------------------------------------------------
-  
-  useEffect(() => { // path = /admin/transaction-management
-    const fetchData = async () => {
+    // ----------------------------------------------------------------------------------------------------------------------------------
+
+    const fetchDataTransactionManagement = async () => { // path = /admin/transaction-management
       try {
         // console.log('refresh /admin/transaction-management');
         let page = parseInt(searchParams.get("page"));
@@ -50,12 +50,13 @@ export const AdminContextProvider = ({ children }) => {
         console.error("Error : ", error);
       }
     };
-    if (location.pathname == "/admin/transaction-management") fetchData();
+    if (location.pathname == "/admin/transaction-management") fetchDataTransactionManagement();
+
+    // ----------------------------------------------------------------------------------------------------------------------------------
+
   }, [navigate, searchParams, refresh]);
 
-  // ----------------------------------------------------------------------------------------------------------------------------------
-
-  const refreshCallback = useCallback((url) => {
+  const refreshCallback = useCallback(() => {
     setRefresh(Math.random())
   }, []);
 

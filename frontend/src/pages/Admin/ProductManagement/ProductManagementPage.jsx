@@ -23,6 +23,10 @@ function ProductManagementPage() {
   return (
     <div className="m-3 sm:m-5">
 
+      <div className="mb-5 flex place-content-end">
+        <button className="btn btn-primary" onClick={() => navigate('/admin/product-management/create')}> Add New Product</button>
+      </div>
+
       {/* Judul (hanya ada di menu home) */}
       {location.pathname == "/" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
@@ -137,9 +141,9 @@ function ProductManagementPage() {
                           <span className="text-xl font-semibold text-primary">
                             {new Intl.NumberFormat('id-ID', {
                               style: 'currency',
-                              currency: product?.currency || 'IDR',
+                              currency: productsByIDState?.currency || 'IDR',
                               minimumFractionDigits: 0
-                            }).format(product?.price || 0)}
+                            }).format(productsByIDState?.price || 0)}
                           </span>
                           <div className="divider my-2"></div>
                         </div>

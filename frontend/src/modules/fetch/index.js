@@ -86,6 +86,31 @@ async function getProductByID(id) {
   }
 }
 
+// ADMIN : Function for create product endpoint
+async function createProduct(data) {
+  try {
+    const response = await instance.post("/products", data);
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
+// ADMIN : Function for create image product endpoint
+async function uploadImageProduct(formData) {
+  const formDataObject = Object.fromEntries(formData.entries());
+  try {
+    const response = await instance.post(`/products/${formDataObject.id}/images`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
 // ADMIN : Function for get all user
 async function getAllUsers(params = {}) {
   try {
@@ -126,6 +151,7 @@ async function getAllTrasaction(params = {}) {
 export {
   register, login,
   getAllProducts, getProductByID,
+  createProduct, uploadImageProduct,
   getMe, updateProfile, updateProfileAvatar,
   getAllUsers, deleteUserByID,
   getAllTrasaction,

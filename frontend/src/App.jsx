@@ -22,10 +22,12 @@ import ForgotPasswordPage from './pages/Auth/ForgotPasswordPage';
 import ProfilePage from './pages/ProfilePage';
 
 import DashboardPage from './pages/Admin/DashboardPage';
-import ProductManagementPage from './pages/Admin/ProductManagement/ProductManagementPage';
 import TransactionManagementPage from './pages/Admin/TransactionManagementPage';
 import UserManagementPage from './pages/Admin/UserManagementPage';
+
+import ProductManagementPage from './pages/Admin/ProductManagement/ProductManagementPage';
 import EditProductManagementPage from './pages/Admin/ProductManagement/EditProductManagementPage';
+import CreateProductManagementPage from './pages/Admin/ProductManagement/CreateProductManagementPage';
 
 // Framer Motion (Efek Transisi Faded Perpindahan Page)
 const PageMotionWrapper = ({ children }) => (
@@ -73,6 +75,7 @@ function App() {
           
           <Route path="/admin/product-management" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><ProductManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
           <Route path="/admin/product-management/edit/:id" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><EditProductManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
+          <Route path="/admin/product-management/create" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><CreateProductManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
 
           <Route path="/admin/transaction-management" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><TransactionManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
           <Route path="/admin/user-management" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><UserManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />

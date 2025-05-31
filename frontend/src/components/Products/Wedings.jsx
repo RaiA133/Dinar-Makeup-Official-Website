@@ -19,7 +19,7 @@ function Weddings() {
       console.error("Error : ", error);
     }
   };
-
+    
   return (
     <div className="mt-20 mx-1 sm:mx-20">
 
@@ -137,9 +137,9 @@ function Weddings() {
                           <span className="text-xl font-semibold text-primary">
                             {new Intl.NumberFormat('id-ID', {
                               style: 'currency',
-                              currency: product?.currency || 'IDR',
+                              currency: productsByIDState?.currency || 'IDR',
                               minimumFractionDigits: 0
-                            }).format(product?.price || 0)}
+                            }).format(productsByIDState?.price || 0)}
                           </span>
                           <div className="divider my-2"></div>
                         </div>
