@@ -18,4 +18,5 @@ func MapProductRoutes(router *gin.RouterGroup, controller products.ProductContro
 	protected.PUT("/products/:id", controller.UpdateProduct())
 	protected.POST("/products/:productId/images", controller.AddImageToProduct())
 	protected.DELETE("/products/images/:imageId", controller.DeleteImageFromProduct())
+	protected.DELETE("/products/:id", controller.DeleteProduct())
 }

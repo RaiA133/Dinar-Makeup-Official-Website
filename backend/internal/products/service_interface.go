@@ -14,6 +14,7 @@ type ProductService interface {
 	GetProducts(ctx context.Context) ([]dto.GetProductsResponse, error)
 	GetProduct(ctx context.Context, id uuid.UUID) (*dto.GetProductResponse, error)
 	UpdateProduct(ctx context.Context, entity *model.Product) (*dto.UpdateProductResponse, error)
+	DeleteProduct(ctx context.Context, id uuid.UUID) error
 
 	// Product Image
 	AddImageToProduct(ctx context.Context, productId uuid.UUID, file multipart.File, fileName string) error

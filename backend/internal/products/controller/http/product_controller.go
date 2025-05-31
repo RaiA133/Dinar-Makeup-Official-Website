@@ -139,6 +139,30 @@ func (pc *productController) UpdateProduct() gin.HandlerFunc {
 	}
 }
 
+func (pc *productController) DeleteProduct() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		auth := middleware.GetAuth(c)
+		if auth.Role != "admin" {
+			utils.LogErrorResponse(c, pc.logger, errors.New("access denied"))
+			response.SendErrorResponse(c, http.StatusForbidden, "access denied")
+			return
+		}
+		id := c.Param("id")
+		parseUUID, err := utils.ParseUUID(id)
+		if err != nil {
+			utils.LogErrorResponse(c, pc.logger, err)
+			response.SendErrorResponse(c, http.StatusBadRequest, "failed parsing uuid")
+			return
+		}
+
+		if err := pc.service.DeleteProduct(context.Background(), parseUUID); err != nil {
+			utils.LogErrorResponse(c, pc.logger, err)
+			response.SendErrorResponse(c, http.StatusInternalServerError, err.Error())
+			return
+		}
+	}
+}
+
 func (pc *productController) AddImageToProduct() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		auth := middleware.GetAuth(ctx)
