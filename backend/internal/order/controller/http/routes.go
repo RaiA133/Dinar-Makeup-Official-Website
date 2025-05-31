@@ -8,6 +8,7 @@ import (
 
 func MapOrderRoutes(router *gin.RouterGroup, controller order.ControllerInterface, mw *middleware.MiddlewareManager) {
 	router.GET("/order", controller.GetBookingWedding())
+	router.POST("/callback", controller.CallbackURL())
 
 	protected := router.Group("")
 	protected.Use(mw.AuthJwtMiddleware())
