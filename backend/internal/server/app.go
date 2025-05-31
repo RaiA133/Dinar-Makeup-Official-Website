@@ -29,14 +29,16 @@ import (
 )
 
 func (s *Server) Bootstrap() error {
+	InitMidtrans := payment.InitMidtransCore(*s.cfg)
+
 	// -----------------------------------------------------------------------------------------------------------
 	// create a new instance repositories
 	userPostgresRepo := userRepository.NewUserPostgresRepository(s.db)
 	userRedisRepo := userRepository.NewUserRedisRepository(s.redisClient)
 	productPostgresRepo := productRepository.NewProductPostgresRepository(s.db)
 	galleryPostgresRepo := galleryRepository.NewGalleryPostgresRepository(s.db)
-	orderPostgresRepo := orderRepository.NewOrderPGRepository(s.db)
-	InitMidtrans := payment.InitMidtransCore(*s.cfg)
+
+	orderPostgresRepo := orderRepository.NewOrderPGRepository(s.db, InitMidtrans)
 
 	cldConfig, err := cloudinary.InitializeCloudinary(&s.cfg.Cloudinary)
 	if err != nil {
