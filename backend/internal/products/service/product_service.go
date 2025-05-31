@@ -211,6 +211,19 @@ func (p *productService) DeleteProductImage(ctx context.Context, imageId string)
 	return nil
 }
 
+func (p *productService) DeleteProduct(ctx context.Context, id uuid.UUID) error {
+	productId, err := p.pgRepo.FindById(ctx, &model.Product{Id: id})
+	if err != nil {
+		return errors.New("product not found")
+	}
+
+	err = p.pgRepo.Delete(ctx, productId)
+	if err != nil {
+		return errors.New("failed to delete product")
+	}
+	return nil
+}
+
 func formatIndonesianDateFromMillis(millis int64) string {
 	t := time.UnixMilli(millis)
 	return t.Format("02-01-2006 15:04:05")
