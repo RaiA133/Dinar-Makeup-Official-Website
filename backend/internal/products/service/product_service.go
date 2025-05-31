@@ -48,14 +48,16 @@ func (p *productService) CreateProduct(ctx context.Context, req *dto.CreateProdu
 	}
 
 	// Create product
-	if err := p.pgRepo.Create(ctx, product); err != nil {
+
+	idProduct, err := p.pgRepo.Create(ctx, product)
+	if err != nil {
 		return nil, errors.New("failed to create product")
 	}
 
 	// Loop and create product groups
 	for _, g := range req.DetailGroups {
 		group := &model.ProductDetailGroup{
-			ProductId: product.Id,
+			ProductId: idProduct,
 			GroupName: g.GroupName,
 		}
 
@@ -75,7 +77,7 @@ func (p *productService) CreateProduct(ctx context.Context, req *dto.CreateProdu
 		}
 	}
 	return &dto.CreateProductResponse{
-		Id:    product.Id,
+		Id:    idProduct,
 		Name:  product.Name,
 		Price: product.Price,
 	}, nil

@@ -7,7 +7,7 @@ import (
 )
 
 type ProductPostgresRepository interface {
-	Create(ctx context.Context, product *model.Product) error
+	Create(ctx context.Context, product *model.Product) (uuid.UUID, error)
 	CreateGroup(ctx context.Context, group *model.ProductDetailGroup) error
 	CreateGroupItems(ctx context.Context, item *model.ProductDetailItem) error
 	Update(ctx context.Context, entity *model.Product) (*model.Product, error)
