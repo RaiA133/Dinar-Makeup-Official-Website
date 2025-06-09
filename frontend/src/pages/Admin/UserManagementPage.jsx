@@ -64,11 +64,11 @@ function UserManagementPage() {
             {usersState?.data?.map((user) => (
               <dialog key={`detail_${user.id}`} id={`users_modal_${user.id}`} className="modal">
                 <div className="modal-box max-w-2xl">
-                  <h3 className="font-bold text-lg mb-4">User Details</h3>
+                  <h3 className="font-bold text-lg mb-4 text-primary">User Details</h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <h4 className="font-semibold">Information</h4>
+                      <h4 className="font-semibold text-accent">Information</h4>
                       <div className="divider m-0"></div>
                       <p><span className="font-medium">User ID:</span> {user.id}</p>
                       <p><span className="font-medium">Username:</span> {user.username}</p>
@@ -77,7 +77,7 @@ function UserManagementPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <h4 className="font-semibold">Contact</h4>
+                      <h4 className="font-semibold text-accent">Contact</h4>
                       <div className="divider m-0"></div>
                       <p><span className="font-medium">Email:</span> {user.email || "-"}</p>
                       <p><span className="font-medium">Phone Number:</span> {user.phone_number || "-"}</p>

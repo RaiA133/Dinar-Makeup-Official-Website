@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ProductsContext } from "../../../contexts/ProductsContext";
-import { getProductByID } from "../../../modules/fetch";
+import { deleteProductByID, getProductByID } from "../../../modules/fetch";
 
 function ProductManagementPage() {
   let location = useLocation();
@@ -74,15 +74,18 @@ function ProductManagementPage() {
                     <span className="text-xl">
                       {new Intl.NumberFormat('id-ID', {
                         style: 'currency',
-                        currency: product?.currency|| 'IDR',
+                        currency: product?.currency || 'IDR',
                         minimumFractionDigits: 0
                       }).format(product?.price || 0)}
                     </span>
                   </div>
                   {/* You can open the modal using document.getElementById('ID').showModal() method */}
-                  <div className="w-full flex gap-2">
-                    <button className="btn btn-warning w-1/2" onClick={() => navigate("/admin/product-management/edit/" + product?.id)}>Edit</button>
-                    <button className="btn w-1/2" onClick={() => {
+                  <div className="">
+                    <div className="flex mb-2 gap-2">
+                      <button className="btn btn-warning flex-1" onClick={() => navigate("/admin/product-management/edit/" + product?.id)}>Edit</button>
+                      <button className="btn btn-error flex-1" onClick={() => document.getElementById(`product_delete_modal`).showModal()}>Delete</button>
+                    </div>
+                    <button className="btn btn-outline w-full" onClick={() => {
                       handleClickDetailProducts(product?.id);
                       document.getElementById('my_modal_product').showModal();
                     }
@@ -176,6 +179,35 @@ function ProductManagementPage() {
                         </div>
 
                       </div>
+                    </div>
+                  </div>
+                </dialog>
+
+                {/* MODAL DELETE CONFIRMATION */}
+                <dialog key={`delete_${product.id}`} id={`product_delete_modal`} className="modal modal-bottom sm:modal-middle">
+                  <div className="modal-box">
+                    <h3 className="font-bold text-lg">Confirm Deletion</h3>
+                    <p className="py-4">Are you sure you want to delete product {product.name}?</p>
+                    <div className="modal-action">
+                      <form method="dialog">
+                        <button className="btn">Cancel</button>
+                        <button
+                          className="btn btn-error ml-2"
+                          onClick={async () => {
+                            try {
+                              const response = await deleteProductByID(product.id);
+                              if (response.status === 200) {
+                                toast.success(response.message, { duration: 2500 });
+                                refreshCallback();
+                              }
+                            } catch (error) {
+                              console.error("Error:", error);
+                            }
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </form>
                     </div>
                   </div>
                 </dialog>

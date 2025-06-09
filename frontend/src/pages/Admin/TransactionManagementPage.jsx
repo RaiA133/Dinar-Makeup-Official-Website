@@ -82,11 +82,11 @@ function TransactionManagementPage() {
               {transcactionState?.data?.map((transaction) => (
                 <dialog key={`detail_${transaction.id}`} id={`transaction_modal_${transaction.id}`} className="modal">
                   <div className="modal-box max-w-2xl">
-                    <h3 className="font-bold text-lg mb-4">Transaction Details</h3>
+                    <h3 className="font-bold text-lg mb-4 text-primary">Transaction Details</h3>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <h4 className="font-semibold">Order Information</h4>
+                        <h4 className="font-semibold text-accent">Order Information</h4>
                         <div className="divider m-0"></div>
                         <p><span className="font-medium">Order ID:</span> {transaction.order_id}</p>
                         <p><span className="font-medium">Status:</span>
@@ -99,7 +99,7 @@ function TransactionManagementPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <h4 className="font-semibold">Payment Details</h4>
+                        <h4 className="font-semibold text-accent">Payment Details</h4>
                         <div className="divider m-0"></div>
                         <p><span className="font-medium">Amount:</span> Rp{transaction.installment_amount.toLocaleString()}</p>
                         <p><span className="font-medium">Outstanding:</span> Rp{transaction.outstanding.toLocaleString()}</p>
@@ -108,7 +108,7 @@ function TransactionManagementPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <h4 className="font-semibold">Customer Information</h4>
+                        <h4 className="font-semibold text-accent">Customer Information</h4>
                         <div className="divider m-0"></div>
                         <p><span className="font-medium">Name:</span> {transaction.user_information.name}</p>
                         <p><span className="font-medium">Email:</span> {transaction.user_information.email}</p>
@@ -116,7 +116,7 @@ function TransactionManagementPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <h4 className="font-semibold">Product Information</h4>
+                        <h4 className="font-semibold text-accent">Product Information</h4>
                         <div className="divider m-0"></div>
                         <p><span className="font-medium">Package:</span> {transaction.product_information.name}</p>
                         <p><span className="font-medium">Price:</span> Rp{parseInt(transaction.product_information.price).toLocaleString()}</p>
