@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import defatulAvatar from '../assets/img/users/default.png';
-import Weddings from '../components/Products/Wedings';
+import Weddings from '../components/Products/Weddings';
 import About from '../components/HomePage/About';
 import Gallery from '../components/HomePage/Gallery';
 import Rating from '../components/HomePage/Rating';

@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ProductsContext } from "../../contexts/ProductsContext";
 import { getProductByID } from "../../modules/fetch";
+import { UserContext } from "../../contexts/UserContext";
 
 function Weddings() {
   let location = useLocation();
@@ -10,6 +11,8 @@ function Weddings() {
     productsState,
     productsByIDState, setProductsByIDState
   } = useContext(ProductsContext);
+
+  const { isLogin } = useContext(UserContext);
 
   const handleClickDetailProducts = async (id) => {
     try {
@@ -77,7 +80,10 @@ function Weddings() {
                   </div>
                   {/* You can open the modal using document.getElementById('ID').showModal() method */}
                   <div className="w-full flex gap-2">
-                    <button className="btn btn-primary w-1/2">Buy</button>
+                    <button className="btn btn-primary w-1/2" onClick={() => {
+                      if (isLogin) navigate('/order');
+                      else navigate('/login');
+                    }}>Buy</button>
                     <button className="btn w-1/2" onClick={() => {
                       handleClickDetailProducts(product?.id);
                       document.getElementById('my_modal_product').showModal();

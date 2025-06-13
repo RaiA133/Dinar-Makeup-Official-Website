@@ -16,6 +16,7 @@ export const UserContextProvider = ({ children }) => {
     const fetchData = async () => {
       try {
         const response = await getMe(); // get semua data profile mu
+        console.log('userContext', response);
         if (response.status === 200) {
           setIsLogin(true)
           

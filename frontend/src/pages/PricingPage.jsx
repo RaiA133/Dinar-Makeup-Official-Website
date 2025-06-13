@@ -1,4 +1,4 @@
-import Weddings from '../components/Products/Wedings';
+import Weddings from '../components/Products/Weddings';
 import Makeups from '../components/Products/Makeups';
 
 function PricingPage() {

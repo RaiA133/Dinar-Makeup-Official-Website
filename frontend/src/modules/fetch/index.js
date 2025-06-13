@@ -22,6 +22,17 @@ async function login(email, password) {
   }
 }
 
+// Function for login user endpoint
+async function loginGoogle(id_token) {
+  try {
+    const response = await instance.post("/login/google", { id_token });
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
 //Function My Profile
 async function getMe() {
   try {
@@ -182,7 +193,7 @@ async function getAllTrasaction(params = {}) {
 }
 
 export {
-  register, login,
+  register, login, loginGoogle,
   getAllProducts, getProductByID,
   createProduct, updateProduct, uploadImageProduct, deleteProductByID, deleteImageProduct,
   getMe, updateProfile, updateProfileAvatar,

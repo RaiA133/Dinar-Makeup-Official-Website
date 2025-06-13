@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { UserContext } from "../../contexts/UserContext";
+import { getMe } from "../../modules/fetch";
 
 export const LoginRouteContext = createContext();
 
@@ -16,12 +17,16 @@ function LoginRoute({
   useEffect(() => {
     try {
       const token = Cookies.get("token");
+      // const response = await getMe();
       // if (!token || !isLogin) {
       if (!token) {
-        localStorage.setItem('toastMessage', 'token is expired')
+        // localStorage.setItem('toastMessage', 'token is expired')
         navigate("/login");
         return;
-      } else setIsLogin(true);
+      } else {
+       
+        setIsLogin(true);
+      }
     } catch (error) {
       console.error('Error checking login status:', error);
     }
