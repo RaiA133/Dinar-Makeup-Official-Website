@@ -18,7 +18,7 @@ createRoot(document.getElementById('root')).render(
             </AdminContextProvider>
           </ProductsContextProvider>
         </UserContextProvider>
-      </GoogleOAuthProvider>;
+      </GoogleOAuthProvider>
     </Router>
   </StrictMode>,
 )

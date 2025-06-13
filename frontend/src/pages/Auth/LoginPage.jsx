@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { login, loginGoogle } from "../../modules/fetch";
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from "js-cookie";
-import { GoogleLogin, useGoogleLogin, useGoogleOneTapLogin } from '@react-oauth/google';
-import { jwtDecode } from 'jwt-decode';
+import { GoogleLogin } from '@react-oauth/google';
 
 function LoginPage() {
   const navigate = useNavigate()
@@ -169,6 +168,7 @@ function LoginPage() {
                 }}
                 auto_select={true}
                 useOneTap
+                text="continue_with"
               />
             </div>
 

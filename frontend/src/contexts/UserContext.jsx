@@ -2,6 +2,7 @@ import { createContext, useCallback, useEffect, useState } from 'react';
 import { getMe } from '../modules/fetch';
 import { useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
+import { googleLogout } from '@react-oauth/google';
 
 export const UserContext = createContext();
 
@@ -16,18 +17,21 @@ export const UserContextProvider = ({ children }) => {
     const fetchData = async () => {
       try {
         const response = await getMe(); // get semua data profile mu
-        console.log('userContext', response);
         if (response.status === 200) {
           setIsLogin(true)
-          
+
           if (response.data.role == "admin") setIsAdmin(true) // kondisi admin / bukan ada disini
           else setIsAdmin(false)
 
           setUserState(response.data); //mengirim response get diatas ke react context
-        } else setIsLogin(false)
+        } else {
+          googleLogout();
+          setIsLogin(false);
+        }
       }
       catch (err) { // Auto Logout ketika SESSION Habis
-        setIsLogin(false)
+        googleLogout();
+        setIsLogin(false);
         Cookies.remove("token");
       }
     };

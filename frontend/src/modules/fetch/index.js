@@ -25,6 +25,7 @@ async function login(email, password) {
 // Function for login user endpoint
 async function loginGoogle(id_token) {
   try {
+    console.log(id_token);
     const response = await instance.post("/login/google", { id_token });
     return response.data;
   } catch (error) {
@@ -37,6 +38,18 @@ async function loginGoogle(id_token) {
 async function getMe() {
   try {
     const response = await instance.get(`/me`);
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
+//  Function for create order endpoint
+async function createOrder(data) {
+  console.log(data);
+  try {
+    const response = await instance.post("/order", data);
     return response.data;
   } catch (error) {
     // console.log("Error : ", error);
@@ -197,6 +210,7 @@ export {
   getAllProducts, getProductByID,
   createProduct, updateProduct, uploadImageProduct, deleteProductByID, deleteImageProduct,
   getMe, updateProfile, updateProfileAvatar,
+  createOrder,
   getAllUsers, deleteUserByID,
   getAllTrasaction, 
 };

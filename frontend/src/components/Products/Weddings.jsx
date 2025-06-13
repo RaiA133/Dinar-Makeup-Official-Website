@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ProductsContext } from "../../contexts/ProductsContext";
 import { getProductByID } from "../../modules/fetch";
 import { UserContext } from "../../contexts/UserContext";
+import toast from "react-hot-toast";
 
 function Weddings() {
   let location = useLocation();
@@ -12,7 +13,8 @@ function Weddings() {
     productsByIDState, setProductsByIDState
   } = useContext(ProductsContext);
 
-  const { isLogin } = useContext(UserContext);
+  const { isLogin, userState } = useContext(UserContext);
+  const isProfileFulfill = !!userState.nik && !!userState.phone_number;
 
   const handleClickDetailProducts = async (id) => {
     try {
@@ -22,7 +24,7 @@ function Weddings() {
       console.error("Error : ", error);
     }
   };
-    
+
   return (
     <div className="mt-20 mx-1 sm:mx-20">
 
@@ -73,7 +75,7 @@ function Weddings() {
                     <span className="text-xl">
                       {new Intl.NumberFormat('id-ID', {
                         style: 'currency',
-                        currency: product?.currency|| 'IDR',
+                        currency: product?.currency || 'IDR',
                         minimumFractionDigits: 0
                       }).format(product?.price || 0)}
                     </span>
@@ -81,8 +83,20 @@ function Weddings() {
                   {/* You can open the modal using document.getElementById('ID').showModal() method */}
                   <div className="w-full flex gap-2">
                     <button className="btn btn-primary w-1/2" onClick={() => {
-                      if (isLogin) navigate('/order');
-                      else navigate('/login');
+                      if (isLogin) {
+                        if (isProfileFulfill) navigate(`/order/${product?.id}`);
+                        else {
+                          navigate('/profile');
+                          toast.error('NIK & Phone Number is required', {
+                            duration: 4000,
+                          });
+                        }
+                      } else {
+                        navigate('/login');
+                        toast.error('Login is required', {
+                          duration: 4000,
+                        });
+                      }
                     }}>Buy</button>
                     <button className="btn w-1/2" onClick={() => {
                       handleClickDetailProducts(product?.id);
@@ -172,7 +186,22 @@ function Weddings() {
                         {/* Action Buttons */}
                         <div className="modal-action sticky bottom-0 bg-base-100 p-5">
                           <form method="dialog" className="w-full flex gap-2">
-                            <button className="btn btn-primary flex-1">Buy Now</button>
+                            <button className="btn btn-primary flex-1" onClick={() => {
+                              if (isLogin) {
+                                if (isProfileFulfill) navigate(`/order/${product?.id}`);
+                                else {
+                                  navigate('/profile');
+                                  toast.error('NIK & Phone Number is required', {
+                                    duration: 4000,
+                                  });
+                                }
+                              } else {
+                                navigate('/login');
+                                toast.error('Login is required', {
+                                  duration: 4000,
+                                });
+                              }
+                            }}>Buy Now</button>
                             <button className="btn flex-1">Close</button>
                           </form>
                         </div>

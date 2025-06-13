@@ -4,6 +4,7 @@ import logoDinarMakeupCrop from '/img/logo/logoDinarMakeupCrop.jpg';
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from "js-cookie";
 import { UserContext } from '../contexts/UserContext';
+import { googleLogout } from '@react-oauth/google';
 
 
 function Navbar() {
@@ -105,6 +106,7 @@ function Navbar() {
 
                 <li><a
                   onClick={() => {
+                    googleLogout();
                     setIsLogin(false);
                     Cookies.remove("token");
                     navigate('/')
