@@ -19,6 +19,7 @@ type UserService interface {
 	Update(ctx context.Context, user *model.User, id string) (*dto.UserResponse, error)
 	// UpdateAvatar(ctx context.Context, user *model.User) (*dto.UserResponse, error)
 	Delete(ctx context.Context, user *model.User) (string, error)
-	GetUsers(ctx context.Context, offset, limit int) ([]*dto.GetUsersResponse, int, error)
+	GetUsers(ctx context.Context, offset, limit int, search string) ([]*dto.GetUsersResponse, int, error)
 	UpdateAvatar(ctx context.Context, userId string, file multipart.File, fileName string) error
+	GetUserByID(ctx context.Context, id string) (*dto.UserResponse, error)
 }

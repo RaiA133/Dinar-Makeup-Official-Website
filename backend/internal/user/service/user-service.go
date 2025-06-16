@@ -75,6 +75,20 @@ func (u *userService) GetCurrentUser(ctx context.Context, id string) (*dto.UserR
 	return converter.ToUserResponse(currentUser), nil
 }
 
+func (u *userService) GetUserByID(ctx context.Context, id string) (*dto.UserResponse, error) {
+	parseId, err := uuid.Parse(id)
+	if err != nil {
+		return nil, errors.New("failed parsing uuid")
+	}
+
+	userFound, err := u.pgRepo.FindById(ctx, &model.User{Id: parseId})
+	if err != nil {
+		return nil, errors.New("failed finding user by id")
+	}
+
+	return converter.ToUserResponse(userFound), nil
+}
+
 func (u *userService) Update(ctx context.Context, user *model.User, id string) (*dto.UserResponse, error) {
 	parseId, err := uuid.Parse(id)
 	if err != nil {
@@ -120,8 +134,8 @@ func (u *userService) Delete(ctx context.Context, user *model.User) (string, err
 	return "Success delete user", nil
 }
 
-func (u *userService) GetUsers(ctx context.Context, offset, limit int) ([]*dto.GetUsersResponse, int, error) {
-	users, total, err := u.pgRepo.FindUsers(ctx, offset, limit)
+func (u *userService) GetUsers(ctx context.Context, offset, limit int, search string) ([]*dto.GetUsersResponse, int, error) {
+	users, total, err := u.pgRepo.FindUsers(ctx, offset, limit, search)
 	if err != nil {
 		return nil, 0, errors.New("failed fetching users")
 	}

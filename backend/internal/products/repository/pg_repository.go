@@ -40,12 +40,52 @@ func (r *productPostgresRepository) CreateGroupItems(ctx context.Context, item *
 	return nil
 }
 
-func (p *productPostgresRepository) Update(ctx context.Context, entity *model.Product) (*model.Product, error) {
-	db := p.db.WithContext(ctx)
-	if err := db.Model(model.Product{}).Where("id = ?", entity.Id).Updates(entity).Error; err != nil {
-		return nil, err
+func (r *productPostgresRepository) UpdateProduct(ctx context.Context, product *model.Product) error {
+	tx := r.db.WithContext(ctx).Begin()
+
+	if err := tx.Model(&model.Product{}).
+		Where("id = ?", product.Id).
+		Updates(map[string]interface{}{
+			"name":        product.Name,
+			"price":       product.Price,
+			"currency":    product.Currency,
+			"description": product.Description,
+			"notes":       product.Notes,
+		}).Error; err != nil {
+		tx.Rollback()
+		return err
 	}
-	return entity, nil
+
+	if err := tx.Where("product_id = ?", product.Id).Delete(&model.ProductDetailItem{}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	if err := tx.Where("product_id = ?", product.Id).Delete(&model.ProductDetailGroup{}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	for _, group := range product.DetailGroups {
+		group.ProductId = product.Id
+		group.Id = uuid.New()
+
+		if err := tx.Create(&group).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+
+		for _, item := range group.DetailItems {
+			item.GroupId = group.Id
+			item.Id = uuid.New()
+			if err := tx.Create(&item).Error; err != nil {
+				tx.Rollback()
+				return err
+			}
+		}
+	}
+
+	tx.Commit()
+	return nil
 }
 
 func (p *productPostgresRepository) FindById(ctx context.Context, entity *model.Product) (*model.Product, error) {
@@ -55,7 +95,7 @@ func (p *productPostgresRepository) FindById(ctx context.Context, entity *model.
 		Preload("Images").
 		Preload("DetailGroups").
 		Preload("DetailGroups.DetailItems").
-		Where("id = ?", entity.Id).
+		Where("id = ? AND deleted_at IS NULL", entity.Id).
 		First(product).Error; err != nil {
 		return nil, err
 	}
@@ -65,7 +105,7 @@ func (p *productPostgresRepository) FindById(ctx context.Context, entity *model.
 
 func (p *productPostgresRepository) FindAll(ctx context.Context) ([]model.Product, error) {
 	var products []model.Product
-	if err := p.db.WithContext(ctx).Preload("Images").Preload("DetailGroups").Find(&products).Error; err != nil {
+	if err := p.db.WithContext(ctx).Preload("Images").Preload("DetailGroups").Where("deleted_at IS NULL").Find(&products).Error; err != nil {
 		return nil, err
 	}
 	return products, nil
@@ -73,7 +113,6 @@ func (p *productPostgresRepository) FindAll(ctx context.Context) ([]model.Produc
 
 func (p *productPostgresRepository) Delete(ctx context.Context, entity *model.Product) error {
 	db := p.db.WithContext(ctx)
-
 	// Set the DeletedAt field to the current time to mark it as deleted
 	entity.DeletedAt = timePtr(time.Now().Unix())
 

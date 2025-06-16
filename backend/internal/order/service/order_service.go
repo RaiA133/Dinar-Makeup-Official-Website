@@ -171,8 +171,8 @@ func (or *orderService) CreateOrder(ctx context.Context, userId string, req *dto
 	return resFormatMidtrans, nil
 }
 
-func (or *orderService) GetOrders(ctx context.Context, offset, limit int) ([]*dto.GetOrdersResponse, int, error) {
-	data, total, err := or.pgRepo.FindOrdersData(ctx, offset, limit)
+func (or *orderService) GetOrders(ctx context.Context, offset, limit int, search string) ([]*dto.GetOrdersResponse, int, error) {
+	data, total, err := or.pgRepo.FindOrdersData(ctx, offset, limit, search)
 	if err != nil {
 		return nil, 0, errors.New("failed to fetch orders data")
 	}
@@ -230,11 +230,11 @@ func (or *orderService) Callback(ctx context.Context, notifPayload map[string]in
 	}
 	if status == "success" {
 		if err := or.ConfirmPayment(ctx, dataOrder.IdOrder); err != nil {
-			return errors.New("failed to confirm payment")
+			return errors.New("failed to confirm payment 1 ")
 		}
 	} else if status == "failed" {
 		if err := or.ConfirmPayment(ctx, dataOrder.IdOrder); err != nil {
-			return errors.New("failed to confirm payment")
+			return errors.New("failed to confirm payment 2")
 		}
 	}
 	return nil

@@ -26,10 +26,13 @@ type CreateDetailItemInput struct {
 // Product Make-Up: Mc, Fotograper
 
 type UpdateProductRequest struct {
-	Id          uuid.UUID `json:"id"`
-	Name        string    `json:"name"`
-	Price       int64     `json:"price"`
-	Description string    `json:"description"`
+	Id           uuid.UUID                `json:"id"`
+	Name         string                   `json:"name"`
+	Price        int64                    `json:"price"`
+	Currency     string                   `json:"currency"`
+	Description  string                   `json:"description"`
+	Notes        string                   `json:"notes"`
+	DetailGroups []CreateDetailGroupInput `json:"detail_groups"`
 }
 
 type InputImageRequest struct {

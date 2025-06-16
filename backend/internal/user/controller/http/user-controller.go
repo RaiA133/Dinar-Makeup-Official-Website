@@ -51,7 +51,7 @@ func (u *userController) GetCurrentUser() gin.HandlerFunc {
 func (u *userController) UpdateUser() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		auth := middleware.GetAuth(ctx)
-		if auth.Role != "user" {
+		if auth.Role != "user" && auth.Role != "admin" {
 			utils.LogErrorResponse(ctx, u.logger, errors.New("access denied"))
 			response.SendErrorResponse(ctx, http.StatusForbidden, "access denied")
 			return
@@ -112,10 +112,11 @@ func (u *userController) GetUsers() gin.HandlerFunc {
 			response.SendErrorResponse(ctx, http.StatusForbidden, "access denied")
 			return
 		}
+		userName := ctx.Param("name")
 		paginate := pagination.RequestPagination(ctx)
 		var err error
 
-		data, total, err := u.service.GetUsers(ctx, paginate.Offset, paginate.Limit)
+		data, total, err := u.service.GetUsers(ctx, paginate.Offset, paginate.Limit, userName)
 		if err != nil {
 			utils.LogErrorResponse(ctx, u.logger, err)
 			response.SendErrorResponse(ctx, http.StatusInternalServerError, err.Error())
@@ -161,6 +162,28 @@ func (u *userController) UpdateAvatar() gin.HandlerFunc {
 			return
 		}
 		response.SendSuccesResponse(ctx, http.StatusOK, "Success update avatar", nil)
+
+	}
+}
+
+func (u *userController) GetUserById() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		auth := middleware.GetAuth(ctx)
+		if auth.Role != "user" && auth.Role != "admin" {
+			utils.LogErrorResponse(ctx, u.logger, errors.New("access denied"))
+			response.SendErrorResponse(ctx, http.StatusForbidden, "access denied")
+			return
+		}
+
+		id := ctx.Param("id")
+		data, err := u.service.GetUserByID(ctx, id)
+		if err != nil {
+			utils.LogErrorResponse(ctx, u.logger, err)
+			response.SendErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		response.SendSuccesResponse(ctx, http.StatusOK, "Success get user data", data)
 
 	}
 }
