@@ -10,7 +10,7 @@ type ProductPostgresRepository interface {
 	Create(ctx context.Context, product *model.Product) (uuid.UUID, error)
 	CreateGroup(ctx context.Context, group *model.ProductDetailGroup) error
 	CreateGroupItems(ctx context.Context, item *model.ProductDetailItem) error
-	Update(ctx context.Context, entity *model.Product) (*model.Product, error)
+	UpdateProduct(ctx context.Context, product *model.Product) error
 	FindById(ctx context.Context, entity *model.Product) (*model.Product, error)
 	FindAll(ctx context.Context) ([]model.Product, error)
 	Delete(ctx context.Context, entity *model.Product) error

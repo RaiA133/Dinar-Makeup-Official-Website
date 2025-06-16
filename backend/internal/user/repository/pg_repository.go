@@ -81,17 +81,23 @@ func (u *userPostgresRepository) FindAlreadyExistByEmail(ctx context.Context, en
 	return total, nil
 }
 
-func (u *userPostgresRepository) FindUsers(ctx context.Context, offset, limit int) ([]*model.User, int, error) {
+func (u *userPostgresRepository) FindUsers(ctx context.Context, offset, limit int, search string) ([]*model.User, int, error) {
 	var users []*model.User
 	var total int64
 
 	DB := u.db.WithContext(ctx)
 
-	if err := DB.Model(&model.User{}).Where("role = ?", "user").Count(&total).Error; err != nil {
+	query := DB.Model(&model.User{}).Where("role = ?", "user")
+
+	if search != "" {
+		query = query.Where("name ILIKE ?", "%"+search+"%")
+	}
+
+	if err := query.Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
 
-	if err := DB.Where("role = ?", "user").Offset(offset).Limit(limit).Find(&users).Error; err != nil {
+	if err := query.Offset(offset).Limit(limit).Find(&users).Error; err != nil {
 		return nil, 0, err
 	}
 

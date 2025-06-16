@@ -6,7 +6,6 @@ import (
 	"github.com/RianIhsan/wedding-organizer-be/config"
 	"github.com/RianIhsan/wedding-organizer-be/internal/middleware"
 	"github.com/RianIhsan/wedding-organizer-be/internal/products"
-	"github.com/RianIhsan/wedding-organizer-be/internal/products/model"
 	"github.com/RianIhsan/wedding-organizer-be/internal/products/model/dto"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/httpErrors/response"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/utils"
@@ -106,6 +105,7 @@ func (pc *productController) UpdateProduct() gin.HandlerFunc {
 			response.SendErrorResponse(ctx, http.StatusForbidden, "access denied")
 			return
 		}
+
 		id := ctx.Param("id")
 		parseUUID, err := utils.ParseUUID(id)
 		if err != nil {
@@ -117,18 +117,13 @@ func (pc *productController) UpdateProduct() gin.HandlerFunc {
 		request := new(dto.UpdateProductRequest)
 		if err := ctx.ShouldBindJSON(request); err != nil {
 			utils.LogErrorResponse(ctx, pc.logger, err)
-			response.SendErrorResponse(ctx, http.StatusBadRequest, "Invalid payload")
+			response.SendErrorResponse(ctx, http.StatusBadRequest, "invalid payload")
 			return
 		}
 
-		entitiyProduct := &model.Product{
-			Id:          parseUUID,
-			Name:        request.Name,
-			Price:       request.Price,
-			Description: request.Description,
-		}
+		request.Id = parseUUID
 
-		data, err := pc.service.UpdateProduct(context.Background(), entitiyProduct)
+		data, err := pc.service.UpdateProduct(context.Background(), request)
 		if err != nil {
 			utils.LogErrorResponse(ctx, pc.logger, err)
 			response.SendErrorResponse(ctx, http.StatusInternalServerError, err.Error())

@@ -145,29 +145,45 @@ func (p *productService) GetProduct(ctx context.Context, id uuid.UUID) (*dto.Get
 	return &response, nil
 }
 
-func (p *productService) UpdateProduct(ctx context.Context, entity *model.Product) (*dto.UpdateProductResponse, error) {
-	getId, err := p.pgRepo.FindById(ctx, entity)
+func (p *productService) UpdateProduct(ctx context.Context, req *dto.UpdateProductRequest) (*dto.UpdateProductResponse, error) {
+	existingProduct, err := p.pgRepo.FindById(ctx, &model.Product{Id: req.Id})
 	if err != nil {
-		return nil, errors.New("Product not found")
+		return nil, errors.New("product not found")
 	}
 
-	if getId.Name != "" {
-		getId.Name = entity.Name
-	}
-	if getId.Price != 0 {
-		getId.Price = entity.Price
-	}
-	if getId.Description != "" {
-		getId.Description = entity.Description
+	var detailGroups []model.ProductDetailGroup
+	for _, group := range req.DetailGroups {
+		var detailItems []model.ProductDetailItem
+		for _, item := range group.DetailItems {
+			detailItems = append(detailItems, model.ProductDetailItem{
+				Description: item.Description,
+			})
+		}
+
+		detailGroups = append(detailGroups, model.ProductDetailGroup{
+			GroupName:   group.GroupName,
+			DetailItems: detailItems,
+		})
 	}
 
-	updatedProduct, err := p.pgRepo.Update(ctx, getId)
+	productToUpdate := model.Product{
+		Id:           existingProduct.Id,
+		Name:         req.Name,
+		Price:        req.Price,
+		Currency:     req.Currency,
+		Description:  req.Description,
+		Notes:        req.Notes,
+		DetailGroups: detailGroups,
+	}
+
+	err = p.pgRepo.UpdateProduct(ctx, &productToUpdate)
 	if err != nil {
 		return nil, errors.New("failed to update product")
 	}
 
+	// Step 4: Return response
 	response := dto.UpdateProductResponse{
-		Id: updatedProduct.Id,
+		Id: productToUpdate.Id,
 	}
 	return &response, nil
 }

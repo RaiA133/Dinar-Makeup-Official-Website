@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"github.com/RianIhsan/wedding-organizer-be/internal/order"
 	"github.com/RianIhsan/wedding-organizer-be/internal/order/model"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/payment"
@@ -29,17 +30,28 @@ func (rp *orderPGRepository) InsertOrder(ctx context.Context, data *model.Order)
 	return data, nil
 }
 
-func (rp *orderPGRepository) FindOrdersData(ctx context.Context, offset, limit int) ([]*model.Order, int64, error) {
+func (rp *orderPGRepository) FindOrdersData(ctx context.Context, offset, limit int, search string) ([]*model.Order, int64, error) {
 	var orders []*model.Order
 	var total int64
 
-	DB := rp.db.WithContext(ctx)
+	DB := rp.db.WithContext(ctx).Model(&model.Order{})
 
-	if err := DB.Model(&model.Order{}).Count(&total).Error; err != nil {
+	if search != "" {
+		searchPattern := "%" + search + "%"
+		DB = DB.Where(`
+			id_order text ILIKE ? OR 
+			user_id::text ILIKE ? OR 
+			product_id::text ILIKE ?`,
+			searchPattern, searchPattern, searchPattern)
+	}
+	if err := DB.Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
 
-	if err := DB.Offset(offset).Limit(limit).Preload("User").Preload("Product").Find(&orders).Error; err != nil {
+	if err := DB.Offset(offset).Limit(limit).
+		Preload("User").
+		Preload("Product").
+		Find(&orders).Error; err != nil {
 		return nil, 0, err
 	}
 
@@ -48,11 +60,17 @@ func (rp *orderPGRepository) FindOrdersData(ctx context.Context, offset, limit i
 
 func (rp *orderPGRepository) CheckTransaction(ctx context.Context, orderId string) (string, error) {
 	var paymentStatus string
+	fmt.Println("================================")
+	fmt.Println("ORDER ID = ", orderId)
+	fmt.Println("================================")
+
 	transactionStatus, err := rp.coreClient.CheckTransaction(orderId)
 	if err != nil {
+		fmt.Println("GACOR 1")
 		return "", err
 	} else {
 		if transactionStatus != nil {
+			fmt.Println("GACOR 2")
 			paymentStatus = payment.TransactionStatus(transactionStatus)
 			return paymentStatus, nil
 		}

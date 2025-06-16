@@ -63,10 +63,17 @@ func (oc *orderController) BookingWedding() gin.HandlerFunc {
 
 func (oc *orderController) GetBookingWedding() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// TODO : ONLY ADMIN CAN ACCESS
+		auth := middleware.GetAuth(c)
+		if auth.Role != "admin" {
+			utils.LogErrorResponse(c, oc.logger, errors.New("access denied"))
+			response.SendErrorResponse(c, http.StatusForbidden, "access denied")
+			return
+		}
+
+		search := c.Query("search")
 
 		paginate := pagination.RequestPagination(c)
-		data, total, err := oc.service.GetOrders(c, paginate.Offset, paginate.Limit)
+		data, total, err := oc.service.GetOrders(c, paginate.Offset, paginate.Limit, search)
 		if err != nil {
 			utils.LogErrorResponse(c, oc.logger, err)
 			response.SendErrorResponse(c, http.StatusInternalServerError, err.Error())

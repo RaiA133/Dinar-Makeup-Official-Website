@@ -21,7 +21,7 @@ func RequestPagination(c *gin.Context) *Pagination {
 	}
 	limit, err := strconv.Atoi(c.Query("limit"))
 	if err != nil || limit <= 0 {
-		limit = 10
+		limit = 1000
 	}
 	offset := (page - 1) * limit
 	return &Pagination{

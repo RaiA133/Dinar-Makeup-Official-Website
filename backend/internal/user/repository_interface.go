@@ -21,7 +21,7 @@ type UserPostgresRepository interface {
 
 	Delete(ctx context.Context, entity *model.User) error
 
-	FindUsers(ctx context.Context, offset, limit int) ([]*model.User, int, error)
+	FindUsers(ctx context.Context, offset, limit int, search string) ([]*model.User, int, error)
 
 	UpdateAvatarUser(ctx context.Context, id, avatar string) error
 }
