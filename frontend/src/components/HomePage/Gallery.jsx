@@ -5,6 +5,33 @@ import { FaBrush, FaPalette, FaCamera, FaCalendarAlt } from "react-icons/fa";
 function Gallery() {
   const navigate = useNavigate();
 
+  const dataGallery = [
+    {
+      title: "Makeup",
+      src: "/img/gallery/weddings/main/makeup.png",
+      desc: "Tata rias profesional untuk penampilan sempurna",
+      borderColor: "border-primary"
+    },
+    {
+      title: "Dekorasi",
+      src: "/img/gallery/weddings/main/dekorasi.png",
+      desc: "Transformasi ruangan sesuai tema pernikahan Anda",
+      borderColor: "border-secondary"
+    },
+    {
+      title: "Dokumentasi",
+      src: "/img/gallery/weddings/main/dokumentasi.png",
+      desc: "Abadikan momen berharga dengan hasil terbaik",
+      borderColor: "border-accent"
+    },
+    {
+      title: "Wedding Organizer",
+      src: "/img/gallery/weddings/main/wedding_organizer.png",
+      desc: "Kelola seluruh acara pernikahan dengan profesional",
+      borderColor: "border-info"
+    }
+  ]
+
   return (
     <div className="mt-20 mx-1 sm:mx-20">
 
@@ -29,79 +56,29 @@ function Gallery() {
         </div>
       )}
 
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6'>
-        {/* Makeup Card */}
-        <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300 group overflow-hidden" onClick={() => navigate('/gallery')} style={{cursor: "pointer"}}> 
-          <figure className="relative overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        {dataGallery.map((item, i) => (
+          <div
+            key={i}
+            onClick={() => navigate('/gallery')}
+            className="relative group overflow-hidden rounded-2xl cursor-pointer transition-transform duration-300 hover:scale-105 shadow-md flex justify-center"
+          >
             <LazyLoadImage
+              src={item.src}
+              alt={item.title}
               effect="opacity"
-              src={`/img/gallery/weddings/main/makeup.png`}
-              alt="Makeup Service"
-              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+              className="w-full h-64 object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-          </figure>
-          <div className="card-body items-center text-center p-4">
-            <h2 className="card-title text-lg font-semibold text-base-800">Makeup</h2>
-            <div className="w-10 h-1 bg-primary mt-2 mb-3"></div>
-            <p className="text-sm text-base-500">Tata rias profesional untuk penampilan sempurna</p>
+            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300"></div>
+            <div className="absolute bottom-0 p-5 w-full text-center text-base-100">
+              <h2 className="text-lg font-semibold">{item.title}</h2>
+              <div className={`mx-auto mt-2 mb-3 w-10 h-1 ${item.borderColor} bg-current`}></div>
+              <p className="text-sm text-base-300">{item.desc}</p>
+            </div>
           </div>
-        </div>
-
-        {/* Dekorasi Card */}
-        <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300 group overflow-hidden" onClick={() => navigate('/gallery')} style={{cursor: "pointer"}}>
-          <figure className="relative overflow-hidden">
-            <LazyLoadImage
-              effect="opacity"
-              src={`/img/gallery/weddings/main/dekorasi.png`}
-              alt="Decoration Service"
-              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-          </figure>
-          <div className="card-body items-center text-center p-4">
-            <h2 className="card-title text-lg font-semibold text-base-800">Dekorasi</h2>
-            <div className="w-10 h-1 bg-secondary mt-2 mb-3"></div>
-            <p className="text-sm text-base-500">Transformasi ruangan sesuai tema pernikahan Anda</p>
-          </div>
-        </div>
-
-        {/* Dokumentasi Card */}
-        <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300 group overflow-hidden" onClick={() => navigate('/gallery')} style={{cursor: "pointer"}}>
-          <figure className="relative overflow-hidden">
-            <LazyLoadImage
-              effect="opacity"
-              src={`/img/gallery/weddings/main/dokumentasi.png`}
-              alt="Photography Service"
-              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-          </figure>
-          <div className="card-body items-center text-center p-4">
-            <h2 className="card-title text-lg font-semibold text-base-800">Dokumentasi</h2>
-            <div className="w-10 h-1 bg-accent mt-2 mb-3"></div>
-            <p className="text-sm text-base-500">Abadikan momen berharga dengan hasil terbaik</p>
-          </div>
-        </div>
-
-        {/* Wedding Organizer Card */}
-        <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300 group overflow-hidden" onClick={() => navigate('/gallery')} style={{cursor: "pointer"}}>
-          <figure className="relative overflow-hidden">
-            <LazyLoadImage
-              effect="opacity"
-              src={`/img/gallery/weddings/main/wedding_organizer.png`}
-              alt="Wedding Organizer"
-              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-          </figure>
-          <div className="card-body items-center text-center p-4">
-            <h2 className="card-title text-lg font-semibold text-base-800">Wedding Organizer</h2>
-            <div className="w-10 h-1 bg-info mt-2 mb-3"></div>
-            <p className="text-sm text-base-500">Kelola seluruh acara pernikahan dengan profesional</p>
-          </div>
-        </div>
+        ))}
       </div>
+
 
       {location.pathname !== "/" && (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
