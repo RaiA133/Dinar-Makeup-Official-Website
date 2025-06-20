@@ -23,7 +23,7 @@ function Makeups() {
       ]
     },
     {
-      name: "Pre-Wedding/Tunangan/Wisuda",
+      name: "Pre-Wedding / Tunangan / Wisuda",
       priceOwner: "Rp 350.000",
       priceTeam: "Rp 250.000",
       popular: false,
