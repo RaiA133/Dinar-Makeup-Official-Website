@@ -35,7 +35,7 @@ function HomePage() {
 
   return (
 
-    <div className="mx-3">
+    <div className="mx-0">
 
       <Toaster
         toastOptions={{
@@ -92,23 +92,25 @@ function HomePage() {
         </div>
       </div>
 
-      {/* About */}
-      <About />
+      <div className="mx-3">
+        {/* About */}
+        <About />
 
-      {/* Testimoni */}
-      <TestimoniPage />
+        {/* Testimoni */}
+        <TestimoniPage />
 
-      {/* Gallery */}
-      <Gallery />
+        {/* Gallery */}
+        <Gallery />
 
-      {/* Pricing */}
-      <Weddings />
+        {/* Pricing */}
+        <Weddings />
 
-      {/* Rating */}
-      {/* <Rating /> */}
+        {/* Rating */}
+        {/* <Rating /> */}
 
-      {/* Contact */}
-      <Contact />
+        {/* Contact */}
+        <Contact />
+      </div>
 
     </div>
   )
