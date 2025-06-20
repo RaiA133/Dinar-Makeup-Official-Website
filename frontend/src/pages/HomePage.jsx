@@ -46,7 +46,10 @@ function HomePage() {
       />
 
       {/* HERO */}
-      <div className="hero min-h-screen bg-cover bg-center" style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(/img/home/hero.PNG)' }}>
+      <div
+        className="hero min-h-screen bg-cover bg-center"
+        style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(/img/home/hero.PNG)' }}
+      >
         <div className="hero-content text-center text-neutral-content w-fit backdrop-blur-xs">
           <div className="max-w-2xl space-y-6">
             <div className="flex justify-center items-center gap-4">
@@ -61,7 +64,7 @@ function HomePage() {
             </h1>
 
             <p className="text-xs sm:text-sm md-text-md lg-text-lg lg:text-lg font-light leading-relaxed">
-              Selamat Datang di Dashboard Pernikahanmu!      Semua momen indahmu dimulai dari sini.     kami siap menemani perjalanan anda mewujudkan dan mempercantik hari istimewa, menjadi kenangan abadi. Kami percaya bahwa setiap kisah cinta layak dirayakan dengan sempurna.
+              Selamat Datang di Dashboard Pernikahanmu! Semua momen indahmu dimulai dari sini. kami siap menemani perjalanan anda mewujudkan dan mempercantik hari istimewa, menjadi kenangan abadi. Kami percaya bahwa setiap kisah cinta layak dirayakan dengan sempurna.
             </p>
 
             <div className="pt-4">
@@ -103,7 +106,6 @@ function HomePage() {
 
       {/* Rating */}
       {/* <Rating /> */}
-
 
       {/* Contact */}
       <Contact />
