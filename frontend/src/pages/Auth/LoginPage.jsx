@@ -27,7 +27,7 @@ function LoginPage() {
     <div className='px-0'>
 
       <div className="h-screen flex justify-center items-center">
-        <div className="card w-96 bg-base-100 shadow-xl">
+        <div className="card absolute sm:relative sm:shadow-xl top-0 w-96 bg-base-100">
 
           <Toaster
             toastOptions={{
