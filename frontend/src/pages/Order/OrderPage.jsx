@@ -7,6 +7,7 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import moment from 'moment';
 import toast, { Toaster } from "react-hot-toast";
+import { FiCheck, FiShoppingCart } from "react-icons/fi";
 
 function OrderPage() {
   const { id } = useParams();
@@ -102,28 +103,34 @@ function OrderPage() {
         {Object.keys(productsByIDState).length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
 
-            <div className="md:col-span-7 xl:col-span-9 p-5 border border-base-300 shadow-lg rounded-box">
+            <div className="md:col-span-7 xl:col-span-9 p-5 border border-base-300 shadow-lg rounded-box h-fit">
               <div className='grid grid-cols-1 lg:grid-cols-2 gap-0'>
                 {/* Image Gallery Section */}
-                <div className="relative z-20">
+                <div className="bg-base-50 p-6 flex flex-col h-fit">
+                  {/* Header Image Preview*/}
+                  <div className="z-10 bg-base-50 pb-4 ">
+                    <h3 className="text-lg font-semibold text-base-700">Gallery Preview</h3>
+                    <div className="divider my-2"></div>
+                  </div>
 
-                  <div className="overflow-hidden"> {/* Main Image */}
+                  {/* Main Image with Zoom Effect */}
+                  <div className="relative flex-grow overflow-hidden rounded-xl bg-base-100 shadow-sm">
                     <img
                       src={productsByIDState?.images?.[0]?.image_url}
                       alt="Main product image"
-                      className="object-contain transition-opacity duration-300"
+                      className="w-full h-fit object-contain transition-transform duration-300 hover:scale-105"
                       id="main-image"
                     />
                   </div>
 
+                  {/* Thumbnail Gallery */}
                   {productsByIDState?.images?.length > 1 && (
-                    <section> {/* Thumbnail Grid */}
-                      <div className="divider"></div>
-                      <div className="mt-4 grid grid-cols-6 gap-2">
+                    <div className="mt-6">
+                      <div className="grid grid-cols-4 gap-3">
                         {productsByIDState?.images?.map((image, index) => (
                           <button
                             key={index}
-                            className="aspect-square overflow-hidden rounded-lg border-2 border-transparent hover:border-primary transition-all"
+                            className="aspect-square overflow-hidden rounded-lg border-2 border-transparent hover:border-primary transition-all duration-200 relative group"
                             onClick={() => {
                               document.getElementById('main-image').src = image.image_url;
                             }}
@@ -131,50 +138,87 @@ function OrderPage() {
                             <img
                               src={image.image_url}
                               alt={`Thumbnail ${index + 1}`}
-                              className="h-full w-full object-cover"
+                              className="h-full w-full object-cover group-hover:opacity-80"
                             />
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-200"></div>
                           </button>
                         ))}
                       </div>
-                      <div className="divider"></div>
-                    </section>
+                    </div>
                   )}
-
                 </div>
 
                 {/* Product Details Section */}
-                <div className="overflow-y-auto max-h-[85vh] my-5">
-                  {/* Product Title */}
-                  <div className="sticky top-0 bg-base-100 p-5 z-10 px-9">
-                    <h2 className="text-3xl font-bold mb-2">{productsByIDState?.name}</h2>
-                    <span className="text-xl font-semibold text-primary">
-                      {new Intl.NumberFormat('id-ID', {
-                        style: 'currency',
-                        currency: productsByIDState?.currency || 'IDR',
-                        minimumFractionDigits: 0
-                      }).format(productsByIDState?.price || 0)}
-                    </span>
-                    <div className="divider my-2"></div>
+                <div className="p-8 flex flex-col ">
+                  {/* Header with Price */}
+                  <div className="border-b border-base-100 pb-6">
+                    <h2 className="text-3xl font-bold text-base-900 mb-2">{productsByIDState?.name}</h2>
+                    <div className="flex items-center justify-between">
+                      <div className="text-2xl font-semibold text-primary">
+                        {new Intl.NumberFormat('id-ID', {
+                          style: 'currency',
+                          currency: productsByIDState?.currency || 'IDR',
+                          minimumFractionDigits: 0
+                        }).format(productsByIDState?.price || 0)}
+                      </div>
+                      <div className="badge badge-primary badge-lg">
+                        {productsByIDState?.category?.name || 'Wedding'}
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Product Details */}
-                  <div className="space-y-4 px-5">
-                    {productsByIDState?.detail_groups?.map((group) => (
-                      <div key={group.id} className="collapse collapse-plus bg-base-100 border border-base-300">
-                        <input type="radio" name="product-accordion" />
-                        <div className="collapse-title font-semibold text-lg">
-                          {group.group_name}
-                        </div>
-                        <div className="collapse-content">
-                          <ul className="list-disc pl-5 space-y-2">
-                            {group?.detail_items?.map((item) => (
-                              <li key={item?.id}>{item?.description}</li>
-                            ))}
-                          </ul>
-                        </div>
+                  <div className="max-h-[75vh] overflow-y-auto">
+                    {/* Key Features */}
+                    <div className="py-6 border-b border-base-100">
+                      <h3 className="text-lg font-semibold text-gray-700 mb-3">Highlight Features</h3>
+                      <div className="grid grid-cols-2 gap-3">
+                        {productsByIDState?.detail_groups?.slice(0, 4).map((group, idx) => (
+                          <div key={idx} className="flex items-start">
+                            <div className="bg-primary/10 p-2 rounded-full mr-3">
+                              <FiCheck className="text-primary" />
+                            </div>
+                            <div>
+                              <h4 className="font-medium">{group.group_name}</h4>
+                              <p className="text-sm text-gray-500 line-clamp-1">
+                                {group.detail_items?.[0]?.description || 'Included'}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    </div>
+
+                    {/* Detailed Specifications */}
+                    <div className="py-6 flex-grow overflow-y-auto">
+                      <h3 className="text-lg font-semibold text-base-700 mb-4">Package Details</h3>
+                      <div className="space-y-4">
+                        {productsByIDState?.detail_groups?.map((group) => (
+                          <div key={group.id} className="collapse collapse-plus bg-base-100 border border-base-200">
+                            <input type="radio" name="product-accordion" />
+                            <div className="collapse-title font-medium text-md sm:text-lg flex items-center">
+                              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                                <span className="text-primary font-semibold">{group.group_name.charAt(0)}</span>
+                              </div>
+                              {group.group_name}
+                            </div>
+                            <div className="collapse-content">
+                              <ul className="space-y-3 pl-2">
+                                {group?.detail_items?.map((item) => (
+                                  <li key={item?.id} className="flex items-center">
+                                    <div className="bg-success/10 p-1 rounded-full mr-3 mt-1">
+                                      <FiCheck className="text-success text-sm" />
+                                    </div>
+                                    <span className="text-base-700 text-xs md:text-md">{item?.description}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -182,7 +226,7 @@ function OrderPage() {
             <div className="md:col-span-5 xl:col-span-3">
 
               {/* Calendar */}
-              <div className="flex justify-center mb-5 py-5 border-base-300 shadow-lg rounded-box text-xs">
+              <div className="flex justify-center mb-5 py-5 border-base-300 shadow-lg rounded-box text-xs text-center">
                 <DayPicker
                   animate
                   mode="single"
@@ -286,8 +330,10 @@ function OrderPage() {
                 {/* <p className="mt-4 text-sm">Selected: <strong>{paymentMethod}</strong></p> */}
 
                 <div className="divider"></div>
-
-                <button className="btn btn-primary w-full" onClick={() => handlePreSubmit()}>Checkout</button>
+                
+                <button className="btn btn-primary w-full" onClick={() => handlePreSubmit()}>
+                <FiShoppingCart /> Checkout
+                </button>
                 <dialog id="checkout_confirm_modal" className="modal modal-bottom sm:modal-middle">
                   <div className="modal-box sm:min-w-2xl">
                     <h3 className="font-bold text-lg mb-4 text-primary">Order Details</h3>

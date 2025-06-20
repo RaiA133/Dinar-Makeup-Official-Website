@@ -74,7 +74,7 @@ function Navbar() {
       )}
       <div className="navbar-end">
         {!isLogin ? (
-          <a onClick={() => navigate("/login")} className="btn btn-primary">Login</a>
+          <a onClick={() => navigate("/login")} className="btn btn-outline btn-primary">Login</a>
         ) : (
 
           <div className="flex-noneblock gap-2">

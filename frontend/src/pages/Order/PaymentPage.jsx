@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { ProductsContext } from "../../contexts/ProductsContext";
 import toast, { Toaster } from "react-hot-toast";
+import { FiCopy, FiClock, FiCheckCircle, FiInfo } from "react-icons/fi";
+import { FaWhatsapp } from "react-icons/fa";
 
 function PaymentPage() {
   const [copied, setCopied] = useState(false);
@@ -10,7 +12,7 @@ function PaymentPage() {
 
   const paymentData = JSON.parse(sessionStorage.getItem('paymentData'));
 
-  const targetDate = new Date(paymentData.expiry_time); // ISO format
+  const targetDate = new Date(paymentData.expiry_time);
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -38,134 +40,166 @@ function PaymentPage() {
       } else {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
-
     }, 1000);
 
-    return () => clearInterval(interval); // clean up on unmount
+    return () => clearInterval(interval);
   }, [paymentData.transaction_status, targetDate]);
 
-  //END COUNTDOWN
+  console.log(paymentData);
 
   return (
-    <div className="m-3 sm:m-5">
-      <div className="my-3">
+    <div className="min-h-screen bg-base-50 py-8 px-4 sm:px-6 lg:px-8">
+      <Toaster
+        toastOptions={{
+          style: {
+            maxWidth: '600px',
+            background: '#4F46E5',
+            color: '#fff'
+          }
+        }}
+      />
 
-        <Toaster
-          toastOptions={{
-            style: {
-              maxWidth: '600px'
-            }
-          }}
-        />
+      <div className="max-w-4xl mx-auto">
+        {/* Payment Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-base-900 mb-2">Payment Details</h1>
+          <p className="text-base-600">Complete your payment to secure your booking</p>
+        </div>
 
-        <div className="p-4">
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title">Payment Details</h2>
-
-              <div className="divider my-0"></div>
-
-              {paymentData.transaction_status == "pending" ? (
-                <div role="alert" className="alert alert-info">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="h-6 w-6 shrink-0 stroke-current">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
-                  <span>Waiting for payment.</span>
+        {/* Payment Status Card */}
+        <div className="bg-base-100 rounded-xl shadow-md overflow-hidden mb-8">
+          <div className="p-6">
+            {paymentData.transaction_status === "pending" ? (
+              <div className="flex items-center bg-base-200 text-info p-4 rounded-lg mb-6">
+                <FiClock className="text-2xl mr-3" />
+                <div>
+                  <h3 className="font-semibold">Waiting for Payment</h3>
+                  <p className="text-sm">Please complete your payment before the due time</p>
                 </div>
-              ) : (
-                <div role="alert" className="alert alert-success">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span>Your purchase has been confirmed!</span>
+              </div>
+            ) : (
+              <div className="flex items-center bg-base-200 text-success p-4 rounded-lg mb-6">
+                <FiCheckCircle className="text-2xl mr-3" />
+                <div>
+                  <h3 className="font-semibold">Payment Confirmed!</h3>
+                  <p className="text-sm">Your booking is now secured</p>
                 </div>
-              )}
+              </div>
+            )}
 
-              <div className="divider my-0"></div>
+            {/* Progress Steps */}
+            <div className="mb-8">
+              <div className="steps steps-horizontal w-full">
+                <div className={`step ${paymentData.transaction_status == "pending" ? 'step-neutral' : ''}`}>
+                  <div className="step-circle">1</div>
+                  <div className="step-title">Payment</div>
+                </div>
+                <div className={`step ${paymentData.transaction_status == "" ? 'step-neutral' : ''}`}>
+                  <div className="step-circle">2</div>
+                  <div className="step-title">Confirmation</div>
+                </div>
+                <div className={`step ${paymentData.transaction_status == "" ? 'step-neutral' : ''}`}>
+                  <div className="step-circle">3</div>
+                  <div className="step-title">Preparation</div>
+                </div>
+                <div className={`step ${paymentData.transaction_status == "" ? 'step-neutral' : ''}`}>
+                  <div className="step-circle">4</div>
+                  <div className="step-title">Wedding Day</div>
+                </div>
+              </div>
+            </div>
 
-              <ul className="steps steps-vertical sm:steps-horizontal">
-                <li className="step step-primary">Payment</li>
-                <li className="step">Confirmation</li>
-                <li className="step">Preparation & Coordination</li>
-                <li className="step">Weddings Day</li>
-              </ul>
+            {/* Payment Information */}
+            <div className="space-y-6">
+              {/* VA Number & Countdown */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-base-50 p-5 rounded-lg border border-neutral-600">
+                  <h3 className="font-medium text-base-700 mb-3">Virtual Account</h3>
+                  <div 
+                    className="flex items-center justify-between p-3 bg-base-100 rounded-lg border border-neutral-600 cursor-pointer hover:bg-base-50 transition-colors"
+                    onClick={() => {
+                      navigator.clipboard.writeText(paymentData.va).then(() => {
+                        setCopied(true);
+                        setTimeout(() => setCopied(false), 1500);
+                        toast.success('VA Number copied!');
+                      });
+                    }}
+                  >
+                    <span className="font-mono">{paymentData.va}</span>
+                    <FiCopy className="text-base-500" />
+                  </div>
+                  <p className="text-sm text-base-500 mt-2">Click to copy VA number</p>
+                </div>
 
-              <div className="divider my-0"></div>
-
-              <div className="space-y-2">
-
-                <div className="flex justify-center">
-                  <div className="grid grid-cols-1 justify-center md:grid-cols-2 gap-2 w-fit">
-                    <p style={{ cursor: 'pointer' }} className="flex justify-center items-center"
-                      onClick={() => {
-                        navigator.clipboard.writeText(paymentData.va).then(() => {
-                          setCopied(true);
-                          setTimeout(() => setCopied(false), 1500); // Reset after 1.5s
-                          toast('Copied!', {
-                            icon: '📋',
-                          });
-                        });
-                      }}>
-                      <span className="p-5 border border-base-300 shadow-sm rounded-box btn btn-soft btn-neutral">
-                        <strong>VA Number:</strong> {paymentData.va} 📋
-                      </span>
-                    </p>
-
-                    {/* Countdown */}
-                    <div className="flex justify-center mt-2 md:mt-0">
-                      <div className="grid grid-flow-col gap-5 text-center auto-cols-max">
-                        <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content h-fit">
-                          <span className="countdown font-mono text-4xl">
-                            <span style={{ "--value": timeLeft.days } /* as React.CSSProperties */} aria-live="polite" aria-label={timeLeft.days}>{timeLeft.days}</span>
-                          </span>
-                          days
+                {/* Countdown Timer */}
+                <div className="bg-base-50 p-5 rounded-lg border border-neutral-600">
+                  <h3 className="font-medium text-base-700 mb-3">Payment Due In</h3>
+                  <div className="grid grid-flow-col gap-2 text-center auto-cols-max justify-center">
+                    {Object.entries(timeLeft).map(([unit, value]) => (
+                      <div key={unit} className="flex flex-col items-center">
+                        <div className="w-16 h-16 bg-base-100 rounded-lg shadow-sm border-1 border-neutral-600 flex items-center justify-center">
+                          <span className="text-2xl font-bold text-base-800">{value}</span>
                         </div>
-                        <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content h-fit">
-                          <span className="countdown font-mono text-4xl">
-                            <span style={{ "--value": timeLeft.hours } /* as React.CSSProperties */} aria-live="polite" aria-label={timeLeft.hours}>{timeLeft.hours}</span>
-                          </span>
-                          hours
-                        </div>
-                        <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content h-fit">
-                          <span className="countdown font-mono text-4xl">
-                            <span style={{ "--value": timeLeft.minutes } /* as React.CSSProperties */} aria-live="polite" aria-label={timeLeft.minutes}>{timeLeft.minutes}</span>
-                          </span>
-                          min
-                        </div>
-                        <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content h-fit">
-                          <span className="countdown font-mono text-4xl">
-                            <span style={{ "--value": timeLeft.seconds } /* as React.CSSProperties */} aria-live="polite" aria-label={timeLeft.seconds}>{timeLeft.seconds}</span>
-                          </span>
-                          sec
-                        </div>
+                        <span className="text-xs text-base-500 mt-1 uppercase">{unit}</span>
                       </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
+              </div>
 
-                <div className="divider my-0"></div>
-
-                <div className="flex justify-center mt-4">
-                  <div className="border border-base-300 p-5 shadow-md rounded-box w-full max-w-2xl">
-                    <p><strong>Order ID:</strong> {paymentData.order_id}</p>
-                    <p><strong>Amount: </strong>
+              {/* Payment Details */}
+              <div className="bg-base-50 p-5 rounded-lg border border-neutral-600">
+                <h3 className="font-medium text-base-700 mb-4">Transaction Details</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-base-500">Order ID</p>
+                    <p className="font-medium">{paymentData.order_id}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-base-500">Amount</p>
+                    <p className="font-medium">
                       {new Intl.NumberFormat('id-ID', {
                         style: 'currency',
                         currency: paymentData?.currency || 'IDR',
                         minimumFractionDigits: 0
                       }).format(paymentData?.gross_amount || 0)}
                     </p>
-                    <p><strong>Bank:</strong> {paymentData.bank_name.toUpperCase()}</p>
-                    <p><strong>Trasaction Time:</strong> {paymentData.transaction_time}</p>
-                    <p><strong>Pay Before:</strong> {paymentData.expiry_time}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-base-500">Bank</p>
+                    <p className="font-medium">{paymentData.bank_name.toUpperCase()}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-base-500">Transaction Time</p>
+                    <p className="font-medium">{paymentData.transaction_time}</p>
                   </div>
                 </div>
+              </div>
 
+              {/* Help Section */}
+              <div className="bg-blue-50 p-5 rounded-lg border border-blue-200">
+                <div className="flex items-start">
+                  <FiInfo className="text-blue-500 text-xl mr-3 mt-1" />
+                  <div>
+                    <h3 className="font-medium text-blue-800 mb-2">Need Help?</h3>
+                    <p className="text-sm text-blue-700 mb-3">
+                      If you encounter any issues with your payment, please contact our customer support.
+                    </p>
+                    <a 
+                      href={`https://wa.me/123?text=Hi, I need help with my payment for order ${paymentData.order_id}`}
+                      className="inline-flex items-center px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaWhatsapp className="mr-2" />
+                      Chat via WhatsApp
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
