@@ -41,7 +41,7 @@ function Navbar() {
 
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+            className="menu menu-md dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
             <li><a onClick={() => navigate("/")} className={location.pathname == '/' ? 'menu-active' : ''}>Home</a></li>
             <li><a onClick={() => navigate("/about")} className={location.pathname == '/about' ? 'menu-active' : ''}>About</a></li>
             <li><a onClick={() => navigate("/gallery")} className={location.pathname == '/gallery' ? 'menu-active' : ''}>Gallery</a></li>
