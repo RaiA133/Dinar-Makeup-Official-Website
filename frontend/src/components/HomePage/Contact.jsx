@@ -106,7 +106,7 @@ function Contact() {
               <div className="overflow-x-auto">
                   <div className="text-md">
                     <div className="font-medium">Senin - Sabtu</div>
-                    <div className="text-base-600">09.00 – 17.00 WIB0</div>
+                    <div className="text-base-600">09.00 – 17.00 WIB</div>
                   </div>
               </div>
             </div>
