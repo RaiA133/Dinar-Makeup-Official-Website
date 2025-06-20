@@ -4,12 +4,14 @@ import (
 	"context"
 	"log"
 	"os"
+	"time"
 
 	"github.com/RianIhsan/wedding-organizer-be/config"
 	"github.com/RianIhsan/wedding-organizer-be/internal/server"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/db/postgres"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/db/redis"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/logger"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -49,6 +51,16 @@ func main() {
 	// -----------------------------------------------------------------------------------------------------------
 	// instance gin framework
 	app := gin.New()
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"}, // Allow all origins, you can specify specific origins if needed
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
 	app.Use(gin.Recovery())
 
 	// -----------------------------------------------------------------------------------------------------------
