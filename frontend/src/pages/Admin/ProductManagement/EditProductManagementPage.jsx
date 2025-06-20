@@ -252,7 +252,7 @@ function UpdateProductManagementPage() {
 
             {/* Basic Product Info */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-5">
-              <div className="form-control w-full">
+              <div className="form-control w-full col-span-2">
                 <label className="label">
                   <span className="label-text">Product Name*</span>
                 </label>
@@ -265,7 +265,7 @@ function UpdateProductManagementPage() {
                   required
                 />
               </div>
-              <div className="form-control w-full">
+              <div className="form-control w-full col-span-2">
                 <label className="label">
                   <span className="label-text">Price (IDR)*</span>
                 </label>
@@ -289,6 +289,7 @@ function UpdateProductManagementPage() {
                   defaultValue={productsState.data.find(p => p.id === id)?.description || ''}
                   placeholder="Product description"
                   rows={3}
+                  // disabled
                   required
                 />
               </div>
@@ -302,6 +303,7 @@ function UpdateProductManagementPage() {
                   defaultValue={productsState.data.find(p => p.id === id)?.notes || ''}
                   placeholder="Additional notes"
                   rows={3}
+                  // disabled
                 />
               </div>
             </div>

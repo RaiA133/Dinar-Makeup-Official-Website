@@ -4,7 +4,7 @@ import { ProductsContext } from "../../contexts/ProductsContext";
 import { getProductByID } from "../../modules/fetch";
 import { UserContext } from "../../contexts/UserContext";
 import toast from "react-hot-toast";
-import { FiCheck, FiChevronRight, FiShoppingCart, FiInfo } from "react-icons/fi";
+import { FiCheck, FiShoppingCart } from "react-icons/fi";
 
 function Weddings() {
   let location = useLocation();
@@ -157,7 +157,7 @@ function Weddings() {
 
 
 
-      {/* Product Detail Modal */}
+      {/* Product Detail modal */}
       <dialog id="my_modal_product" className="modal">
         <div className="modal-box p-0 max-w-6xl rounded-xl overflow-auto lg:overflow-hidden shadow-2xl max-h-[90vh]">
           <div className="grid grid-cols-1 lg:grid-cols-2 h-fit">
@@ -281,22 +281,6 @@ function Weddings() {
                 <div className="flex gap-4">
                   <button
                     className="btn btn-primary flex-1 gap-2 hover:shadow-lg transition-all"
-                    onClick={() => {
-                      if (isLogin) {
-                        if (isProfileFulfill) navigate(`/order/${productsByIDState?.id}`);
-                        else {
-                          navigate('/profile');
-                          toast.error('NIK & Phone Number is required', {
-                            duration: 4000,
-                          });
-                        }
-                      } else {
-                        navigate('/login');
-                        toast.error('Login is required', {
-                          duration: 4000,
-                        });
-                      }
-                    }}
                   >
                     <FiShoppingCart /> Order Now
                   </button>
