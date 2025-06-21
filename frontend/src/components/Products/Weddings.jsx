@@ -159,15 +159,15 @@ function Weddings() {
 
       {/* Product Detail modal */}
       <dialog id="my_modal_product" className="modal">
-        <div className="modal-box p-0 max-w-6xl rounded-xl overflow-auto lg:overflow-hidden shadow-2xl max-h-[90vh]">
+        <div className="modal-box p-0 max-w-7xl rounded-xl overflow-auto lg:overflow-hidden shadow-2xl max-h-[90vh]">
           <div className="grid grid-cols-1 lg:grid-cols-2 h-fit">
 
             {/* Image Gallery Section */}
-            <div className="bg-base-50 p-6 flex flex-col h-fit">
+            <div className="bg-base-50 p-3 sm:p-6 flex flex-col h-fit">
               {/* Header Image Preview*/}
-              <div className="z-10 bg-base-50 pb-4 ">
+              <div className="z-10 bg-base-50 mb-1 ">
                 <h3 className="text-lg font-semibold text-base-700">Gallery Preview</h3>
-                <div className="divider my-2"></div>
+                <div className="divider my-0 sm:my-2"></div>
               </div>
 
               {/* Main Image with Zoom Effect */}
@@ -206,19 +206,19 @@ function Weddings() {
             </div>
 
             {/* Product Details Section */}
-            <div className="p-8 flex flex-col ">
+            <div className="p-5 sm:p-8 flex flex-col ">
               {/* Header with Price */}
               <div className="border-b border-base-100 pb-6">
-                <h2 className="text-3xl font-bold text-base-900 mb-2">{productsByIDState?.name}</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold text-base-900 mb-2">{productsByIDState?.name}</h2>
                 <div className="flex items-center justify-between">
-                  <div className="text-2xl font-semibold text-primary">
+                  <div className="text-xl sm:text-2xl font-semibold text-primary">
                     {new Intl.NumberFormat('id-ID', {
                       style: 'currency',
                       currency: productsByIDState?.currency || 'IDR',
                       minimumFractionDigits: 0
                     }).format(productsByIDState?.price || 0)}
                   </div>
-                  <div className="badge badge-primary badge-lg">
+                  <div className="badge badge-primary badge-sm sm:badge-lg">
                     {productsByIDState?.category?.name || 'Wedding'}
                   </div>
                 </div>
@@ -228,7 +228,7 @@ function Weddings() {
                 {/* Key Features */}
                 <div className="py-6 border-b border-base-100">
                   <h3 className="text-lg font-semibold text-base-700 mb-3">Highlight Features</h3>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-3 text-xs sm:text-sm md:text-md">
                     {productsByIDState?.detail_groups?.slice(0, 4).map((group, idx) => (
                       <div key={idx} className="flex items-start">
                         <div className="bg-primary/10 p-2 rounded-full mr-3">
@@ -253,10 +253,12 @@ function Weddings() {
                       <div key={group.id} className="collapse collapse-plus bg-base-100 border border-base-200">
                         <input type="radio" name="product-accordion" />
                         <div className="collapse-title font-medium text-md sm:text-lg flex items-center">
-                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                          <div className="absolute w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
                             <span className="text-primary font-semibold">{group.group_name.charAt(0)}</span>
                           </div>
-                          {group.group_name}
+                          <div className="ms-12">
+                            {group.group_name}
+                          </div>
                         </div>
                         <div className="collapse-content">
                           <ul className="space-y-3 pl-2">
