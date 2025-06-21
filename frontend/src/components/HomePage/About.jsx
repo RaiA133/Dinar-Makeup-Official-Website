@@ -13,7 +13,7 @@ function About() {
       {window.location.pathname === "/" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10 items-center">
           <div className="p-2">
-            <h2 className="text-4xl font-bold mb-4 text-primary">Gallery</h2>
+            <h2 className="text-4xl font-bold mb-4 text-primary">About</h2>
             <p className="text-lg text-base-600">
               Kami hadir untuk menjadikan hari istimewa Anda lebih berkesan melalui layanan yang elegan, personal, dan profesional.
             </p>
