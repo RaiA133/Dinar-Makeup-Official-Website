@@ -101,7 +101,7 @@ function RegisterPage() {
             }}
           />
 
-          <div className="card-body gap-0">
+          <div className="card-body gap-0 p-3 sm:p-6">
             <div className="card-actions justify-between mb-5">
               <h2 className="card-title text-2xl">Register</h2>
               <button className="btn btn-square btn-sm" onClick={() => navigate("/")}>
