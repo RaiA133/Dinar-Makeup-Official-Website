@@ -1,6 +1,8 @@
 import './App.css'
+import { useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/solid';
 import LoginRoute from './components/ValidationRoute/LoginRoute';
 import AdminRoute from './components/ValidationRoute/AdminRoute';
 import AdminSidebar from './components/Admin/AdminSidebar';
@@ -30,6 +32,8 @@ import EditProductManagementPage from './pages/Admin/ProductManagement/EditProdu
 import CreateProductManagementPage from './pages/Admin/ProductManagement/CreateProductManagementPage';
 import OrderPage from './pages/Order/OrderPage';
 import PaymentPage from './pages/Order/PaymentPage';
+import Chatbot from './components/Ai/Chabot/Chatbot';
+
 
 // Framer Motion (Efek Transisi Faded Perpindahan Page)
 const PageMotionWrapper = ({ children }) => (
@@ -45,6 +49,7 @@ const PageMotionWrapper = ({ children }) => (
 
 function App() {
   let location = useLocation();
+  const [showChatbot, setShowChatbot] = useState(false);
   const hideOnRegisterLogin = location.pathname !== '/register' && location.pathname !== '/login' && location.pathname !== '/forgot-password'; // location.pathname : untuk cek current url
 
   return (
@@ -85,6 +90,21 @@ function App() {
           <Route path="/admin/user-management" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><UserManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
         </Routes>
       </AnimatePresence>
+
+      {/* Tombol toggle chatbot */}
+      <button
+        onClick={() => setShowChatbot(!showChatbot)}
+        className="btn fixed bottom-6 right-6 h-fit bg-neutral text-base-100 p-4 rounded-full shadow-lg hover:bg-neutral-600 transition-colors"
+      >
+        <ChatBubbleOvalLeftEllipsisIcon className="h-6 w-6" />
+      </button>
+
+      {/* Chatbot */}
+      {showChatbot && (
+        <div className="fixed bottom-25 right-5 z-10">
+          <Chatbot />
+        </div>
+      )}
 
       {/* FOOTER */}
       <AnimatePresence mode="wait" initial={false}>
