@@ -81,7 +81,7 @@ function App() {
           {/* Admin Route */}
           <Route path="/admin/" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><DashboardPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
           <Route path="/admin/dashboard" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><DashboardPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
-          
+
           <Route path="/admin/product-management" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><ProductManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
           <Route path="/admin/product-management/edit/:id" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><EditProductManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
           <Route path="/admin/product-management/create" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><CreateProductManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
@@ -100,11 +100,9 @@ function App() {
       </button>
 
       {/* Chatbot */}
-      {showChatbot && (
-        <div className="fixed bottom-25 right-5 z-10">
-          <Chatbot />
-        </div>
-      )}
+      <div className={`fixed bottom-25 right-5 z-10 ${showChatbot ? '' : 'hidden'}`}>
+        <Chatbot />
+      </div>
 
       {/* FOOTER */}
       <AnimatePresence mode="wait" initial={false}>
