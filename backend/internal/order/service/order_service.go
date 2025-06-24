@@ -230,10 +230,10 @@ func (or *orderService) Callback(ctx context.Context, notifPayload map[string]in
 	}
 	if status == "success" {
 		if err := or.ConfirmPayment(ctx, dataOrder.IdOrder); err != nil {
-			return errors.New("failed to confirm payment 1 ")
+			return err
 		}
 	} else if status == "failed" {
-		if err := or.ConfirmPayment(ctx, dataOrder.IdOrder); err != nil {
+		if err := or.CancelPayment(ctx, dataOrder.IdOrder); err != nil {
 			return errors.New("failed to confirm payment 2")
 		}
 	}
@@ -247,7 +247,7 @@ func (or *orderService) ConfirmPayment(ctx context.Context, orderID string) erro
 	}
 	data.PaymentStatus = "success"
 	if err := or.pgRepo.ConfirmPayment(ctx, data.IdOrder, data.PaymentStatus); err != nil {
-		return errors.New("failed to confirm payment")
+		return err
 	}
 	return nil
 }

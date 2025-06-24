@@ -88,7 +88,11 @@ func (rp *orderPGRepository) GetOrderByID(ctx context.Context, orderId string) (
 
 func (rp *orderPGRepository) ConfirmPayment(ctx context.Context, orderID, paymentStatus string) error {
 	var data model.Order
-	if err := rp.db.WithContext(ctx).Model(data).Where("order_id = ?", orderID).Update("payment_status", paymentStatus).Error; err != nil {
+	fmt.Println("================================")
+	fmt.Println("ORDER ID = ", orderID)
+	fmt.Println("PAYMENT STATUS = ", paymentStatus)
+	fmt.Println("================================")
+	if err := rp.db.WithContext(ctx).Model(data).Where("id_order = ?", orderID).Update("payment_status", paymentStatus).Error; err != nil {
 		return err
 	}
 	return nil
