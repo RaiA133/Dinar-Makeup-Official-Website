@@ -24,7 +24,6 @@ const Chatbot = () => {
   // }, [navigate]);
 
   // console.log("domData", domData);
-  console.log("import.meta.env.VITE_GEMINI_API_KEY =", import.meta.env.VITE_GEMINI_API_KEY);
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || "YOUR_API_KEY" });
 
   const handleSendMessage = async (e) => {
