@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Atur URL dan route situs Anda
-const baseUrl = "https://dinar-makeup-official-website.vercel.app/";
+const baseUrl = "https://ai-dinar-makeup-official-website.vercel.app/";
 const routes = [
   '/', 
   '/about', 
