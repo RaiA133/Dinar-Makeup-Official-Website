@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate-sitemap": "node ./src/script/GenerateSitemap.js"
   },
   "dependencies": {
     "@google/genai": "^1.6.0",
@@ -30,7 +31,8 @@
     "react-router-dom": "^7.5.3",
     "remark-gfm": "^4.0.1",
     "swiper": "^11.2.8",
-    "tailwindcss": "^4.1.5"
+    "tailwindcss": "^4.1.5",
+    "xmlbuilder2": "^3.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

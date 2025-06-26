@@ -1,89 +1,35 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-		<!--	created with www.mysitemapgenerator.com	-->
-		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/transparent</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/about</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/gallery</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/pricing</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/contact</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/login</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/register</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/forgot-password</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/profile</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/payment</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/admin/</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/admin/dashboard</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/admin/product-management</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/admin/product-management/create</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>0.6</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/admin/transaction-management</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
-<url>
-	<loc>https://dinar-makeup-official-website.vercel.app/admin/user-management</loc>
-	<lastmod>2025-06-26T16:54:08+01:00</lastmod>
-	<priority>0.8</priority>
-</url>
+<?xml version="1.0"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://localhost:5173/</loc>
+    <lastmod>2025-06-26T17:44:05.462Z</lastmod>
+  </url>
+  <url>
+    <loc>http://localhost:5173/about</loc>
+    <lastmod>2025-06-26T17:44:05.462Z</lastmod>
+  </url>
+  <url>
+    <loc>http://localhost:5173/gallery</loc>
+    <lastmod>2025-06-26T17:44:05.463Z</lastmod>
+  </url>
+  <url>
+    <loc>http://localhost:5173/pricing</loc>
+    <lastmod>2025-06-26T17:44:05.463Z</lastmod>
+  </url>
+  <url>
+    <loc>http://localhost:5173/contact</loc>
+    <lastmod>2025-06-26T17:44:05.463Z</lastmod>
+  </url>
+  <url>
+    <loc>http://localhost:5173/login</loc>
+    <lastmod>2025-06-26T17:44:05.463Z</lastmod>
+  </url>
+  <url>
+    <loc>http://localhost:5173/register</loc>
+    <lastmod>2025-06-26T17:44:05.463Z</lastmod>
+  </url>
+  <url>
+    <loc>http://localhost:5173/forgot-password</loc>
+    <lastmod>2025-06-26T17:44:05.463Z</lastmod>
+  </url>
 </urlset>
