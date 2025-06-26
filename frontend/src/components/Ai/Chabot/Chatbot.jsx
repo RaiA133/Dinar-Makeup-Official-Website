@@ -1,15 +1,29 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { ArrowPathIcon, PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import { GoogleGenAI } from "@google/genai";
 import MarkdownRenderer from './MarkdownRenderer';
+import introJs from 'intro.js';
+import 'intro.js/introjs.css';
+import { crawlDOM } from './crawl';
+import { useNavigate } from 'react-router-dom';
 
 const Chatbot = () => {
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([
     { id: 1, text: 'Halo! Saya Dinar, asisten virtual Dinar Makeup. Ada yang bisa saya bantu?', sender: 'bot' }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+
+  // const [domData, setDomData] = useState([]);
+
+  // useEffect(() => {
+  //   const data = crawlDOM();
+  //   setDomData(data);
+  // }, [navigate]);
+
+  // console.log("domData", domData);
 
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || "YOUR_API_KEY" });
 
@@ -29,28 +43,81 @@ const Chatbot = () => {
 
     try {
 
-      // Format history chat untuk Gemini
-      const chatHistory = messages.map(msg => ({
-        role: msg.sender === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.text }]
-      }));
+      // ====================================================================================================================================
 
-      // Mulai chat session
-      const chat = ai.chats.create({
+      // DECISION MAKER
+      const decision = ai.chats.create({
         model: "gemini-2.5-flash",
         history: [
           {
             role: "model",
             parts: [{
-              text: `Anda adalah asisten virtual untuk Dinar Makeup, sebuah layanan makeup profesional. Berikan respon yang 
-                ramah, informatif, dan relevan dengan dunia makeup dan wedding organizer. Gunakan bahasa yang santai namun profesional. 
-  
-                lakukan crawl pada website ini untuk informasi lainnya seperti lokasi halaman, harga, kontak dan hal lainnya : 
-                dinar-makeup-official-website.vercel.app ` }],
-          },
-          ...chatHistory
+              text: `beri saya output simple saja berupa 'chat' atau 'tour'. tentukan dari pesan yg akan diinput. Jika pertanyaan menyangkut 
+              pertanyaan seperti letak halaman, dan info lain yang menanyakan lokasi tampilan di website output adalah 'tour' saja, tapi jika 
+              konversesi biasa berikan output 'chat' saja`
+            }],
+          }
         ],
       });
+      const decisionResponse = await decision.sendMessage({
+        message: inputValue
+      });
+      
+      // ====================================================================================================================================
+
+      let chatHistory;
+      let chat;
+
+      if (decisionResponse.text == "tour") {
+
+        console.log(decisionResponse);
+        console.log('ini tour');
+        return
+
+        chatHistory = messages.map(msg => ({
+          role: msg.sender === 'user' ? 'user' : 'model',
+          parts: [{ text: msg.text }]
+        }));
+
+        chat = ai.chats.create({
+          model: "gemini-2.5-flash",
+          history: [
+            {
+              role: "model",
+              parts: [{
+                text: `asd` }],
+            },
+            ...chatHistory
+          ],
+        });
+
+      } else if (decisionResponse.text == "chat") {
+
+        console.log(decisionResponse);
+        console.log('ini chat');
+
+        chatHistory = messages.map(msg => ({
+          role: msg.sender === 'user' ? 'user' : 'model',
+          parts: [{ text: msg.text }]
+        }));
+
+        chat = ai.chats.create({
+          model: "gemini-2.5-flash",
+          history: [
+            {
+              role: "model",
+              parts: [{
+                text: `Nama ada adalah Dinar, Anda adalah asisten virtual untuk Dinar Makeup, sebuah layanan makeup profesional.
+                Ambil data dan informasi seluruhnya dari website ini : https://dinar-makeup-official-website.vercel.app/
+                ` }],
+            },
+            ...chatHistory
+          ],
+          config: {
+            tools: [{urlContext: {}}, {googleSearch: {}}],
+          },
+        });
+      }
 
       // Kirim pesan dan dapatkan respon
       const response = await chat.sendMessage({
@@ -85,6 +152,36 @@ const Chatbot = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // ===============================================================================================================
+
+  const startTour = useCallback(() => {
+    introJs().setOptions({
+      steps: [
+        {
+          element: '.navbar',
+          intro: 'Ini adalah navbar',
+          position: 'bottom'
+        },
+        {
+          element: '.hero-content',
+          intro: 'Ini adalah Hero',
+          position: 'right'
+        },
+        {
+          element: '.login',
+          intro: 'Klik di sini untuk login',
+          position: 'left'
+        }
+      ],
+      nextLabel: 'Lanjut',
+      prevLabel: 'Kembali',
+      skipLabel: 'x',
+      doneLabel: 'Selesai',
+      showProgress: true
+    })
+      .start();
+  }, []);
+
   return (
     <div className="flex flex-col h-full max-w-md mx-auto bg-base-100 rounded-lg shadow-lg overflow-hidden">
       {/* Header Chatbot */}
@@ -96,14 +193,17 @@ const Chatbot = () => {
           <h3 className="font-bold">Dinar Makeup Assistant</h3>
           <p className="text-xs">Online</p>
         </div>
+        <button className='btn' onClick={startTour} style={{ marginTop: '20px' }}>
+          Mulai Tour Guide
+        </button>
       </div>
 
       {/* Area Pesan */}
       <div className="flex-1 p-4 overflow-y-auto bg-base-50 max-h-96 text-xs">
         {messages.map((message) => (
 
-          <div key={message.id} class={`chat ${message.sender === 'user' ? 'chat-end' : 'chat-start'}`}>
-            <div class={`chat-bubble ${message.sender === 'user' ? 'chat-bubble-neutral' : ''}`}>
+          <div key={message.id} className={`chat ${message.sender === 'user' ? 'chat-end' : 'chat-start'}`}>
+            <div className={`chat-bubble ${message.sender === 'user' ? 'chat-bubble-neutral' : ''}`}>
               <MarkdownRenderer>{message.text}</MarkdownRenderer>
             </div>
           </div>
