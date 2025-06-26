@@ -1,6 +1,9 @@
 package payment
 
-import "github.com/midtrans/midtrans-go/coreapi"
+import (
+	"fmt"
+	"github.com/midtrans/midtrans-go/coreapi"
+)
 
 func TransactionStatus(transactionStatusResp *coreapi.TransactionStatusResponse) string {
 	var paymentStatus string
@@ -19,5 +22,8 @@ func TransactionStatus(transactionStatusResp *coreapi.TransactionStatusResponse)
 	} else if transactionStatusResp.TransactionStatus == "pending" {
 		paymentStatus = "pending"
 	}
+
+	fmt.Printf("TransactionStatus = %s, FraudStatus = %s\n", transactionStatusResp.TransactionStatus, transactionStatusResp.FraudStatus)
+	fmt.Printf("Mapped PaymentStatus = %s\n", paymentStatus)
 	return paymentStatus
 }
