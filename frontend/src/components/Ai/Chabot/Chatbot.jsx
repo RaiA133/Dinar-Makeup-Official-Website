@@ -7,6 +7,8 @@ import 'intro.js/introjs.css';
 import { crawlDOM } from './crawl';
 import { useNavigate } from 'react-router-dom';
 
+// import { GoogleAuth } from 'google-auth-library';
+
 const Chatbot = () => {
   const navigate = useNavigate();
   const [messages, setMessages] = useState([
@@ -16,15 +18,39 @@ const Chatbot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
+  /* MANUAL CRAWL (To much data html) */
   // const [domData, setDomData] = useState([]);
-
   // useEffect(() => {
   //   const data = crawlDOM();
   //   setDomData(data);
   // }, [navigate]);
-
   // console.log("domData", domData);
+
+
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || "YOUR_API_KEY" });
+
+  // const credentials = JSON.parse(import.meta.env.VITE_GCP_SERVICE_ACCOUNT_KEY);
+  // const auth = new GoogleAuth({
+  //   credentials: {
+  //     client_email: credentials.client_email,
+  //     private_key: credentials.private_key,
+  //   },
+  //   scopes: ['https://www.googleapis.com/auth/cloud-platform'], // Scope untuk Vertex AI
+  // });
+
+  // const ai2 = new GoogleGenAI({
+  //   vertexai: true,
+  //   project: 'trim-heaven-464108-h6',
+  //   location: 'global',
+  // });
+  // async function main() {
+  //   const response = await ai2.models.generateContent({
+  //     model: "gemini-2.0-flash",
+  //     contents: "Explain how AI works in a few words",
+  //   });
+  //   console.log("vertex", response.text);
+  // }
+  // main();
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -61,7 +87,7 @@ const Chatbot = () => {
       const decisionResponse = await decision.sendMessage({
         message: inputValue
       });
-      
+
       // ====================================================================================================================================
 
       let chatHistory;
@@ -84,7 +110,8 @@ const Chatbot = () => {
             {
               role: "model",
               parts: [{
-                text: `asd` }],
+                text: `asd`
+              }],
             },
             ...chatHistory
           ],
@@ -113,7 +140,7 @@ const Chatbot = () => {
             ...chatHistory
           ],
           config: {
-            tools: [{urlContext: {}}, {googleSearch: {}}],
+            tools: [{ urlContext: {} }, { googleSearch: {} }],
           },
         });
       }

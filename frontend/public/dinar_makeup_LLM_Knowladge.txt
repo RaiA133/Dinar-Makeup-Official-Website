@@ -1,0 +1,1079 @@
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": [
+      {
+        "href": "tel:08980000845",
+        "text": "0898-0000-845",
+        "title": "",
+        "base_domain": ""
+      },
+      {
+        "href": "mailto:dinar.dumilah@gmail.com",
+        "text": "dinar.dumilah@gmail.com",
+        "title": "",
+        "base_domain": ""
+      },
+      {
+        "href": "https://instagram.com/dinarmakeup",
+        "text": "@dinarmakeup",
+        "title": "",
+        "base_domain": "instagram.com"
+      },
+      {
+        "href": "https://wa.me/628980000845",
+        "text": "Chat via WhatsApp",
+        "title": "",
+        "base_domain": "wa.me"
+      }
+    ]
+  },
+  "media": {
+    "images": [
+      {
+        "src": "/img/about/IMG_5926.PNG",
+        "data": "",
+        "alt": "Dinar Makeup Professional Team",
+        "desc": "Tim Profesional Dinar Makeup",
+        "score": 5,
+        "type": "image",
+        "group_id": 1,
+        "format": "png",
+        "width": null
+      },
+      {
+        "src": "https://res.cloudinary.com/dyominih0/image/upload/v1746721137/dinar-makeup/banner/l5szf6adjv6jic5agn67.png",
+        "data": "",
+        "alt": "Wedding Bronze",
+        "desc": "Wedding Bronze Rp\u00a024.000.000 Makeup Dokumentasi MC Wedding + 5 more features",
+        "score": 4,
+        "type": "image",
+        "group_id": 6,
+        "format": "png",
+        "width": null
+      },
+      {
+        "src": "https://res.cloudinary.com/dyominih0/image/upload/v1746721145/dinar-makeup/banner/cbgpjfubjeuusvaljsk1.png",
+        "data": "",
+        "alt": "Wedding Silver",
+        "desc": "Wedding Silver Rp\u00a027.000.000 Makeup Dokumentasi MC Wedding + 5 more features",
+        "score": 4,
+        "type": "image",
+        "group_id": 7,
+        "format": "png",
+        "width": null
+      },
+      {
+        "src": "https://res.cloudinary.com/dyominih0/image/upload/v1746721149/dinar-makeup/banner/ibyhx3572lfn5g5xwkmq.png",
+        "data": "",
+        "alt": "Wedding Platinum Indoor",
+        "desc": "Wedding Platinum Indoor Rp\u00a065.000.000 Makeup Dokumentasi MC Wedding + 7 more features",
+        "score": 4,
+        "type": "image",
+        "group_id": 9,
+        "format": "png",
+        "width": null
+      }
+    ],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+  * Home
+  * About
+  * Gallery
+  * Pricing
+  * Contact
+
+
+![](https://dinar-makeup-official-website.vercel.app/img/logo/logoDinarMakeupCrop.jpg)Dinar Makeups
+  * Home
+  * About
+  * Gallery
+  * Pricing
+  * Contact
+
+
+Login
+TATA RIAS & WO PROFESIONAL
+# DINAR MAKEUP
+Selamat Datang di Dashboard Pernikahanmu! Semua momen indahmu dimulai dari sini. kami siap menemani perjalanan anda mewujudkan dan mempercantik hari istimewa, menjadi kenangan abadi. Kami percaya bahwa setiap kisah cinta layak dirayakan dengan sempurna.
+EXPLORE PACKAGES
+EST. 2016
+## About
+Kami hadir untuk menjadikan hari istimewa Anda lebih berkesan melalui layanan yang elegan, personal, dan profesional.
+Lihat Selengkapnya
+![Dinar Makeup Professional Team](https://dinar-makeup-official-website.vercel.app/img/about/IMG_5926.PNG)
+Tim Profesional Dinar Makeup
+### Filosofi Kami
+Dinar Makeup hadir dari kecintaan mendalam terhadap dunia kecantikan dan momen pernikahan, dengan tujuan memberikan pengalaman yang elegan, personal, dan tak terlupakan bagi setiap calon pengantin.
+### Visi Kami
+Menjadi mitra terpercaya dan pilihan utama dalam dunia Wedding Organizer dan Makeup Profesional di Bandung dan sekitarnya, dengan mengutamakan kualitas layanan, kepercayaan, dan estetika yang konsisten.
+### Misi Kami
+"Membantu pasangan pengantin merancang dan melaksanakan pernikahan dengan sempurna melalui layanan yang profesional, personal, dan inovatif."
+Pengalaman
+5+ Tahun
+Di industri pernikahan | Since 2016
+Spesialisasi
+Makeup
+Profesional & Elegant
+## Apa Kata Mereka?
+Customers Testimonial
+## Semua Pelanggan yang Memberikan Feedback
+![Customer](https://i.pravatar.cc/150?img=10)
+#### Jane D
+"Pelayanan dari Dinar Makeup sangat memuaskan! Hasil makeup natural dan tahan lama seharian."
+![Customer](https://i.pravatar.cc/150?img=11)
+#### Harsh P.
+"Pelayanan dari Dinar Makeup sangat memuaskan! Hasil makeup natural dan tahan lama seharian."
+![Customer](https://i.pravatar.cc/150?img=12)
+#### Jane D
+"Pelayanan dari Dinar Makeup sangat memuaskan! Hasil makeup natural dan tahan lama seharian."
+![Customer](https://i.pravatar.cc/150?img=13)
+#### Harsh P.
+"Pelayanan dari Dinar Makeup sangat memuaskan! Hasil makeup natural dan tahan lama seharian."
+## Gallery
+Kenangan Terindah Untuk Pasangan yang Serasi
+Lihat Selengkapnya
+## Makeup
+Tata rias profesional untuk penampilan sempurna
+## Dekorasi
+Transformasi ruangan sesuai tema pernikahan Anda
+## Dokumentasi
+Abadikan momen berharga dengan hasil terbaik
+## Wedding Organizer
+Kelola seluruh acara pernikahan dengan profesional
+## Wedding Packages
+Paket yang Disesuaikan untuk Setiap Cerita Cinta
+Lihat Selengkapnya
+![Wedding Bronze](https://res.cloudinary.com/dyominih0/image/upload/v1746721137/dinar-makeup/banner/l5szf6adjv6jic5agn67.png)
+## Wedding Bronze
+Rp 24.000.000
+  * Makeup
+  * Dokumentasi
+  * MC Wedding
+  * + 5 more features
+
+
+Order
+![Wedding Silver](https://res.cloudinary.com/dyominih0/image/upload/v1746721145/dinar-makeup/banner/cbgpjfubjeuusvaljsk1.png)
+## Wedding Silver
+Rp 27.000.000
+  * Makeup
+  * Dokumentasi
+  * MC Wedding
+  * + 5 more features
+
+
+Order
+![Wedding Gold](https://res.cloudinary.com/dyominih0/image/upload/v1746721103/dinar-makeup/banner/vbk22qztgooghpelix1z.png)
+## Wedding Gold
+Rp 37.000.000
+  * Makeup
+  * Dokumentasi
+  * MC Wedding
+  * + 6 more features
+
+
+Order
+![Wedding Platinum Indoor](https://res.cloudinary.com/dyominih0/image/upload/v1746721149/dinar-makeup/banner/ibyhx3572lfn5g5xwkmq.png)
+## Wedding Platinum Indoor
+Rp 65.000.000
+  * Makeup
+  * Dokumentasi
+  * MC Wedding
+  * + 7 more features
+
+
+Order
+### Gallery Preview
+Rp 0
+Wedding
+### Highlight Features
+### Package Details
+Order NowCencel
+# Contact Us
+Hubungi Tim Dinar Makeup
+"Siap merancang hari spesial Anda? Hubungi kami untuk konsultasi gratis. Kami dengan senang hati akan membantu menjawab semua pertanyaan Anda dan memberikan solusi terbaik untuk pernikahan Anda."
+### Alamat Studio
+KP Pangakalan Raja, Jl. Pangkalan Raja, RT.001/RW.005 Desa, Sukamukti, Kec. Majalaya, Kabupaten Bandung, Jawa Barat 40382
+### Telepon/WhatsApp
+[0898-0000-845](tel:08980000845)
+### Email
+dinar.dumilah@gmail.com
+### Instagram
+[@dinarmakeup](https://instagram.com/dinarmakeup)
+### Jam Operasional
+Senin - Sabtu
+09.00 – 17.00 WIB
+## Punya Pertanyaan?
+Tim kami siap membantu Anda mewujudkan pernikahan impian Anda. Hubungi kami sekarang!
+[Chat via WhatsApp](https://wa.me/628980000845)Kirim Email
+Copyright © 2025 - All right reserved by Dinar Makeup
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/transparent",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": []
+  },
+  "media": {
+    "images": [],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+  * Home
+  * About
+  * Gallery
+  * Pricing
+  * Contact
+
+
+![](https://dinar-makeup-official-website.vercel.app/img/logo/logoDinarMakeupCrop.jpg)Dinar Makeups
+  * Home
+  * About
+  * Gallery
+  * Pricing
+  * Contact
+
+
+Login
+Copyright © 2025 - All right reserved by Dinar Makeup
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/about",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": []
+  },
+  "media": {
+    "images": [
+      {
+        "src": "/img/about/IMG_5926.PNG",
+        "data": "",
+        "alt": "Dinar Makeup Professional Team",
+        "desc": "Tim Profesional Dinar Makeup",
+        "score": 4,
+        "type": "image",
+        "group_id": 1,
+        "format": "png",
+        "width": null
+      }
+    ],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+  * Home
+  * About
+  * Gallery
+  * Pricing
+  * Contact
+
+
+![](https://dinar-makeup-official-website.vercel.app/img/logo/logoDinarMakeupCrop.jpg)Dinar Makeups
+  * Home
+  * About
+  * Gallery
+  * Pricing
+  * Contact
+
+
+Login
+![Dinar Makeup Professional Team](https://dinar-makeup-official-website.vercel.app/img/about/IMG_5926.PNG)
+Tim Profesional Dinar Makeup
+### Filosofi Kami
+Dinar Makeup hadir dari kecintaan mendalam terhadap dunia kecantikan dan momen pernikahan, dengan tujuan memberikan pengalaman yang elegan, personal, dan tak terlupakan bagi setiap calon pengantin.
+### Visi Kami
+Menjadi mitra terpercaya dan pilihan utama dalam dunia Wedding Organizer dan Makeup Profesional di Bandung dan sekitarnya, dengan mengutamakan kualitas layanan, kepercayaan, dan estetika yang konsisten.
+### Misi Kami
+"Membantu pasangan pengantin merancang dan melaksanakan pernikahan dengan sempurna melalui layanan yang profesional, personal, dan inovatif."
+Pengalaman
+5+ Tahun
+Di industri pernikahan | Since 2016
+Spesialisasi
+Makeup
+Profesional & Elegant
+### Tentang Dinar Makeup
+Kami memahami bahwa setiap pasangan memiliki cerita dan impian unik. Misi kami adalah mewujudkan impian tersebut melalui layanan yang personal, penuh perhatian, dan berkualitas tinggi.
+Dari tata rias hingga pengelolaan acara, kami hadir untuk membantu Anda menikmati setiap momen dengan mudah dan tanpa khawatir. Setiap detail diperhatikan dengan seksama untuk menciptakan pengalaman yang sempurna.
+Sebagai penyedia layanan wedding organizer terpercaya, Dinar Makeup berkomitmen untuk mewujudkan momen istimewa Anda menjadi kenangan tak terlupakan. Dengan perpaduan pengalaman profesional dan pendekatan personal, kami menawarkan solusi lengkap untuk pernikahan Anda.
+Bersama kami, impian pernikahan Anda bukan sekadar rencana, melainkan realita yang indah dan penuh makna. Setiap pernikahan adalah cerita unik yang layak mendapatkan sentuhan spesial.
+Copyright © 2025 - All right reserved by Dinar Makeup
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/gallery",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": []
+  },
+  "media": {
+    "images": [],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+  * Home
+  * About
+  * Gallery
+  * Pricing
+  * Contact
+
+
+![](https://dinar-makeup-official-website.vercel.app/img/logo/logoDinarMakeupCrop.jpg)Dinar Makeups
+  * Home
+  * About
+  * Gallery
+  * Pricing
+  * Contact
+
+
+Login
+## Makeup
+Tata rias profesional untuk penampilan sempurna
+## Dekorasi
+Transformasi ruangan sesuai tema pernikahan Anda
+## Dokumentasi
+Abadikan momen berharga dengan hasil terbaik
+## Wedding Organizer
+Kelola seluruh acara pernikahan dengan profesional
+Copyright © 2025 - All right reserved by Dinar Makeup
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/pricing",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": [
+      {
+        "href": "tel:0898000845",
+        "text": "0898-0000-845",
+        "title": "",
+        "base_domain": ""
+      }
+    ]
+  },
+  "media": {
+    "images": [
+      {
+        "src": "https://res.cloudinary.com/dyominih0/image/upload/v1746721137/dinar-makeup/banner/l5szf6adjv6jic5agn67.png",
+        "data": "",
+        "alt": "Wedding Bronze",
+        "desc": "Wedding Bronze Rp\u00a024.000.000 Makeup Dokumentasi MC Wedding + 5 more features",
+        "score": 5,
+        "type": "image",
+        "group_id": 1,
+        "format": "png",
+        "width": null
+      },
+      {
+        "src": "https://res.cloudinary.com/dyominih0/image/upload/v1746721145/dinar-makeup/banner/cbgpjfubjeuusvaljsk1.png",
+        "data": "",
+        "alt": "Wedding Silver",
+        "desc": "Wedding Silver Rp\u00a027.000.000 Makeup Dokumentasi MC Wedding + 5 more features",
+        "score": 5,
+        "type": "image",
+        "group_id": 2,
+        "format": "png",
+        "width": null
+      },
+      {
+        "src": "https://res.cloudinary.com/dyominih0/image/upload/v1746721149/dinar-makeup/banner/ibyhx3572lfn5g5xwkmq.png",
+        "data": "",
+        "alt": "Wedding Platinum Indoor",
+        "desc": "Wedding Platinum Indoor Rp\u00a065.000.000 Makeup Dokumentasi MC Wedding + 7 more features",
+        "score": 4,
+        "type": "image",
+        "group_id": 4,
+        "format": "png",
+        "width": null
+      }
+    ],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+  * Home
+  * About
+  * Gallery
+  * Pricing
+  * Contact
+
+
+![](https://dinar-makeup-official-website.vercel.app/img/logo/logoDinarMakeupCrop.jpg)Dinar Makeups
+  * Home
+  * About
+  * Gallery
+  * Pricing
+  * Contact
+
+
+Login
+# Wedding Packages
+Paket yang Disesuaikan untuk Setiap Cerita Cinta
+![Wedding Bronze](https://res.cloudinary.com/dyominih0/image/upload/v1746721137/dinar-makeup/banner/l5szf6adjv6jic5agn67.png)
+## Wedding Bronze
+Rp 24.000.000
+  * Makeup
+  * Dokumentasi
+  * MC Wedding
+  * + 5 more features
+
+
+Order
+![Wedding Silver](https://res.cloudinary.com/dyominih0/image/upload/v1746721145/dinar-makeup/banner/cbgpjfubjeuusvaljsk1.png)
+## Wedding Silver
+Rp 27.000.000
+  * Makeup
+  * Dokumentasi
+  * MC Wedding
+  * + 5 more features
+
+
+Order
+![Wedding Gold](https://res.cloudinary.com/dyominih0/image/upload/v1746721103/dinar-makeup/banner/vbk22qztgooghpelix1z.png)
+## Wedding Gold
+Rp 37.000.000
+  * Makeup
+  * Dokumentasi
+  * MC Wedding
+  * + 6 more features
+
+
+Order
+![Wedding Platinum Indoor](https://res.cloudinary.com/dyominih0/image/upload/v1746721149/dinar-makeup/banner/ibyhx3572lfn5g5xwkmq.png)
+## Wedding Platinum Indoor
+Rp 65.000.000
+  * Makeup
+  * Dokumentasi
+  * MC Wedding
+  * + 7 more features
+
+
+Order
+### Gallery Preview
+Rp 0
+Wedding
+### Highlight Features
+### Package Details
+Order NowCencel
+# Makeup Packages
+Layanan Makeups profesional untuk acara-acara khusus Anda
+## Wedding Makeup Packages
+POPULAR
+## Basic Wedding Package
+Rp 7.000.000
+  * Makeup akad
+  * Retouch makeup resepsi
+  * Sepasang baju akad (ready stock)
+  * 2 sepasang baju resepsi (ready stock)
+  * 2 pasang baju ibu dan bapa besan (ready stock)
+  * Makeup ibu cpw
+  * Makeup ibu cpp (Majalaya only)
+  * 4 pasang baju pagar ayu + makeup (ready stock)
+  * 2 pasang baju pagar bagus (ready stock)
+  * Free softens (normal only)
+  * Free henna & nail art
+  * Free fresh bunga melati
+
+
+Package Terms
+  * •DP minimal 50% untuk booking fix
+  * •Pelunasan wajib H-7
+  * •Jarak >15km kena charge transport
+  * •Makeup ibu cpp >5km dari gallery kena charge transport
+
+
+Book Now
+## Standard Wedding Package
+Rp 6.000.000
+  * Makeup akad
+  * Retouch makeup resepsi
+  * Sepasang baju akad (ready stock)
+  * Sepasang baju resepsi (ready stock)
+  * 2 pasang baju ibu dan bapa besan (ready stock)
+  * Makeup ibu cpw (only)
+  * 2 pasang baju pagar ayu + makeup (ready stock)
+  * Free softens (normal only)
+  * Free henna & nail art
+  * Free fresh bunga melati
+
+
+Package Terms
+  * •DP minimal 50% untuk booking fix
+  * •Pelunasan wajib H-7
+  * •Jarak >15km kena charge transport
+
+
+Book Now
+## Akad Only Package
+Rp 2.500.000 - Rp 3.000.000
+  * Makeup akad tanpa retouch
+  * Sepasang kebaya pengantin + riasan
+  * Free hena putih
+  * Free softens normal
+  * Siger Sunda (Rp 3.000.000 version)
+  * Free fresh melati (Rp 3.000.000 version)
+  * Free nail art (Rp 3.000.000 version)
+
+
+Package Terms
+  * •Akad di hari terpisah kena charge Rp 1.5jt
+  * •Jam kerja maksimal sampai jam 12
+  * •Tidak bisa di retouch dengan MUA lain
+  * •Acara harus di dalam rumah
+
+
+Book Now
+### Wedding General Terms & Conditions
+  * •DP minimal 50% untuk booking fix
+  * •Bila akad di hari terpisah kena charge jam kerja dan produk Rp 1.5jt
+  * •Tambahan makeup keluarga Rp 200.000/orang
+  * •Hairdo charge Rp 500.000/look (paes Rp 850.000)
+  * •Pemakaian attire perdana by request kena charge sesuai harga attire
+  * •Pengurangan attire tidak mengurangi harga paketan
+  * •Pelunasan wajib H-7 (bila tidak dilunasi dianggap cancel)
+  * •Jarak >15km kena charge transport
+  * •Harga melati sewaktu-waktu bisa berubah
+  * •Makeup ibu cpp >5km dari gallery kena charge transport
+  * •Acara akad harus di dalam rumah (kecuali booking paket resepsi)
+
+
+## Regular Makeup Packages
+POPULAR
+## Siraman Package
+By Owner:Rp 750.000
+By Team:Rp 600.000
+  * Makeup by owner or team
+  * Retouch makeup siraman
+  * Baju siraman included
+  * Bustie included
+  * Stagen included
+  * Samping included
+  * Hijabdo included
+
+
+Package Terms
+  * •Transport & accommodation not included
+  * •Softlens not included
+  * •Hairdo 1 look charge Rp 100.000
+
+
+Book Now
+## Pre-Wedding / Tunangan / Wisuda
+By Owner:Rp 350.000
+By Team:Rp 250.000
+  * Makeup only
+  * Simple hijabdo
+  * Makeup at gallery
+  * Home service available (min 2 people for tunangan/wisuda)
+
+
+Package Terms
+  * •Booking max H-1 month for weekends
+  * •Home service transport & accommodation not included
+  * •Softlens not included
+  * •Hairdo 1 look charge Rp 50.000
+
+
+Book Now
+## Bridesmaid/Family Makeup
+By Owner:Rp 300.000
+By Team:Rp 200.000
+  * Makeup only
+  * Simple hijabdo
+  * Makeup at gallery
+  * Home service available (min 3 people)
+
+
+Package Terms
+  * •Booking max H-1 month
+  * •Home service transport & accommodation not included
+  * •Softlens not included
+  * •Hairdo 1 look charge Rp 50.000
+
+
+Book Now
+### Regular Makeup General Terms & Conditions
+  * •Booking must be made at least 1 month in advance for weekend events
+  * •Transportation and accommodation costs are not included in the package price
+  * •Contact lenses (softlens) are not included
+  * •Additional charges apply for special hairdo requests
+  * •Home service available with minimum number of people
+  * •Prices may vary for special requests
+
+
+### For bookings and inquiries
+Contact us at [0898-0000-845](tel:0898000845)
+Instagram: @dinarmakeup
+Copyright © 2025 - All right reserved by Dinar Makeup
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/contact",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": [
+      {
+        "href": "tel:08980000845",
+        "text": "0898-0000-845",
+        "title": "",
+        "base_domain": ""
+      },
+      {
+        "href": "mailto:dinar.dumilah@gmail.com",
+        "text": "dinar.dumilah@gmail.com",
+        "title": "",
+        "base_domain": ""
+      },
+      {
+        "href": "https://instagram.com/dinarmakeup",
+        "text": "@dinarmakeup",
+        "title": "",
+        "base_domain": "instagram.com"
+      },
+      {
+        "href": "https://wa.me/628980000845",
+        "text": "Chat via WhatsApp",
+        "title": "",
+        "base_domain": "wa.me"
+      }
+    ]
+  },
+  "media": {
+    "images": [],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+  * Home
+  * About
+  * Gallery
+  * Pricing
+  * Contact
+
+
+![](https://dinar-makeup-official-website.vercel.app/img/logo/logoDinarMakeupCrop.jpg)Dinar Makeups
+  * Home
+  * About
+  * Gallery
+  * Pricing
+  * Contact
+
+
+Login
+# Contact Us
+Hubungi Tim Dinar Makeup
+"Siap merancang hari spesial Anda? Hubungi kami untuk konsultasi gratis. Kami dengan senang hati akan membantu menjawab semua pertanyaan Anda dan memberikan solusi terbaik untuk pernikahan Anda."
+### Alamat Studio
+KP Pangakalan Raja, Jl. Pangkalan Raja, RT.001/RW.005 Desa, Sukamukti, Kec. Majalaya, Kabupaten Bandung, Jawa Barat 40382
+### Telepon/WhatsApp
+[0898-0000-845](tel:08980000845)
+### Email
+dinar.dumilah@gmail.com
+### Instagram
+[@dinarmakeup](https://instagram.com/dinarmakeup)
+### Jam Operasional
+Senin - Sabtu
+09.00 – 17.00 WIB
+## Punya Pertanyaan?
+Tim kami siap membantu Anda mewujudkan pernikahan impian Anda. Hubungi kami sekarang!
+[Chat via WhatsApp](https://wa.me/628980000845)Kirim Email
+Copyright © 2025 - All right reserved by Dinar Makeup
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/login",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": []
+  },
+  "media": {
+    "images": [],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+## Login
+Email
+PasswordShow Password
+Login
+Atau
+Lanjutkan dengan GoogleLanjutkan dengan Google. Dibuka di tab baru
+Dont have account ?Register
+Forgot Password ?
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/register",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": []
+  },
+  "media": {
+    "images": [],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+## Register
+Name
+Username
+Email
+PasswordShow Password
+Confirm PasswordShow Password
+Register
+Already have account ?Login
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/forgot-password",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": []
+  },
+  "media": {
+    "images": [],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+## Forget Password
+Email
+Reset Password
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/profile",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": []
+  },
+  "media": {
+    "images": [],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+## Login
+Email
+PasswordShow Password
+Login
+Atau
+Lanjutkan dengan GoogleLanjutkan dengan Google. Dibuka di tab baru
+Dont have account ?Register
+Forgot Password ?
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/payment",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": []
+  },
+  "media": {
+    "images": [],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+## Login
+Email
+PasswordShow Password
+Login
+Atau
+Lanjutkan dengan GoogleLanjutkan dengan Google. Dibuka di tab baru
+Dont have account ?Register
+Forgot Password ?
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/admin/",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": []
+  },
+  "media": {
+    "images": [],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+## Login
+Email
+PasswordShow Password
+Login
+Atau
+Lanjutkan dengan GoogleLanjutkan dengan Google. Dibuka di tab baru
+Dont have account ?Register
+Forgot Password ?
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/admin/dashboard",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": []
+  },
+  "media": {
+    "images": [],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+## Login
+Email
+PasswordShow Password
+Login
+Atau
+Lanjutkan dengan GoogleLanjutkan dengan Google. Dibuka di tab baru
+Dont have account ?Register
+Forgot Password ?
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/admin/product-management",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": []
+  },
+  "media": {
+    "images": [],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+## Login
+Email
+PasswordShow Password
+Login
+Atau
+Lanjutkan dengan GoogleLanjutkan dengan Google. Dibuka di tab baru
+Dont have account ?Register
+Forgot Password ?
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/admin/product-management/create",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": []
+  },
+  "media": {
+    "images": [],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+## Login
+Email
+PasswordShow Password
+Login
+Atau
+Lanjutkan dengan GoogleLanjutkan dengan Google. Dibuka di tab baru
+Dont have account ?Register
+Forgot Password ?
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/admin/transaction-management",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": []
+  },
+  "media": {
+    "images": [],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+## Login
+Email
+PasswordShow Password
+Login
+Atau
+Lanjutkan dengan GoogleLanjutkan dengan Google. Dibuka di tab baru
+Dont have account ?Register
+Forgot Password ?
+
+===========================================================================================================================================
+===========================================================================================================================================
+===========================================================================================================================================
+
+================================= Meta JSON Halaman ==================================
+
+{
+  "url": "https://dinar-makeup-official-website.vercel.app/admin/user-management",
+  "status": 200,
+  "links": {
+    "internal": [],
+    "external": []
+  },
+  "media": {
+    "images": [],
+    "videos": [],
+    "audios": []
+  }
+}
+
+================================== Content Halaman ==================================
+
+## Login
+Email
+PasswordShow Password
+Login
+Atau
+Lanjutkan dengan GoogleLanjutkan dengan Google. Dibuka di tab baru
+Dont have account ?Register
+Forgot Password ?
