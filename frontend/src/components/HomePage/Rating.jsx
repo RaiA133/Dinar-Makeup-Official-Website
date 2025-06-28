@@ -4,7 +4,7 @@ function Rating() {
   const navigate = useNavigate();
 
   return (
-    <div className="mt-20 mx-1 sm:mx-20">
+    <div className="mx-1 sm:mx-20">
 
       {/* Judul (hanya ada di menu home) */}
       {location.pathname == "/" && (

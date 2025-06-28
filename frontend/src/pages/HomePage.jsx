@@ -1,119 +1,139 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+
 import defatulAvatar from '../assets/img/users/default.png';
 import Weddings from '../components/Products/Weddings';
 import About from '../components/HomePage/About';
 import Gallery from '../components/HomePage/Gallery';
 import Rating from '../components/HomePage/Rating';
 import Contact from '../components/HomePage/Contact';
-import toast, { Toaster } from 'react-hot-toast';
-import { useEffect } from 'react';
 import TestimoniPage from './TestimoniPage';
+import Team from '../components/HomePage/Team';
 
 function HomePage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  // Acak rotasi untuk 4 bunga
+  const rotateAngles = useMemo(
+    () => Array.from({ length: 4 }, () => Math.floor(Math.random() * 60) - 30),
+    []
+  );
 
   useEffect(() => {
-    const toastMessage = localStorage.getItem('toastMessage')
-
-    // TOAST Login berhasil : Muncul ketika proses login berhasil
-    if (toastMessage == 'Login Success!') {
-      toast.success(toastMessage, {
-        duration: 2500,
-      });
+    const toastMessage = localStorage.getItem('toastMessage');
+    if (toastMessage === 'Login Success!') {
+      toast.success(toastMessage, { duration: 2500 });
       localStorage.removeItem('toastMessage');
     }
-
-    // TOAST Logout berhasil : Muncul ketika proses logout berhasil
-    if (toastMessage == 'Logout Success!') {
-      toast(toastMessage, {
-        duration: 2500,
-        icon: '👏',
-      });
+    if (toastMessage === 'Logout Success!') {
+      toast(toastMessage, { duration: 2500, icon: '👏' });
       localStorage.removeItem('toastMessage');
     }
   }, []);
 
   return (
-
     <div className="mx-0">
-
-      <Toaster
-        toastOptions={{
-          style: {
-            maxWidth: '600px'
-          }
-        }}
-      />
+      <Toaster toastOptions={{ style: { maxWidth: '600px' } }} />
 
       {/* HERO */}
       <div
-        className="hero min-h-screen bg-cover bg-center"
-        style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(/img/home/hero.PNG)' }}
+        className="hero min-h-lvh bg-cover bg-center pb-30"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.0), rgba(0,0,0,0.0), rgba(0,0,0,0.0), rgba(235,163,169,1)), url(/img/home/hero.jpg)',
+        }}
       >
-        <div className="hero-content text-center text-neutral-content w-fit backdrop-blur-xs">
-          <div className="max-w-2xl space-y-6">
+        <div className="hero-content text-center w-fit backdrop-blur-xs">
+          <div className="max-w-2xl space-y-4">
             <div className="flex justify-center items-center gap-4">
-              <div className="hidden sm:block h-px w-16 bg-amber-400"></div>
-              <span className="text-amber-400 font-light tracking-widest">TATA RIAS & WO PROFESIONAL</span>
-              <div className="hidden sm:block h-px w-16 bg-amber-400"></div>
+              <div className="h-0.5 w-15 sm:w-25 bg-neutral"></div>
+              <span className="text-neutral-700 font-light tracking-widest">TATA RIAS & WO PROFESIONAL</span>
+              <div className="h-0.5 w-15 sm:w-25 bg-neutral"></div>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-              <span className="text-base-100">DINAR</span>
-              <span className="text-amber-400"> MAKEUP</span>
+            <h1 className="text-5xl md:text-5xl font-poppins-bold leading-tight">
+              <span className="text-neutral-700">DINAR</span>
+              <span className="text-error"> MAKEUP</span>
             </h1>
 
-            <p className="text-xs sm:text-sm md-text-md lg-text-lg lg:text-lg font-light leading-relaxed">
-              Selamat Datang di Dashboard Pernikahanmu! Semua momen indahmu dimulai dari sini. kami siap menemani perjalanan anda mewujudkan dan mempercantik hari istimewa, menjadi kenangan abadi. Kami percaya bahwa setiap kisah cinta layak dirayakan dengan sempurna.
+            <p className="text-md sm:text-sm md-text-md lg-text-lg lg:text-2xl font-light leading-relaxed text-neutral-700">
+              Dengan Konsep Modern dan Kontemporer
             </p>
 
             <div className="pt-4">
               <button
                 onClick={() => navigate('/pricing')}
-                className="btn btn-primary px-10 py-3 rounded-none border-2 border-transparent hover:border-amber-400 hover:bg-transparent hover:text-amber-400 transition-all duration-300"
+                className="btn btn-error px-15 text-neutral-700 py-3 rounded-md hover:border-neutral hover:bg-transparent hover:text-neutral-700 transition-all duration-300"
               >
-                EXPLORE PACKAGES
+                JELAJAHI
               </button>
-            </div>
-
-            <div className="flex justify-center items-center gap-4 pt-6">
-              <div className="h-px w-20 bg-amber-400"></div>
-              <span className="text-xs tracking-widest">EST. 2016</span>
-              <div className="h-px w-20 bg-amber-400"></div>
             </div>
           </div>
         </div>
 
         {/* Scrolling indicator */}
         <div className="absolute bottom-0 sm:bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-          </svg>
+          <div className='grid gap-4 justify-center'>
+            <div className="avatar avatar-placeholder flex justify-center">
+              <div className="bg-error w-12 rounded-full"></div>
+            </div>
+            <div className="avatar avatar-placeholder flex justify-center">
+              <div className="bg-error w-8 rounded-full"></div>
+            </div>
+            <div className="avatar avatar-placeholder flex justify-center">
+              <div className="bg-error w-6 rounded-full"></div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="mx-3">
-        {/* About */}
-        <About />
+      {/* SECTION UTAMA DENGAN BUNGA */}
+      <div
+        className="relative overflow-hidden"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(235,163,169,1), rgba(0,0,0,0.0), rgba(0,0,0,0.0), rgba(0,0,0,0.0), rgba(0,0,0,0.0), rgba(0,0,0,0.0), rgba(235,163,169,1))',
+        }}
+      >
+        {/* Bunga-bunga (4 buah) */}
+        <img
+          src="/img/home/bg-flower.png"
+          alt="flower"
+          className="absolute top-[10%] left-[-60px] w-full sm:w-1/2 opacity-30 z-0 pointer-events-none"
+          style={{ transform: `rotate(${rotateAngles[0]}deg)` }}
+        />
+        <img
+          src="/img/home/bg-flower.png"
+          alt="flower"
+          className="absolute top-[50%] left-[-80px] w-full sm:w-1/2 opacity-30 z-0 pointer-events-none"
+          style={{ transform: `rotate(${rotateAngles[1]}deg)` }}
+        />
+        <img
+          src="/img/home/bg-flower.png"
+          alt="flower"
+          className="absolute top-[20%] right-[-60px] w-full sm:w-1/2 opacity-30 z-0 pointer-events-none"
+          style={{ transform: `rotate(${rotateAngles[2]}deg)` }}
+        />
+        <img
+          src="/img/home/bg-flower.png"
+          alt="flower"
+          className="absolute top-[65%] right-[-80px] w-full sm:w-1/2 opacity-30 z-0 pointer-events-none"
+          style={{ transform: `rotate(${rotateAngles[3]}deg)` }}
+        />
 
-        {/* Testimoni */}
-        <TestimoniPage />
-
-        {/* Gallery */}
-        <Gallery />
-
-        {/* Pricing */}
-        <Weddings />
-
-        {/* Rating */}
-        {/* <Rating /> */}
-
-        {/* Contact */}
-        <Contact />
+        {/* Konten utama */}
+        <div className="relative z-10 mx-3">
+          <div className="pt-40"><About /></div>
+          <div className="pt-40"><Gallery /></div>
+          <div className="pt-40"><Weddings /></div>
+          <div className="pt-40"><TestimoniPage /></div>
+          <div className="pt-40"><Team /></div>
+          <div className="pt-40"><Contact /></div>
+        </div>
       </div>
-
     </div>
-  )
+  );
 }
 
-export default HomePage
+export default HomePage;

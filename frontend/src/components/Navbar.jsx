@@ -22,7 +22,7 @@ function Navbar() {
   }, []);
 
   return (
-    <div className="navbar bg-base-100 shadow-sm">
+    <div className={`absolute navbar bg-transparant xl:px-25 ${location.pathname == '/' && 'text-[rgb(57,78,106)]'}`}>
       <div className="navbar-start gap-2">
         <div className="dropdown">
 
@@ -53,28 +53,27 @@ function Navbar() {
         </div>
 
         {/* Logo Dinar Makeup */}
-        <a style={{ cursor: 'pointer' }} onClick={() => navigate("/")} className='flex items-center gap-3'>
+        <a style={{ cursor: 'pointer' }} onClick={() => navigate("/")} className='flex items-center gap-5'>
           <img className="w-10 rounded-full lg:ms-5" src={logoDinarMakeupCrop} />
-          <span>Dinar Makeups</span>
+          <span className='font-rochester text-sm sm:text-xl md:text-2xl '>Dinar Makeups</span>
         </a>
 
       </div>
 
-      {!location.pathname.startsWith('/admin') && (
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1 gap-2">
-            <li><a onClick={() => navigate("/")} className={location.pathname == '/' ? 'menu-active' : ''}>Home</a></li>
-            <li><a onClick={() => navigate("/about")} className={location.pathname == '/about' ? 'menu-active' : ''}>About</a></li>
-            <li><a onClick={() => navigate("/gallery")} className={location.pathname == '/gallery' ? 'menu-active' : ''}>Gallery</a></li>
-            <li><a onClick={() => navigate("/pricing")} className={location.pathname == '/pricing' ? 'menu-active' : ''}>Pricing</a></li>
-            {/* <li><a onClick={() => navigate("/rating")} className={location.pathname == '/rating' ? 'menu-active' : ''}>Rating</a></li> */}
-            <li><a onClick={() => navigate("/contact")} className={location.pathname == '/contact' ? 'menu-active' : ''}>Contact</a></li>
-          </ul>
-        </div>
-      )}
+
       <div className="navbar-end">
+        {!location.pathname.startsWith('/admin') && (
+          <ul className="menu menu-horizontal px-1 gap-2 hidden lg:flex">
+            <li><a onClick={() => navigate("/")} className={location.pathname == '/' ? 'underline underline-offset-4' : ''}>Home</a></li>
+            <li><a onClick={() => navigate("/about")} className={location.pathname == '/about' ? 'underline underline-offset-4' : ''}>About</a></li>
+            <li><a onClick={() => navigate("/gallery")} className={location.pathname == '/gallery' ? 'underline underline-offset-4' : ''}>Gallery</a></li>
+            <li><a onClick={() => navigate("/pricing")} className={location.pathname == '/pricing' ? 'underline underline-offset-4' : ''}>Pricing</a></li>
+            {/* <li><a onClick={() => navigate("/rating")} className={location.pathname == '/rating' ? 'underline underline-offset-4' : ''}>Rating</a></li> */}
+            <li><a onClick={() => navigate("/contact")} className={location.pathname == '/contact' ? 'underline underline-offset-4' : ''}>Contact</a></li>
+          </ul>
+        )}
         {!isLogin ? (
-          <a onClick={() => navigate("/login")} className="btn btn-outline btn-primary">Login</a>
+          <a onClick={() => navigate("/login")} className="btn btn-sm text-md px-5 btn-outline">Login</a>
         ) : (
 
           <div className="flex-noneblock gap-2">
@@ -123,6 +122,8 @@ function Navbar() {
           </div>
         )}
       </div>
+
+
     </div>
   );
 }

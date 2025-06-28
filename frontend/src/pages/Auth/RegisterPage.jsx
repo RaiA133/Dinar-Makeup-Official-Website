@@ -187,7 +187,7 @@ function RegisterPage() {
               </div>
 
               <div className="card-actions justify-center mt-4">
-                <button className="btn btn-primary w-full" type="submit">Register</button>
+                <button className="btn btn-error w-full" type="submit">Register</button>
                 <p className='text-sm text-center'>Already have account ?
                   <span className='underline text-sky-600 decoration-sky-600 ms-1' style={{ cursor: 'pointer' }} onClick={() => navigate("/login")}>Login</span>
                 </p>

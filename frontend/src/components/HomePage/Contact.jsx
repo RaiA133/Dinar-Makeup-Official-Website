@@ -2,10 +2,10 @@ import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaInstagram, FaClock } from 'react
 
 function Contact() {
   return (
-    <div className="mt-20 mx-4 sm:mx-8 lg:mx-20">
+    <div className="mx-4 sm:mx-8 lg:mx-20 pb-20">
       {/* Header Section */}
       <div className="text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-bold text-base-900 mb-4">Contact Us</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-base-900 mb-4">Kotak Kami</h1>
         <p className="text-lg text-base-600 max-w-2xl mx-auto">
           Hubungi Tim Dinar Makeup
         </p>
@@ -40,7 +40,7 @@ function Contact() {
         <div className="space-y-8">
           {/* Address */}
           <div className="flex items-start gap-6">
-            <div className="bg-primary/10 p-3 rounded-full text-primary">
+            <div className="bg-error/10 p-3 rounded-full text-error">
               <FaMapMarkerAlt className="text-2xl" />
             </div>
             <div>
@@ -53,13 +53,13 @@ function Contact() {
 
           {/* Phone */}
           <div className="flex items-start gap-6">
-            <div className="bg-primary/10 p-3 rounded-full text-primary">
+            <div className="bg-error/10 p-3 rounded-full text-error">
               <FaPhone className="text-2xl" />
             </div>
             <div>
               <h3 className="text-xl font-semibold mb-2">Telepon/WhatsApp</h3>
               <p className="text-base-600">
-                <a href="tel:08980000845" className="hover:text-primary transition-colors">
+                <a href="tel:08980000845" className="hover:text-error transition-colors">
                   0898-0000-845
                 </a>
               </p>
@@ -68,13 +68,13 @@ function Contact() {
 
           {/* Email */}
           <div className="flex items-start gap-6">
-            <div className="bg-primary/10 p-3 rounded-full text-primary">
+            <div className="bg-error/10 p-3 rounded-full text-error">
               <FaEnvelope className="text-2xl" />
             </div>
             <div>
               <h3 className="text-xl font-semibold mb-2">Email</h3>
               <p className="text-base-600">
-                <a href="mailto:dinar.dumilah@gmail.com" className="hover:text-primary transition-colors">
+                <a href="mailto:dinar.dumilah@gmail.com" className="hover:text-error transition-colors">
                   dinar.dumilah@gmail.com
                 </a>
               </p>
@@ -83,13 +83,13 @@ function Contact() {
 
           {/* Instagram */}
           <div className="flex items-start gap-6">
-            <div className="bg-primary/10 p-3 rounded-full text-primary">
+            <div className="bg-error/10 p-3 rounded-full text-error">
               <FaInstagram className="text-2xl" />
             </div>
             <div>
               <h3 className="text-xl font-semibold mb-2">Instagram</h3>
               <p className="text-base-600">
-                <a href="https://instagram.com/dinarmakeup" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                <a href="https://instagram.com/dinarmakeup" target="_blank" rel="noopener noreferrer" className="hover:text-error transition-colors">
                   @dinarmakeup
                 </a>
               </p>
@@ -98,7 +98,7 @@ function Contact() {
 
           {/* Operating Hours */}
           <div className="flex items-start gap-6">
-            <div className="bg-primary/10 p-3 rounded-full text-primary">
+            <div className="bg-error/10 p-3 rounded-full text-error">
               <FaClock className="text-2xl" />
             </div>
             <div>
@@ -115,7 +115,7 @@ function Contact() {
       </div>
 
       {/* Call to Action */}
-      <div className="bg-gradient-to-r from-primary to-secondary text-white rounded-xl p-8 text-center mb-20">
+      <div className="bg-gradient-to-r from-accent to-error text-white rounded-xl p-8 text-center">
         <h2 className="text-2xl md:text-3xl font-bold mb-4">Punya Pertanyaan?</h2>
         <p className="text-lg mb-6 max-w-2xl mx-auto">
           Tim kami siap membantu Anda mewujudkan pernikahan impian Anda. Hubungi kami sekarang!
@@ -123,7 +123,7 @@ function Contact() {
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <a
             href="https://wa.me/628980000845"
-            className="btn btn-outline btn-white hover:bg-white hover:text-primary"
+            className="btn btn-outline btn-white hover:bg-white hover:text-base-content"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -131,7 +131,7 @@ function Contact() {
           </a>
           <a
             href="mailto:dinar.dumilah@gmail.com"
-            className="btn btn-outline btn-white hover:bg-white hover:text-primary"
+            className="btn btn-outline btn-white hover:bg-white hover:text-base-content"
           >
             Kirim Email
           </a>

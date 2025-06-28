@@ -4,7 +4,7 @@ function ContactPage() {
   return (
     <div className="mx-3">
 
-      <div className="my-20">
+      <div className="py-20">
         <Contact/>
       </div>
 

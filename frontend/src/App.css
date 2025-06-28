@@ -1,7 +1,37 @@
+
 @import "tailwindcss";
 @plugin "daisyui" {
   themes: light --default, dark --prefersdark, winter;
 }
+@plugin "daisyui/theme" {
+  name: "dinar";
+  default: true; /* set as default */
+  color-scheme: winter; /* color of browser-provided UI */
+}
+
+@font-face {
+  font-family: Rochester;
+  src: url("/font/Rochester/Rochester-Regular.ttf")
+}
+@font-face {
+  font-family: Poppins;
+  src: url("/font/Poppins/Poppins-Regular.ttf")
+}
+@font-face {
+  font-family: Poppins-Bold;
+  src: url("/font/Poppins/Poppins-Bold.ttf")
+}
+
+@theme{
+  --font-rochester: Rochester, 'sans-serif'
+}
+@theme{
+  --font-poppins: Poppins, 'sans-serif'
+}
+@theme{
+  --font-poppins-bold: Poppins-Bold, 'sans-serif'
+}
+
 
 
 /* Swiper custom styles */

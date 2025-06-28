@@ -53,7 +53,7 @@ function App() {
   const hideOnRegisterLogin = location.pathname !== '/register' && location.pathname !== '/login' && location.pathname !== '/forgot-password'; // location.pathname : untuk cek current url
 
   return (
-    <div data-theme="winter" className='bg-base-100'>
+    <div data-theme={import.meta.env.VITE_FRONTEND_DAISYUI_THEME || 'winter'} className='bg-base-100 font-poppins'>
 
       {/* NAVBAR */}
       <AnimatePresence mode="wait" initial={false}>
