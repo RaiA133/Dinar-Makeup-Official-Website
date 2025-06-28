@@ -47,9 +47,9 @@ function HomePage() {
         <div className="hero-content text-center w-fit backdrop-blur-xs">
           <div className="max-w-2xl space-y-4">
             <div className="flex justify-center items-center gap-4">
-              <div className="hidden sm:block h-0.5 w-25 bg-neutral"></div>
+              <div className="h-0.5 w-15 sm:w-25 bg-neutral"></div>
               <span className="text-neutral-700 font-light tracking-widest">TATA RIAS & WO PROFESIONAL</span>
-              <div className="hidden sm:block h-0.5 w-25 bg-neutral"></div>
+              <div className="h-0.5 w-15 sm:w-25 bg-neutral"></div>
             </div>
 
             <h1 className="text-5xl md:text-5xl font-poppins-bold leading-tight">
