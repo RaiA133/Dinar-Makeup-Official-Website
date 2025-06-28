@@ -22,7 +22,7 @@ function Navbar() {
   }, []);
 
   return (
-    <div className={`absolute navbar bg-transparant xl:px-25 ${location.pathname == '/' && 'text-[rgb(57,78,106)]'}`}>
+    <div className={`${location.pathname.startsWith('/admin') ? '' : 'absolute'} navbar bg-transparant xl:px-25 ${location.pathname == '/' && 'text-[rgb(57,78,106)]'}`}>
       <div className="navbar-start gap-2">
         <div className="dropdown">
 
