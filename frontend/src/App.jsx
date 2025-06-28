@@ -91,18 +91,8 @@ function App() {
         </Routes>
       </AnimatePresence>
 
-      {/* Tombol toggle chatbot */}
-      <button
-        onClick={() => setShowChatbot(!showChatbot)}
-        className="btn fixed bottom-6 right-6 h-fit bg-neutral text-base-100 p-4 rounded-full shadow-lg hover:bg-neutral-600 transition-colors"
-      >
-        <ChatBubbleOvalLeftEllipsisIcon className="h-6 w-6" />
-      </button>
-
       {/* Chatbot */}
-      <div className={`fixed bottom-25 right-5 z-10 ${showChatbot ? '' : 'hidden'}`}>
-        <Chatbot />
-      </div>
+      <Chatbot />
 
       {/* FOOTER */}
       <AnimatePresence mode="wait" initial={false}>
