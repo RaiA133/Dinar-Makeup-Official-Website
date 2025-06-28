@@ -65,7 +65,7 @@ export default function TestimoniPage() {
           <div className="flex justify-center items-center gap-y-8 lg:gap-y-0 flex-wrap md:flex-wrap lg:flex-nowrap lg:flex-row lg:justify-between lg:gap-x-8 max-w-sm sm:max-w-2xl lg:max-w-full mx-auto">
 
             <div className="w-full lg:w-2/5">
-              <span className="text-sm text-base-500 font-medium mb-4 block">Customers Testimonial</span>
+              <span className="text-sm text-base-500 font-medium mb-4 block">Suara Hati Klien yang Telah Kami Layani</span>
               <h2 className="text-4xl font-bold text-base-900 leading-[3.25rem] mb-8">
                 Semua Pelanggan yang Memberikan{' '}
                 <span className="bg-clip-text bg-gradient-to-tr text-error">

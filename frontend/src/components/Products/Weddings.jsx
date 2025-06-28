@@ -35,7 +35,7 @@ function Weddings() {
           <div className="p-2">
             <h2 className="text-5xl font-bold mb-7 text-base-950">Paket</h2>
             <p className="text-lg text-base-600">
-              Paket yang Disesuaikan untuk Setiap Cerita Cinta
+              Paket yang Disesuaikan untuk Setiap Cerita Cinta Anda
             </p>
           </div>
         </div>
