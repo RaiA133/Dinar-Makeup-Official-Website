@@ -127,7 +127,6 @@ const Chatbot = () => {
       const result = chatbotAPI.data;
 
       let text = ''
-      console.log('result', result);
       if (result.status == "200") text = result.data;
       else text = 'Terjadi masalah, coba lagi nanti';
 
