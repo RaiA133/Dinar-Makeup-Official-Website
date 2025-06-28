@@ -1,11 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { ArrowPathIcon, PaperAirplaneIcon } from '@heroicons/react/24/solid';
-import { healthCheck, chatBot, guideBot } from "../../../modules/fetch/chatbot";
 import { GoogleGenAI } from "@google/genai";
-import { useNavigate } from 'react-router-dom';
 import MarkdownRenderer from './MarkdownRenderer';
 import introJs from 'intro.js';
 import 'intro.js/introjs.css';
+import { useNavigate } from 'react-router-dom';
 
 // import { GoogleAuth } from 'google-auth-library';
 
@@ -16,125 +15,61 @@ const Chatbot = () => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [introJsSteps, setIntroJsSteps] = useState([
-    {
-      element: '.navbar',
-      intro: 'Ini adalah navbar',
-      position: 'bottom'
-    },
-    {
-      element: '.hero-content',
-      intro: 'Ini adalah Hero',
-      position: 'right'
-    },
-    {
-      element: '.login',
-      intro: 'Klik di sini untuk login',
-      position: 'left'
-    },
-  ])
   const messagesEndRef = useRef(null);
 
-
-
-
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || "YOUR_API_KEY" });
-
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (inputValue.trim() === '' || isLoading) return;
 
-    // Tambahkan pesan USER
+    // Tambahkan pesan pengguna
     const newUserMessage = {
       id: messages.length + 1,
       text: inputValue,
       sender: 'user'
     };
-
     setMessages([...messages, newUserMessage]);
     setInputValue('');
     setIsLoading(true);
 
     try {
-
-      // ====================================================================================================================================
-
-      // // DECISION MAKER
-      // const decision = ai.chats.create({
-      //   model: "gemini-2.5-flash",
-      //   history: [
-      //     {
-      //       role: "model",
-      //       parts: [{
-      //         text: `beri saya output simple saja berupa 'chat' atau 'tour'. tentukan dari pesan yg akan diinput. Jika pertanyaan menyangkut 
-      //         pertanyaan seperti letak halaman, dan info lain yang menanyakan lokasi tampilan di website output adalah 'tour' saja, tapi jika 
-      //         konversesi biasa berikan output 'chat' saja`
-      //       }],
-      //     }
-      //   ],
-      // });
-      // const decisionResponse = await decision.sendMessage({
-      //   message: inputValue
-      // });
-
-      // if (decisionResponse.text == "tour") {
-
-      //   console.log(decisionResponse);
-      //   console.log('ini tour');
-      //   return
-
-      //   const response = await guideBot(inputValue);
-
-      // } else if (decisionResponse.text == "chat") {
-
-      //   console.log(decisionResponse);
-      //   console.log('ini chat');
-      //   return
-
-      //   chatHistory = messages.map(msg => ({
-      //     role: msg.sender === 'user' ? 'user' : 'model',
-      //     parts: [{ text: msg.text }]
-      //   }));
-
-      //   chat = ai.chats.create({
-      //     model: "gemini-2.5-flash",
-      //     history: [
-      //       {
-      //         role: "model",
-      //         parts: [{
-      //           text: `Nama ada adalah Dinar, Anda adalah asisten virtual untuk Dinar Makeup, sebuah layanan makeup profesional.
-      //           Ambil data dan informasi seluruhnya dari website ini : https://dinar-makeup-official-website.vercel.app/
-      //           ` }],
-      //       },
-      //       ...chatHistory
-      //     ],
-      //     config: {
-      //       tools: [{ urlContext: {} }, { googleSearch: {} }],
-      //     },
-      //   });
-      // }
-
-      // ====================================================================================================================================
-
+      
       let chatHistory;
+      let chat;
+
       chatHistory = messages.map(msg => ({
         role: msg.sender === 'user' ? 'user' : 'model',
         parts: [{ text: msg.text }]
       }));
-      
-      const chatbotAPI = await chatBot(inputValue, chatHistory);
-      const result = chatbotAPI.data;
 
-      let text = ''
-      console.log('result', result);
-      if (result.status == "200") text = result.data;
-      else text = 'Terjadi masalah, coba lagi nanti';
+      chat = ai.chats.create({
+        model: "gemini-2.5-flash",
+        history: [
+          {
+            role: "model",
+            parts: [{
+              text: `Nama ada adalah Dinar, Anda adalah asisten virtual untuk Dinar Makeup, sebuah layanan makeup profesional.
+              Ambil data dan informasi seluruhnya dari website ini : https://dinar-makeup-official-website.vercel.app/
+              ` }],
+          },
+          ...chatHistory
+        ],
+        config: {
+          tools: [{ urlContext: {} }, { googleSearch: {} }],
+        },
+      });
 
-      // Tambahkan response AI
+      // Kirim pesan dan dapatkan respon
+      const response = await chat.sendMessage({
+        message: inputValue
+      });
+      const text = response.text;
+
+      // Tambahkan respon Gemini
       const botResponse = {
         id: messages.length + 2,
-        text,
+        text: text,
         sender: 'bot'
       };
       setMessages(prev => [...prev, botResponse]);
@@ -162,11 +97,27 @@ const Chatbot = () => {
 
   const startTour = useCallback(() => {
     introJs().setOptions({
-      steps: introJsSteps,
-      nextLabel: 'next',
-      prevLabel: 'back',
+      steps: [
+        {
+          element: '.navbar',
+          intro: 'Ini adalah navbar',
+          position: 'bottom'
+        },
+        {
+          element: '.hero-content',
+          intro: 'Ini adalah Hero',
+          position: 'right'
+        },
+        {
+          element: '.login',
+          intro: 'Klik di sini untuk login',
+          position: 'left'
+        }
+      ],
+      nextLabel: 'Lanjut',
+      prevLabel: 'Kembali',
       skipLabel: 'x',
-      doneLabel: 'done',
+      doneLabel: 'Selesai',
       showProgress: true
     })
       .start();
