@@ -25,7 +25,7 @@ function Team() {
           <div className="p-2">
             <h2 className="text-5xl font-bold mb-7 text-base-950">Tim Kami</h2>
             <p className="text-lg text-base-600">
-              Kenangan Terindah Untuk Pasangan yang Serasi
+              Profesional di Balik Setiap Momen Tak Terlupakan
             </p>
           </div>
         </div>

@@ -39,7 +39,7 @@ function Gallery() {
       {window.location.pathname === "/" && (
         <div className="flex justify-center text-center gap-10 my-10 items-center">
           <div className="p-2">
-            <h2 className="text-5xl font-bold mb-7 text-base-950">Galleri Kami</h2>
+            <h2 className="text-5xl font-bold mb-7 text-base-950">Galeri Kami</h2>
             <p className="text-lg text-base-600">
               Kenangan Terindah Untuk Pasangan yang Serasi
             </p>
