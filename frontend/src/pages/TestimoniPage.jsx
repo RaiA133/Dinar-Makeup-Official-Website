@@ -47,11 +47,11 @@ export default function TestimoniPage() {
   ];
 
   return (
-    <div className="mx-3 my-20">
+    <div className="mx-3">
       {/* Judul hanya di halaman home */}
       {window.location.pathname === "/" && (
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-primary mb-4">Apa Kata Mereka?</h2>
+          <h2 className="text-5xl font-bold text-base-950 mb-4">Ulasan Tentang Kami</h2>
           <div className="flex justify-center gap-2">
             {[...Array(5)].map((_, i) => (
               <FaStar key={i} className="text-amber-400 text-xl" />
@@ -68,15 +68,15 @@ export default function TestimoniPage() {
               <span className="text-sm text-base-500 font-medium mb-4 block">Customers Testimonial</span>
               <h2 className="text-4xl font-bold text-base-900 leading-[3.25rem] mb-8">
                 Semua Pelanggan yang Memberikan{' '}
-                <span className="bg-clip-text bg-gradient-to-tr text-primary">
+                <span className="bg-clip-text bg-gradient-to-tr text-error">
                   Feedback
                 </span>
               </h2>
 
               {/* Slider controls */}
               <div className="flex items-center justify-center lg:justify-start gap-5">
-                <button id="slider-button-left" className='btn btn-outline btn-primary px-5 w-fit'><FaChevronLeft/></button>
-                <button id="slider-button-right" className='btn btn-outline btn-primary px-5 w-fit'><FaChevronRight/></button>
+                <button id="slider-button-left" className='btn btn-outline btn-error px-5 w-fit'><FaChevronLeft/></button>
+                <button id="slider-button-right" className='btn btn-outline btn-error px-5 w-fit'><FaChevronRight/></button>
               </div>
             </div>
 

@@ -1,6 +1,6 @@
 function Product() {
   return (
-    <div className="my-20">
+    <div className="py-20">
 
       {/* Weddings */}
       <div className="divider mb-10"><span className="text-2xl sm:text-3xl lg:text-4xl xl-text-5xl">Weddings</span></div>

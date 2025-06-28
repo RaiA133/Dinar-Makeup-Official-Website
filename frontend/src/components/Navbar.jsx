@@ -22,7 +22,7 @@ function Navbar() {
   }, []);
 
   return (
-    <div className="navbar bg-base-100 shadow-sm">
+    <div className={`absolute navbar bg-transparant px-25 ${location.pathname == '/' && 'text-[rgb(57,78,106)]'}`}>
       <div className="navbar-start gap-2">
         <div className="dropdown">
 
@@ -53,76 +53,77 @@ function Navbar() {
         </div>
 
         {/* Logo Dinar Makeup */}
-        <a style={{ cursor: 'pointer' }} onClick={() => navigate("/")} className='flex items-center gap-3'>
+        <a style={{ cursor: 'pointer' }} onClick={() => navigate("/")} className='flex items-center gap-5'>
           <img className="w-10 rounded-full lg:ms-5" src={logoDinarMakeupCrop} />
-          <span>Dinar Makeups</span>
+          <span className='font-rochester text-2xl'>Dinar Makeups</span>
         </a>
 
       </div>
 
       {!location.pathname.startsWith('/admin') && (
-        <div className="navbar-center hidden lg:flex">
+        <div className="navbar-end hidden lg:flex">
           <ul className="menu menu-horizontal px-1 gap-2">
-            <li><a onClick={() => navigate("/")} className={location.pathname == '/' ? 'menu-active' : ''}>Home</a></li>
-            <li><a onClick={() => navigate("/about")} className={location.pathname == '/about' ? 'menu-active' : ''}>About</a></li>
-            <li><a onClick={() => navigate("/gallery")} className={location.pathname == '/gallery' ? 'menu-active' : ''}>Gallery</a></li>
-            <li><a onClick={() => navigate("/pricing")} className={location.pathname == '/pricing' ? 'menu-active' : ''}>Pricing</a></li>
-            {/* <li><a onClick={() => navigate("/rating")} className={location.pathname == '/rating' ? 'menu-active' : ''}>Rating</a></li> */}
-            <li><a onClick={() => navigate("/contact")} className={location.pathname == '/contact' ? 'menu-active' : ''}>Contact</a></li>
+            <li><a onClick={() => navigate("/")} className={location.pathname == '/' ? 'underline underline-offset-4' : ''}>Home</a></li>
+            <li><a onClick={() => navigate("/about")} className={location.pathname == '/about' ? 'underline underline-offset-4' : ''}>About</a></li>
+            <li><a onClick={() => navigate("/gallery")} className={location.pathname == '/gallery' ? 'underline underline-offset-4' : ''}>Gallery</a></li>
+            <li><a onClick={() => navigate("/pricing")} className={location.pathname == '/pricing' ? 'underline underline-offset-4' : ''}>Pricing</a></li>
+            {/* <li><a onClick={() => navigate("/rating")} className={location.pathname == '/rating' ? 'underline underline-offset-4' : ''}>Rating</a></li> */}
+            <li><a onClick={() => navigate("/contact")} className={location.pathname == '/contact' ? 'underline underline-offset-4' : ''}>Contact</a></li>
+            <li>
+              {!isLogin ? (
+                <a onClick={() => navigate("/login")} className="btn btn-sm text-md px-5 btn-outline">Login</a>
+              ) : (
+
+                <div className="flex-noneblock gap-2">
+
+                  <div className="dropdown dropdown-end me-5">
+                    <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                      <div className="w-10 rounded-full">
+                        <img alt="Tailwind CSS Navbar component" src={userState.avatar || import.meta.env.VITE_PROFILE_DEFAULT} />
+                      </div>
+                    </label>
+                    <ul tabIndex={0} className="mt-5 z-[50] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-fit">
+                      <li>
+                        <div className="avatar p-2" onClick={() => navigate("/profile")}>
+                          <div className="w-8 rounded-full">
+                            <img src={userState.avatar || import.meta.env.VITE_PROFILE_DEFAULT} alt="profile" />
+                          </div>
+                          <span className="overflow-hidden">
+                            <p className="text-xs font-bold"> {userState.username} </p>
+                            <p className="text-xs"> {userState.email}  </p>
+                          </span>
+                        </div>
+                      </li>
+
+                      <li><a>Settings</a></li>
+
+                      {isAdmin && (
+                        <li><a onClick={() => navigate("/admin")}>Administrator</a></li>
+                      )}
+
+                      <li><a
+                        onClick={() => {
+                          googleLogout();
+                          setIsLogin(false);
+                          Cookies.remove("token");
+                          navigate('/')
+                          toast("You have been logout", {
+                            icon: '👏',
+                            duration: 2500,
+                          });
+                        }}
+                        className="text-red-600 "
+                      >Logout</a></li>
+                    </ul>
+                  </div>
+
+                </div>
+              )}
+            </li>
           </ul>
         </div>
       )}
-      <div className="navbar-end">
-        {!isLogin ? (
-          <a onClick={() => navigate("/login")} className="btn btn-outline btn-primary">Login</a>
-        ) : (
 
-          <div className="flex-noneblock gap-2">
-
-            <div className="dropdown dropdown-end me-5">
-              <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full">
-                  <img alt="Tailwind CSS Navbar component" src={userState.avatar || import.meta.env.VITE_PROFILE_DEFAULT} />
-                </div>
-              </label>
-              <ul tabIndex={0} className="mt-5 z-[50] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-fit">
-                <li>
-                  <div className="avatar p-2" onClick={() => navigate("/profile")}>
-                    <div className="w-8 rounded-full">
-                      <img src={userState.avatar || import.meta.env.VITE_PROFILE_DEFAULT} alt="profile" />
-                    </div>
-                    <span className="overflow-hidden">
-                      <p className="text-xs font-bold"> {userState.username} </p>
-                      <p className="text-xs"> {userState.email}  </p>
-                    </span>
-                  </div>
-                </li>
-
-                <li><a>Settings</a></li>
-
-                {isAdmin && (
-                  <li><a onClick={() => navigate("/admin")}>Administrator</a></li>
-                )}
-
-                <li><a
-                  onClick={() => {
-                    googleLogout();
-                    setIsLogin(false);
-                    Cookies.remove("token");
-                    navigate('/')
-                    toast("You have been logout", {
-                      icon: '👏',
-                      duration: 2500,
-                    });
-                  }}
-                  className="text-red-600 "
-                >Logout</a></li>
-              </ul>
-            </div>
-
-          </div>
-        )}
-      </div>
     </div>
   );
 }

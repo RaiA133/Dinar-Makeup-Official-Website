@@ -113,7 +113,7 @@ function LoginPage() {
 
               <div className="card-actions justify-center mt-4">
                 <button
-                  className="btn btn-primary w-full"
+                  className="btn btn-error w-full"
                   type="submit"
                   form="login-form"
                 >Login</button>
