@@ -73,7 +73,7 @@ function HomePage() {
         </div>
 
         {/* Scrolling indicator */}
-        <div className="absolute bottom-[-50px] sm:bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="absolute bottom-0 sm:bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
           <div className='grid gap-4 justify-center'>
             <div className="avatar avatar-placeholder flex justify-center">
               <div className="bg-error w-12 rounded-full"></div>
