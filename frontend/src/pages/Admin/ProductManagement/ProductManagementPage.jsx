@@ -1,16 +1,16 @@
 import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ProductsContext } from "../../../contexts/ProductsContext";
-import { deleteProductByID, getProductByID } from "../../../modules/fetch";
 import { FiCheck, FiShoppingCart } from "react-icons/fi";
+import { AdminContext } from "../../../contexts/AdminContext";
+import { deleteProductByID, getProductByID } from "../../../modules/fetch";
 
 function ProductManagementPage() {
   let location = useLocation();
   const navigate = useNavigate();
   const {
-    productsState,
-    productsByIDState, setProductsByIDState
-  } = useContext(ProductsContext);
+    productsState,productsByIDState, setProductsByIDState, 
+    refreshCallback,
+  } = useContext(AdminContext);
 
   const handleClickDetailProducts = async (id) => {
     try {
@@ -25,7 +25,7 @@ function ProductManagementPage() {
     <div className="m-3 sm:m-5">
 
       <div className="mb-5 flex place-content-end">
-        <button className="btn btn-primary" onClick={() => navigate('/admin/product-management/create')}> Add New Product</button>
+        <button className="btn btn-error" onClick={() => navigate('/admin/product-management/create')}> Add New Product</button>
       </div>
 
       {/* Judul (hanya ada di menu home) */}
@@ -76,7 +76,7 @@ function ProductManagementPage() {
                   <div className="flex-grow">
                     <h2 className="card-title text-2xl font-bold mb-2">{product?.name}</h2>
 
-                    <div className="text-xl font-semibold text-primary mb-4">
+                    <div className="text-xl font-semibold text-error mb-4">
                       {new Intl.NumberFormat('id-ID', {
                         style: 'currency',
                         currency: product?.currency || 'IDR',
@@ -146,7 +146,7 @@ function ProductManagementPage() {
                           {productsByIDState?.images?.map((image, index) => (
                             <button
                               key={index}
-                              className="aspect-square overflow-hidden rounded-lg border-2 border-transparent hover:border-primary transition-all duration-200 relative group"
+                              className="aspect-square overflow-hidden rounded-lg border-2 border-transparent hover:border-error transition-all duration-200 relative group"
                               onClick={() => {
                                 document.getElementById('main-image').src = image.image_url;
                               }}
@@ -170,14 +170,14 @@ function ProductManagementPage() {
                     <div className="border-b border-base-100 pb-6">
                       <h2 className="text-3xl font-bold text-base-900 mb-2">{productsByIDState?.name}</h2>
                       <div className="flex items-center justify-between">
-                        <div className="text-2xl font-semibold text-primary">
+                        <div className="text-2xl font-semibold text-error">
                           {new Intl.NumberFormat('id-ID', {
                             style: 'currency',
                             currency: productsByIDState?.currency || 'IDR',
                             minimumFractionDigits: 0
                           }).format(productsByIDState?.price || 0)}
                         </div>
-                        <div className="badge badge-primary badge-lg">
+                        <div className="badge badge-error badge-lg">
                           {productsByIDState?.category?.name || 'Wedding'}
                         </div>
                       </div>
@@ -190,8 +190,8 @@ function ProductManagementPage() {
                         <div className="grid grid-cols-2 gap-3">
                           {productsByIDState?.detail_groups?.slice(0, 4).map((group, idx) => (
                             <div key={idx} className="flex items-start">
-                              <div className="bg-primary/10 p-2 rounded-full mr-3">
-                                <FiCheck className="text-primary" />
+                              <div className="bg-error/10 p-2 rounded-full mr-3">
+                                <FiCheck className="text-error" />
                               </div>
                               <div>
                                 <h4 className="font-medium">{group.group_name}</h4>
@@ -212,8 +212,8 @@ function ProductManagementPage() {
                             <div key={group.id} className="collapse collapse-plus bg-base-100 border border-base-200">
                               <input type="radio" name="product-accordion" />
                               <div className="collapse-title font-medium text-md sm:text-lg flex items-center">
-                                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
-                                  <span className="text-primary font-semibold">{group.group_name.charAt(0)}</span>
+                                <div className="w-8 h-8 rounded-full bg-error/10 flex items-center justify-center mr-3">
+                                  <span className="text-error font-semibold">{group.group_name.charAt(0)}</span>
                                 </div>
                                 {group.group_name}
                               </div>
@@ -239,7 +239,7 @@ function ProductManagementPage() {
                     <div className="sticky bottom-0 bg-base-100 pt-4 pb-7 border-t border-base-100">
                       <div className="flex gap-4">
                         <button
-                          className="btn btn-primary flex-1 gap-2 hover:shadow-lg transition-all"
+                          className="btn btn-error flex-1 gap-2 hover:shadow-lg transition-all"
                           onClick={() => {
                             if (isLogin) {
                               if (isProfileFulfill) navigate(`/order/${productsByIDState?.id}`);
@@ -287,7 +287,7 @@ function ProductManagementPage() {
                           const response = await deleteProductByID(product.id);
                           if (response.status === 200) {
                             toast.success(response.message, { duration: 2500 });
-                            refreshCallback();
+                            refreshCallback(); // ini tidak akan jalan, karena res berhasil deleteProductByID masih blank
                           }
                         } catch (error) {
                           console.error("Error:", error);

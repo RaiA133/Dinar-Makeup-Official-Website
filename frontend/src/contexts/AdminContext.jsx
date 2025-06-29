@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { getAllTrasaction, getAllUsers } from "../modules/fetch";
+import { getAllProducts, getAllTrasaction, getAllUsers } from "../modules/fetch";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 
@@ -11,14 +11,29 @@ export const AdminContextProvider = ({ children }) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
+  const [productsState, setProductsState] = useState([]);
+  const [productsByIDState, setProductsByIDState] = useState([]);
+
   const [usersState, setUsersState] = useState([]);
   const [usersByIDState, setUsersByIDState] = useState([]);
+
   const [transcactionState, setTranscactionState] = useState([]);
 
   const [refresh, setRefresh] = useState(0); // use this on useEffect that set from callback below
   
 
   useEffect(() => { 
+
+    const fetchDataProductManagement = async () => { // path = /admin/product-management
+      try {
+        // console.log('refresh /admin/product-management');
+        const response = await getAllProducts(); // Fetch data
+        if (response.status === 200) setProductsState(response.data); // Set state if the response is successful
+      } catch (error) {
+        console.error("Error : ", error);
+      }
+    };
+    if (location.pathname == "/admin/product-management") fetchDataProductManagement();
 
     // ----------------------------------------------------------------------------------------------------------------------------------
 
@@ -61,6 +76,8 @@ export const AdminContextProvider = ({ children }) => {
   }, []);
 
   return <AdminContext.Provider value={{
+    productsState, setProductsState,
+    productsByIDState, setProductsByIDState,
     usersState, setUsersState,
     usersByIDState, setUsersByIDState,
     transcactionState, setTranscactionState,

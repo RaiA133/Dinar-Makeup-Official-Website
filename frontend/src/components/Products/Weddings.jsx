@@ -71,13 +71,16 @@ function Weddings() {
                 }}
                 style={{ cursor: "pointer" }}
               >
+                {/* MAIN IMAGE Product */}
                 <figure className="relative h-60 overflow-hidden">
                   <img
                     src={product?.banner}
                     alt={product?.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
+                    <span className="text-base-100 text-xl font-medium">{product?.name}</span>
+                  </div>
                 </figure>
 
                 <div className="card-body p-6">
@@ -174,7 +177,7 @@ function Weddings() {
                 {/* Thumbnail Gallery */}
                 {productsByIDState?.images?.length > 1 && (
                   <div className="mt-6">
-                    <div className="grid grid-cols-4 gap-3">
+                    <div className="grid grid-cols-3 gap-3">
                       {productsByIDState?.images?.map((image, index) => (
                         <button
                           key={index}
@@ -274,6 +277,22 @@ function Weddings() {
                   <div className="flex gap-4">
                     <button
                       className="btn btn-error flex-1 gap-2 hover:shadow-lg transition-all"
+                      onClick={() => {
+                        if (isLogin) {
+                          if (isProfileFulfill) navigate(`/order/${productsByIDState?.id}`);
+                          else {
+                            navigate('/profile');
+                            toast.error('NIK & Phone Number is required', {
+                              duration: 4000,
+                            });
+                          }
+                        } else {
+                          navigate('/login');
+                          toast.error('Login is required', {
+                            duration: 4000,
+                          });
+                        }
+                      }}
                     >
                       <FiShoppingCart /> Order Now
                     </button>

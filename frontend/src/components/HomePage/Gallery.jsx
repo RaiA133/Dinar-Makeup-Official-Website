@@ -1,9 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { FaBrush, FaPalette, FaCamera, FaCalendarAlt } from "react-icons/fa";
 
 function Gallery() {
   const navigate = useNavigate();
+  let location = useLocation()
 
   const dataGallery = [
     {
@@ -18,18 +19,18 @@ function Gallery() {
       desc: "Transformasi ruangan sesuai tema pernikahan Anda",
       borderColor: "border-secondary"
     },
-    // {
-    //   title: "Dokumentasi",
-    //   src: "/img/gallery/weddings/main/dokumentasi.png",
-    //   desc: "Abadikan momen berharga dengan hasil terbaik",
-    //   borderColor: "border-accent"
-    // },
-    // {
-    //   title: "Wedding Organizer",
-    //   src: "/img/gallery/weddings/main/wedding_organizer.png",
-    //   desc: "Kelola seluruh acara pernikahan dengan profesional",
-    //   borderColor: "border-info"
-    // }
+    {
+      title: "Dokumentasi",
+      src: "/img/gallery/weddings/main/dokumentasi.png",
+      desc: "Abadikan momen berharga dengan hasil terbaik",
+      borderColor: "border-accent"
+    },
+    {
+      title: "Wedding Organizer",
+      src: "/img/gallery/weddings/main/wedding_organizer.png",
+      desc: "Kelola seluruh acara pernikahan dengan profesional",
+      borderColor: "border-info"
+    }
   ]
 
   return (
@@ -49,9 +50,11 @@ function Gallery() {
 
       <section>
 
-        {location.pathname === "/" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            {dataGallery.map((item, i) => (
+        {/* {location.pathname === "/" && ( */}
+        <div className={`grid grid-cols-1 md:grid-cols-2 ${location.pathname == '/gallery' && 'lg:grid-cols-4'} gap-6 mb-6`}>
+          {dataGallery
+            .slice(0, location.pathname === '/gallery' ? 4 : 2)
+            .map((item, i) => (
               <div
                 key={i}
                 onClick={() => navigate('/gallery')}
@@ -71,8 +74,10 @@ function Gallery() {
                 </div>
               </div>
             ))}
-          </div>
-        )}
+
+
+        </div>
+        {/* )} */}
 
         {location.pathname !== "/" && (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
