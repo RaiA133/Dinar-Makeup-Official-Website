@@ -1,4 +1,6 @@
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
+import { PiMouseScroll } from "react-icons/pi";
 
 function Team() {
 
@@ -31,12 +33,30 @@ function Team() {
         </div>
       )}
 
+      <Tooltip
+        id={`tooltip-team`}
+        float
+        delayShow={1000}   // delay before showing (in ms)
+        content={
+          <div className="flex items-center gap-2">
+            <kbd className="kbd">Shift</kbd> + <PiMouseScroll />
+          </div>
+        }
+      />
+
       <section>
 
         <div className="carousel carousel-center bg-transparent neutral rounded-box max-w-full space-x-4 p-4">
           {dataTeams.map((src, index) => (
             <div key={index} className="carousel-item">
-              <img src={src} alt="Team" className='w-96 rounded-2xl' />
+              <img
+                src={src}
+                alt="Team"
+                className="w-96 rounded-2xl"
+                data-tooltip-id="tooltip-team"
+                data-tooltip-place="top"
+                data-tooltip-variant="light"
+              />
             </div>
           ))}
 
