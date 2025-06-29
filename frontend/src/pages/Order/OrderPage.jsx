@@ -280,13 +280,13 @@ function OrderPage() {
                   <div className="collapse-content text-sm">
 
                     {/* SUB SECTION : Pengisian Form Booking */}
-                    <div className="mx-0 sm:mx-10 md:mx-20">
+                    <div className="mx-0 lg:mx-5 xl:mx-20">
 
                       {/* Header */}
                       <div className="text-md sm:text-xl flex font-bold justify-center w-full my-5">Data Diri Pengantin</div>
 
                       {/* Form Data Diri Pengantin*/}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
 
                         {/* Mempelai Laki-laki */}
                         <div>
@@ -334,7 +334,7 @@ function OrderPage() {
                       <div className="text-md sm:text-xl flex font-bold justify-center w-full my-5">Detail Acara</div>
 
                       {/* Form Detail Acara*/}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
 
                         {/* Mempelai Laki-laki */}
                         <div className="h-full">
@@ -393,14 +393,14 @@ function OrderPage() {
                       {/* Kententuan */}
                       <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-full border p-4 my-5">
                         {/* <legend className="fieldset-legend">Login options</legend> */}
-                        <label className="label gap-3">
+                        <div className="flex items-center gap-3">
                           <input type="checkbox" defaultChecked className="checkbox" required />
-                          Saya menyetujui syarat dan ketentuan layanan
-                        </label>
-                        <label className="label gap-3">
+                          <span>Saya menyetujui syarat dan ketentuan layanan</span>
+                        </div>
+                        <div className="flex items-center gap-3">
                           <input type="checkbox" defaultChecked className="checkbox" required />
-                          Saya telah membaca kebijakan pembatalan
-                        </label>
+                          <span>Saya telah membaca kebijakan pembatalan</span>
+                        </div>
                       </fieldset>
 
                     </div>
