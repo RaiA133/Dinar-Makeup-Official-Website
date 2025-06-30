@@ -62,8 +62,8 @@ function PaymentPage() {
       <div className="max-w-4xl mx-auto">
         {/* Payment Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-base-900 mb-2">Payment Details</h1>
-          <p className="text-base-600">Complete your payment to secure your booking</p>
+          <h1 className="text-3xl font-bold text-base-900 mb-2">Detail Pembayaran</h1>
+          <p className="text-base-600">Selesaikan pembayaran Anda untuk mengamankan pemesanan Anda</p>
         </div>
 
         {/* Payment Status Card */}
@@ -73,16 +73,16 @@ function PaymentPage() {
               <div className="flex items-center bg-base-200 text-info p-4 rounded-lg mb-6">
                 <FiClock className="text-2xl mr-3" />
                 <div>
-                  <h3 className="font-semibold">Waiting for Payment</h3>
-                  <p className="text-sm">Please complete your payment before the due time</p>
+                  <h3 className="font-semibold">Menunggu Pembayaran</h3>
+                  <p className="text-sm">Harap selesaikan pembayaran Anda sebelum batas waktu yang ditentukan</p>
                 </div>
               </div>
             ) : (
               <div className="flex items-center bg-base-200 text-success p-4 rounded-lg mb-6">
                 <FiCheckCircle className="text-2xl mr-3" />
                 <div>
-                  <h3 className="font-semibold">Payment Confirmed!</h3>
-                  <p className="text-sm">Your booking is now secured</p>
+                  <h3 className="font-semibold">Pembayaran Terkonfirmasi!</h3>
+                  <p className="text-sm">Pemesanan Anda sekarang sudah diamankan</p>
                 </div>
               </div>
             )}
@@ -92,19 +92,19 @@ function PaymentPage() {
               <div className="steps steps-horizontal w-full">
                 <div className={`step ${paymentData.transaction_status == "pending" ? 'step-neutral' : ''}`}>
                   <div className="step-circle">1</div>
-                  <div className="step-title">Payment</div>
+                  <div className="step-title">Pembayaran</div>
                 </div>
                 <div className={`step ${paymentData.transaction_status == "" ? 'step-neutral' : ''}`}>
                   <div className="step-circle">2</div>
-                  <div className="step-title">Confirmation</div>
+                  <div className="step-title">Konfirmasi</div>
                 </div>
                 <div className={`step ${paymentData.transaction_status == "" ? 'step-neutral' : ''}`}>
                   <div className="step-circle">3</div>
-                  <div className="step-title">Preparation</div>
+                  <div className="step-title">Persiapan</div>
                 </div>
                 <div className={`step ${paymentData.transaction_status == "" ? 'step-neutral' : ''}`}>
                   <div className="step-circle">4</div>
-                  <div className="step-title">Wedding Day</div>
+                  <div className="step-title">Hari Pernikahan</div>
                 </div>
               </div>
             </div>
@@ -115,7 +115,7 @@ function PaymentPage() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-base-50 p-5 rounded-lg border border-neutral-600">
                   <h3 className="font-medium text-base-700 mb-3">Virtual Account</h3>
-                  <div 
+                  <div
                     className="flex items-center justify-between p-3 bg-base-100 rounded-lg border border-neutral-600 cursor-pointer hover:bg-base-50 transition-colors"
                     onClick={() => {
                       navigator.clipboard.writeText(paymentData.va).then(() => {
@@ -128,12 +128,12 @@ function PaymentPage() {
                     <span className="font-mono">{paymentData.va}</span>
                     <FiCopy className="text-base-500" />
                   </div>
-                  <p className="text-sm text-base-500 mt-2">Click to copy VA number</p>
+                  <p className="text-sm text-base-500 mt-2">Klik Untuk copy VA number</p>
                 </div>
 
                 {/* Countdown Timer */}
                 <div className="bg-base-50 p-5 rounded-lg border border-neutral-600">
-                  <h3 className="font-medium text-base-700 mb-3">Payment Due In</h3>
+                  <h3 className="font-medium text-base-700 mb-3">Batas Pembayaran</h3>
                   <div className="grid grid-flow-col gap-2 text-center auto-cols-max justify-center">
                     {Object.entries(timeLeft).map(([unit, value]) => (
                       <div key={unit} className="flex flex-col items-center">
@@ -149,14 +149,14 @@ function PaymentPage() {
 
               {/* Payment Details */}
               <div className="bg-base-50 p-5 rounded-lg border border-neutral-600">
-                <h3 className="font-medium text-base-700 mb-4">Transaction Details</h3>
+                <h3 className="font-medium text-base-700 mb-4">Detail Transaksi</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-base-500">Order ID</p>
                     <p className="font-medium">{paymentData.order_id}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-base-500">Amount</p>
+                    <p className="text-sm text-base-500">Total</p>
                     <p className="font-medium">
                       {new Intl.NumberFormat('id-ID', {
                         style: 'currency',
@@ -170,7 +170,7 @@ function PaymentPage() {
                     <p className="font-medium">{paymentData.bank_name.toUpperCase()}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-base-500">Transaction Time</p>
+                    <p className="text-sm text-base-500">Waktu Transaksi</p>
                     <p className="font-medium">{paymentData.transaction_time}</p>
                   </div>
                 </div>
@@ -181,18 +181,18 @@ function PaymentPage() {
                 <div className="flex items-start">
                   <FiInfo className="text-blue-500 text-xl mr-3 mt-1" />
                   <div>
-                    <h3 className="font-medium text-blue-800 mb-2">Need Help?</h3>
+                    <h3 className="font-medium text-blue-800 mb-2">Butuh Bantuan?</h3>
                     <p className="text-sm text-blue-700 mb-3">
-                      If you encounter any issues with your payment, please contact our customer support.
+                      Jika Anda mengalami masalah dengan pembayaran Anda, silakan hubungi dukungan pelanggan kami.
                     </p>
-                    <a 
+                    <a
                       href={`https://wa.me/123?text=Hi, I need help with my payment for order ${paymentData.order_id}`}
                       className="inline-flex items-center px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       <FaWhatsapp className="mr-2" />
-                      Chat via WhatsApp
+                      Chat dari WhatsApp
                     </a>
                   </div>
                 </div>
