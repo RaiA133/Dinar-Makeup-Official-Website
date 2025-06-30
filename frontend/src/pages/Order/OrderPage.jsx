@@ -40,10 +40,10 @@ function OrderPage() {
 
   const bookedDate = [] // ['2025-06-1', '2025-06-2', '2025-06-3', '2025-06-4']; // need api for this, couse currect API is for admin
   let notAvailableDate = [
-    tgl_akad ? moment(new Date(tgl_akad)).format("YYYY-MM-DD") : "", 
+    tgl_akad ? moment(new Date(tgl_akad)).format("YYYY-MM-DD") : "",
     tgl_acara ? moment(new Date(tgl_acara)).format("YYYY-MM-DD") : "",
     tgl_tech_meeting ? moment(new Date(tgl_tech_meeting)).format("YYYY-MM-DD") : "",
-  ...bookedDate] 
+    ...bookedDate]
   let amount = (productsByIDState?.price * rangeDP) / 100;
 
   const handleValidationData = (e) => {
@@ -100,7 +100,27 @@ function OrderPage() {
 
 
   const handleSubmit = async () => {
-    console.log(formData);
+    console.log(formData)
+    const paymentPass = {
+      "transaction_id": "f3056c3c-9875-4440-86b3-f9d1cec2bab1",
+      "order_id": "DNRWO-130625-nPj3s",
+      "gross_amount": "19500000.00",
+      "payment_type": "bank_transfer",
+      "transaction_time": "2025-06-13 10:13:24",
+      "transaction_status": "pending",
+      "fraud_status": "accept",
+      "status_code": "",
+      "bank_name": "bca",
+      "va": "88272172134443448645477",
+      "status_message": "Success, Bank Transfer transaction is created",
+      "currency": "IDR",
+      "expiry_time": moment().utcOffset(7).add(1, 'day').format('YYYY-MM-DD HH:mm:ss'),
+    }
+    sessionStorage.setItem('paymentData', JSON.stringify(paymentPass));
+    toast.success('ini mut dah bisa kan liat payment :) ?', {
+      duration: 6000,
+    });
+    navigate("/payment")
     return
     try {
       const response = await createOrder(data);
@@ -385,6 +405,7 @@ function OrderPage() {
                             </button>
                             <div popover="auto" id="tgl_akad" className="dropdown" style={{ positionAnchor: "--tgl_akad" }}>
                               <DayPicker
+                              required
                                 className="react-day-picker"
                                 mode="single"
                                 captionLayout="dropdown"
@@ -431,7 +452,7 @@ function OrderPage() {
                           </fieldset>
                           <fieldset className="fieldset">
                             <legend className="fieldset-legend ms-1">Jumlah Tamu</legend>
-                            <input type="text" className="input w-full" placeholder="dinar.dumilah@gmail.com" name="jumlah_tamu" />
+                            <input type="number" className="input w-full" placeholder="dinar.dumilah@gmail.com" name="jumlah_tamu" />
                           </fieldset>
                           <div className="fieldset">
                             <legend className="fieldset-legend ms-1">Tanggal Tech Meeting</legend>
