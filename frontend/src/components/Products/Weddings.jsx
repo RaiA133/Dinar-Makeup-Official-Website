@@ -236,8 +236,8 @@ function Weddings() {
                             {/* Tooltip terpisah untuk setiap elemen */}
                             <Tooltip
                               id={tooltipId}
-                              float
-                              delayShow={1000}
+                              delayShow={0}
+                              events={['click']}
                               style={{ backgroundColor: "rgb(229, 139, 139)", color: "#FFFFFF", maxWidth: "200px", textAlign: "center" }}
                               content={
                                 <span className="w-2">{group.detail_items?.[0]?.description || 'Included'}</span>
@@ -300,9 +300,9 @@ function Weddings() {
 
                 {/* Sticky Footer */}
                 <div className="sticky bottom-0 bg-base-100 pt-4 pb-7 border-t border-base-100">
-                  <div className="flex gap-4">
+                  <div className="flex gap-3">
                     <button
-                      className="btn btn-error flex-1 gap-2 hover:shadow-lg transition-all"
+                      className="btn btn-error flex-1 gap-2 w-full hover:shadow-lg transition-all text-xs sm:text-md"
                       onClick={() => {
                         if (isLogin) {
                           if (isProfileFulfill) navigate(`/order/${productsByIDState?.id}`);
@@ -320,10 +320,10 @@ function Weddings() {
                         }
                       }}
                     >
-                      <FiShoppingCart /> Order Sekarang
+                      <FiShoppingCart /> <span className="flex">Order</span>
                     </button>
                     <form method="dialog" className="flex-1">
-                      <button className="btn btn-outline w-full hover:bg-base-50">
+                      <button className="btn btn-outline w-full hover:bg-base-50 text-xs sm:text-md">
                         Batal
                       </button>
                     </form>
