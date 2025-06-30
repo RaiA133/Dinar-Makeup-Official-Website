@@ -320,11 +320,11 @@ function Weddings() {
                         }
                       }}
                     >
-                      <FiShoppingCart /> Order Now
+                      <FiShoppingCart /> Order Sekarang
                     </button>
                     <form method="dialog" className="flex-1">
                       <button className="btn btn-outline w-full hover:bg-base-50">
-                        Cencel
+                        Batal
                       </button>
                     </form>
                   </div>
