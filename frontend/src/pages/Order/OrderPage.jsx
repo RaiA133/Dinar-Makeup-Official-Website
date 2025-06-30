@@ -15,17 +15,8 @@ import { FaCheck, FaShoppingCart, FaRegFileAlt, FaBox, FaCreditCard } from "reac
 function OrderPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [rangeDP, setRangeDP] = useState(100);
-  const [paymentMethod, setPaymentMethod] = useState("bca");
-  const [selected, setSelected] = useState("");
-
-  const [dateTest, setDateTest] = useState();
-
-  const {
-    productsState, productsByIDState, setProductsByIDState
-  } = useContext(ProductsContext);
-
   const { userState } = useContext(UserContext);
+  const { productsByIDState, setProductsByIDState } = useContext(ProductsContext);
 
   useEffect(() => {
     const fetchOrderData = async () => {
@@ -40,35 +31,83 @@ function OrderPage() {
     if (id) fetchOrderData();
   }, [id]);
 
+  const [formData, setFormData] = useState(null);
+  const [tgl_akad, set_tgl_akad] = useState("")
+  const [tgl_acara, set_tgl_acara] = useState("")
+  const [tgl_tech_meeting, set_tgl_tech_meeting] = useState("")
+  const [rangeDP, setRangeDP] = useState(100);
+  const [paymentMethod, setPaymentMethod] = useState("bca");
+
+  const bookedDate = [] // ['2025-06-1', '2025-06-2', '2025-06-3', '2025-06-4']; // need api for this, couse currect API is for admin
+  let notAvailableDate = [
+    tgl_akad ? moment(new Date(tgl_akad)).format("YYYY-MM-DD") : "", 
+    tgl_acara ? moment(new Date(tgl_acara)).format("YYYY-MM-DD") : "",
+    tgl_tech_meeting ? moment(new Date(tgl_tech_meeting)).format("YYYY-MM-DD") : "",
+  ...bookedDate] 
   let amount = (productsByIDState?.price * rangeDP) / 100;
 
+  const handleValidationData = (e) => {
+    e.preventDefault();
 
-  const date = new Date(selected);
-  const formattedDate = moment(date).format('YYYY-MM-DD');
-  const notAvailableDate = ['2025-06-1', '2025-06-2', '2025-06-3', '2025-06-4']; // need api for this, couse currect API is for admin
-  const data = {
-    product_id: id,
-    amount,
-    booking_date: formattedDate,
-    payment_method: paymentMethod,
-    Notes: `DP ${rangeDP} %`
-  }
+    const data = {
+      nama_pria: e.target.nama_pria.value.trim(),
+      alamat_pria: e.target.alamat_pria.value.trim(),
+      email_pria: e.target.email_pria.value.trim(),
+      ig_pria: e.target.ig_pria.value.trim(),
 
-  const handlePreSubmit = () => {
-    if (formattedDate == 'Invalid date') {
-      toast.error('Date is required', {
-        duration: 2500,
+      nama_wanita: e.target.nama_wanita.value.trim(),
+      alamat_wanita: e.target.alamat_wanita.value.trim(),
+      email_wanita: e.target.email_wanita.value.trim(),
+      ig_wanita: e.target.ig_wanita.value.trim(),
+
+      tgl_akad: tgl_akad ? moment(new Date(tgl_akad)).format("YYYY-MM-DD") : "",
+      lokasi_pernikahan: e.target.lokasi_pernikahan.value.trim(),
+      tgl_acara: tgl_acara ? moment(new Date(tgl_acara)).format("YYYY-MM-DD") : "",
+      jam_akad: e.target.jam_akad.value.trim(),
+      jumlah_tamu: e.target.jumlah_tamu.value.trim(),
+      tgl_tech_meeting: tgl_tech_meeting ? moment(new Date(tgl_tech_meeting)).format("YYYY-MM-DD") : "",
+
+      term_1: e.target.term_1.checked,
+      term_2: e.target.term_2.checked,
+    };
+
+    // === Validasi Wajib ===
+    const missingFields = [];
+
+    for (const [key, value] of Object.entries(data)) {
+      if ((typeof value === "string" && value === "") || (typeof value === "boolean" && value === false)) {
+        missingFields.push(key);
+      }
+    }
+
+    if (missingFields.length > 0) {
+      toast.error("Mohon lengkapi semua data dan setujui syarat & ketentuan.", {
+        duration: 3000,
       });
-    } else document.getElementById('checkout_confirm_modal').showModal();
-  }
+      return;
+    }
+
+    // === Valid Email (opsional tambahan) ===
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(data.email_pria) || !emailRegex.test(data.email_wanita)) {
+      toast.error("Format email tidak valid.", { duration: 3000 });
+      return;
+    }
+
+    setFormData(data);
+    document.getElementById("checkout_confirm_modal").checked = true;
+  };
+
 
   const handleSubmit = async () => {
+    console.log(formData);
+    return
     try {
       const response = await createOrder(data);
       console.log(response);
       if (response.status === 200) {
         const successMessage = response.message;
-        sessionStorage.setItem('paymentData', JSON.stringify(response.data));
+        sessionStorage.setItem('paymentData', JSON.stringify(response.data)); // riwayat payment masih
         toast.success(successMessage, {
           duration: 6000,
         });
@@ -94,6 +133,7 @@ function OrderPage() {
 
 
 
+
   return (
     <div
       style={{
@@ -116,7 +156,7 @@ function OrderPage() {
 
         {Object.keys(productsByIDState).length > 0 ? (
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-5 pb-20">
+          <form className="grid grid-cols-1 md:grid-cols-12 gap-5 pb-20" onSubmit={handleValidationData}>
 
             <div className="md:col-span-7 xl:col-span-8 join join-vertical">
               <div className="join join-vertical gap-5">
@@ -292,19 +332,19 @@ function OrderPage() {
                         <div>
                           <fieldset className="fieldset">
                             <legend className="fieldset-legend ms-1">Nama Lengkap Mempelai Pria</legend>
-                            <input type="text" className="input w-full" placeholder="Type here" name="ISI" />
+                            <input type="text" className="input w-full" placeholder="Type here" name="nama_pria" />
                           </fieldset>
                           <fieldset className="fieldset">
                             <legend className="fieldset-legend ms-1">Alamat Mempelai Pria</legend>
-                            <textarea className="textarea h-24 w-full" placeholder="Masukan Alamat"></textarea>
+                            <textarea className="textarea h-24 w-full" placeholder="Masukan Alamat" name="alamat_pria"></textarea>
                           </fieldset>
                           <fieldset className="fieldset">
                             <legend className="fieldset-legend ms-1">Email</legend>
-                            <input type="text" className="input w-full" placeholder="dinar.dumilah@gmail.com" name="ISI" />
+                            <input type="email" className="input w-full" placeholder="dinar.dumilah@gmail.com" name="email_pria" />
                           </fieldset>
                           <fieldset className="fieldset">
                             <legend className="fieldset-legend ms-1">Instagram</legend>
-                            <input type="text" className="input w-full" placeholder="Masukan Nama Instagram Mempelai Pria" name="ISI" />
+                            <input type="text" className="input w-full" placeholder="Masukan Nama Instagram Mempelai Pria" name="ig_pria" />
                           </fieldset>
                         </div>
 
@@ -312,19 +352,19 @@ function OrderPage() {
                         <div>
                           <fieldset className="fieldset">
                             <legend className="fieldset-legend ms-1">Nama Lengkap Mempelai Wanita</legend>
-                            <input type="text" className="input w-full" placeholder="Type here" name="ISI" />
+                            <input type="text" className="input w-full" placeholder="Type here" name="nama_wanita" />
                           </fieldset>
                           <fieldset className="fieldset">
                             <legend className="fieldset-legend ms-1">Alamat Mempelai Wanita</legend>
-                            <textarea className="textarea h-24 w-full" placeholder="Masukan Alamat"></textarea>
+                            <textarea className="textarea h-24 w-full" placeholder="Masukan Alamat" name="alamat_wanita"></textarea>
                           </fieldset>
                           <fieldset className="fieldset">
                             <legend className="fieldset-legend ms-1">Email</legend>
-                            <input type="text" className="input w-full" placeholder="dinar.dumilah@gmail.com" name="ISI" />
+                            <input type="email" className="input w-full" placeholder="dinar.dumilah@gmail.com" name="email_wanita" />
                           </fieldset>
                           <fieldset className="fieldset">
                             <legend className="fieldset-legend ms-1">Instagram</legend>
-                            <input type="text" className="input w-full" placeholder="Masukan Nama Instagram Mempelai Wanita" name="ISI" />
+                            <input type="text" className="input w-full" placeholder="Masukan Nama Instagram Mempelai Wanita" name="ig_wanita" />
                           </fieldset>
                         </div>
 
@@ -338,13 +378,27 @@ function OrderPage() {
 
                         {/* Mempelai Laki-laki */}
                         <div className="h-full">
-                          <fieldset className="fieldset">
+                          <div className="fieldset">
                             <legend className="fieldset-legend ms-1">Tanggal Akad (Bila dipisah)</legend>
-                            <input type="date" className="input w-full" />
-                          </fieldset>
+                            <button type="button" popoverTarget="tgl_akad" className="input input-border w-full" style={{ anchorName: "--tgl_akad" }}>
+                              {tgl_akad ? tgl_akad.toLocaleDateString() : "Pick a date"}
+                            </button>
+                            <div popover="auto" id="tgl_akad" className="dropdown" style={{ positionAnchor: "--tgl_akad" }}>
+                              <DayPicker
+                                className="react-day-picker"
+                                mode="single"
+                                captionLayout="dropdown"
+                                disabled={notAvailableDate.map(dateStr => new Date(dateStr))}
+                                defaultMonth={new Date(2024, 6)}
+                                startMonth={new Date(2024, 6)}
+                                endMonth={new Date(2050, 9)}
+                                selected={tgl_akad}
+                                onSelect={set_tgl_akad} />
+                            </div>
+                          </div>
                           <fieldset className="fieldset h-full">
                             <legend className="fieldset-legend ms-1">Lokasi Pernikahan</legend>
-                            <textarea className="textarea h-48 w-full" placeholder="Masukan Lokasi Pernikahan"></textarea>
+                            <textarea className="textarea h-48 w-full" placeholder="Masukan Lokasi Pernikahan" name="lokasi_pernikahan"></textarea>
                           </fieldset>
                         </div>
 
@@ -352,40 +406,51 @@ function OrderPage() {
                         <div>
 
                           {/* Daypicker Date */}
-                          {/* <div className="fieldset">
+
+                          <div className="fieldset">
                             <legend className="fieldset-legend ms-1">Tanggal Acara</legend>
-                            <button popoverTarget="rdp-popover" className="input input-border w-full" type="date" style={{ anchorName: "--rdp" }}>
-                              {dateTest ? dateTest.toLocaleDateString() : "Pick a date"}
+                            <button type="button" popoverTarget="tgl_acara" className="input input-border w-full" style={{ anchorName: "--tgl_acara" }}>
+                              {tgl_acara ? tgl_acara.toLocaleDateString() : "Pick a date"}
                             </button>
-                            <div popover="auto" id="rdp-popover" className="dropdown" style={{ positionAnchor: "--rdp" }}>
+                            <div popover="auto" id="tgl_acara" className="dropdown" style={{ positionAnchor: "--tgl_acara" }}>
                               <DayPicker
                                 className="react-day-picker"
                                 mode="single"
                                 captionLayout="dropdown"
+                                disabled={notAvailableDate.map(dateStr => new Date(dateStr))}
                                 defaultMonth={new Date(2024, 6)}
                                 startMonth={new Date(2024, 6)}
                                 endMonth={new Date(2050, 9)}
-                                selected={dateTest}
-                                onSelect={setDateTest} />
+                                selected={tgl_acara}
+                                onSelect={set_tgl_acara} />
                             </div>
-                          </div> */}
-
-                          <fieldset className="fieldset">
-                            <legend className="fieldset-legend ms-1">Tanggal Acara</legend>
-                            <input type="date" className="input w-full" />
-                          </fieldset>
+                          </div>
                           <fieldset className="fieldset">
                             <legend className="fieldset-legend ms-1">Jam akad</legend>
-                            <input type="time" className="input w-full" />
+                            <input type="time" className="input w-full" name="jam_akad" />
                           </fieldset>
                           <fieldset className="fieldset">
                             <legend className="fieldset-legend ms-1">Jumlah Tamu</legend>
-                            <input type="text" className="input w-full" placeholder="dinar.dumilah@gmail.com" name="ISI" />
+                            <input type="text" className="input w-full" placeholder="dinar.dumilah@gmail.com" name="jumlah_tamu" />
                           </fieldset>
-                          <fieldset className="fieldset">
-                            <legend className="fieldset-legend ms-1">Tanggal Acara</legend>
-                            <input type="date" className="input w-full" />
-                          </fieldset>
+                          <div className="fieldset">
+                            <legend className="fieldset-legend ms-1">Tanggal Tech Meeting</legend>
+                            <button type="button" popoverTarget="tgl_tech_meeting" className="input input-border w-full" style={{ anchorName: "--tgl_tech_meeting" }}>
+                              {tgl_tech_meeting ? tgl_tech_meeting.toLocaleDateString() : "Pick a date"}
+                            </button>
+                            <div popover="auto" id="tgl_tech_meeting" className="dropdown" style={{ positionAnchor: "--tgl_tech_meeting" }}>
+                              <DayPicker
+                                className="react-day-picker"
+                                mode="single"
+                                captionLayout="dropdown"
+                                disabled={notAvailableDate.map(dateStr => new Date(dateStr))}
+                                defaultMonth={new Date(2024, 6)}
+                                startMonth={new Date(2024, 6)}
+                                endMonth={new Date(2050, 9)}
+                                selected={tgl_tech_meeting}
+                                onSelect={set_tgl_tech_meeting} />
+                            </div>
+                          </div>
                         </div>
 
                       </div>
@@ -394,11 +459,11 @@ function OrderPage() {
                       <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-full border p-4 my-5">
                         {/* <legend className="fieldset-legend">Login options</legend> */}
                         <div className="flex items-center gap-3">
-                          <input type="checkbox" defaultChecked className="checkbox" required />
+                          <input type="checkbox" className="checkbox" name="term_1" />
                           <span>Saya menyetujui syarat dan ketentuan layanan</span>
                         </div>
                         <div className="flex items-center gap-3">
-                          <input type="checkbox" defaultChecked className="checkbox" required />
+                          <input type="checkbox" className="checkbox" name="term_2" />
                           <span>Saya telah membaca kebijakan pembatalan</span>
                         </div>
                       </fieldset>
@@ -414,21 +479,6 @@ function OrderPage() {
 
             <div className="md:col-span-5 xl:col-span-4">
 
-              {/* Calendar */}
-              {/* <div className="bg-base-100 flex justify-center mb-5 py-5 border-base-300 border rounded-md text-xs text-center">
-                <DayPicker
-                  animate
-                  mode="single"
-                  // size='small'
-                  disabled={notAvailableDate.map(dateStr => new Date(dateStr))}
-                  selected={selected}
-                  onSelect={setSelected}
-                  footer={
-                    selected ? `Selected: ${selected.toLocaleDateString()}` : "Pick a day."
-                  }
-                />
-              </div> */}
-
               {/* Checkout */}
               <div className="bg-base-100 border-base-300 border rounded-md p-5">
 
@@ -437,7 +487,7 @@ function OrderPage() {
                   <div className="card-title">Detail Pesanan</div>
                 </div>
 
-                <div>{productsByIDState.name}</div>
+                <div>Paket {productsByIDState?.name}</div>
                 <div className="divider"></div>
                 <div className="flex items-center justify-between">
                   <div>Total Harga </div>
@@ -502,7 +552,6 @@ function OrderPage() {
 
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
-                        disabled
                         type="radio"
                         name="payment"
                         value="mandiri"
@@ -515,7 +564,6 @@ function OrderPage() {
 
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
-                        disabled
                         type="radio"
                         name="payment"
                         value="danamon"
@@ -530,79 +578,117 @@ function OrderPage() {
 
                 </div>
 
-                {/* <p className="mt-4 text-sm">Selected: <strong>{paymentMethod}</strong></p> */}
-
                 <div className="divider"></div>
 
                 {/* MODAL CONFIRM BOOKING */}
-                <button className="btn btn-error w-full" onClick={() => handlePreSubmit()}>
+                <button className="btn btn-error w-full" type="submit">
                   <FaShoppingCart /> Checkout
                 </button>
 
-                <dialog id="checkout_confirm_modal" className="modal modal-bottom sm:modal-middle">
+                <input type="checkbox" id="checkout_confirm_modal" className="modal-toggle" />
+                <div className="modal modal-bottom sm:modal-middle">
                   <div className="modal-box sm:min-w-2xl">
-                    <h3 className="font-bold text-lg mb-4 text-error">Order Details</h3>
+                    <h3 className="ont-bold text-lg mb-4 text-error">Order Details</h3>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-accent">Order Information</h4>
-                        <div className="divider m-0"></div>
-                        <p><span className="font-medium">Wedding Date:</span> {data.booking_date}</p>
-                        <p><span className="font-medium">Notes:</span> {data.Notes}</p>
-                      </div>
-
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-accent">Payment Details</h4>
-                        <div className="divider m-0"></div>
-                        <p><span className="font-medium">Amount: </span>
-                          {new Intl.NumberFormat('id-ID', {
-                            style: 'currency',
-                            currency: productsByIDState?.currency || 'IDR',
-                            minimumFractionDigits: 0
-                          }).format(productsByIDState?.price || 0)}
-                        </p>
-                        <p><span className="font-medium">Method:</span> {data.payment_method.toUpperCase()} Virtual Account</p>
-                      </div>
-
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-accent">Customer Information</h4>
-                        <div className="divider m-0"></div>
-                        <p><span className="font-medium">Name:</span> {userState.name}</p>
-                        <p><span className="font-medium">Email:</span> {userState.email}</p>
-                        <p><span className="font-medium">Phone:</span> {userState.phone || '-'}</p>
-                      </div>
-
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-accent">Product Information</h4>
-                        <div className="divider m-0"></div>
-                        <p><span className="font-medium">Package:</span> {productsByIDState.name}</p>
-                        <p><span className="font-medium">Price: </span>
-                          {new Intl.NumberFormat('id-ID', {
-                            style: 'currency',
-                            currency: productsByIDState?.currency || 'IDR',
-                            minimumFractionDigits: 0
-                          }).format(productsByIDState?.price || 0)}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="modal-action">
-                      <button className="btn btn-error" onClick={() => handleSubmit()}>Checkout</button>
-                      <form method="diaog">
-                        <div className="flex gap-2">
-                          <button className="btn">Cencel</button>
+                    <div className="space-y-6">
+                      {/* === Informasi Pasangan & Acara === */}
+                      <section>
+                        <h4 className="font-semibold text-accent mb-2">Order Information</h4>
+                        <div className="divider m-0 mb-4"></div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                          <div className="space-y-1">
+                            <p><span className="font-medium">Nama Pria:</span> {formData?.nama_pria}</p>
+                            <p><span className="font-medium">Alamat Pria:</span> {formData?.alamat_pria}</p>
+                            <p><span className="font-medium">Email Pria:</span> {formData?.email_pria}</p>
+                            <p><span className="font-medium">Instagram Pria:</span> {formData?.ig_pria}</p>
+                          </div>
+                          <div className="space-y-1">
+                            <p><span className="font-medium">Nama Wanita:</span> {formData?.nama_wanita}</p>
+                            <p><span className="font-medium">Alamat Wanita:</span> {formData?.alamat_wanita}</p>
+                            <p><span className="font-medium">Email Wanita:</span> {formData?.email_wanita}</p>
+                            <p><span className="font-medium">Instagram Wanita:</span> {formData?.ig_wanita}</p>
+                          </div>
+                          <div className="space-y-1">
+                            <p><span className="font-medium">Tanggal Akad:</span> {formData?.tgl_akad}</p>
+                            <p><span className="font-medium">Jam Akad:</span> {formData?.jam_akad}</p>
+                            <p><span className="font-medium">Tanggal Acara:</span> {formData?.tgl_acara}</p>
+                          </div>
+                          <div className="space-y-1">
+                            <p><span className="font-medium">Jumlah Tamu:</span> {formData?.jumlah_tamu}</p>
+                            <p><span className="font-medium">Tanggal Tech Meeting:</span> {formData?.tgl_tech_meeting}</p>
+                            <p><span className="font-medium">Lokasi Pernikahan:</span> {formData?.lokasi_pernikahan}</p>
+                          </div>
                         </div>
-                      </form>
+                      </section>
+
+                      {/* === Informasi Produk === */}
+                      <section>
+                        <h4 className="font-semibold text-accent mb-2">Product Information</h4>
+                        <div className="divider m-0 mb-4"></div>
+                        <div className="space-y-1 text-sm">
+                          <p><span className="font-medium">Package:</span> {productsByIDState?.name}</p>
+                          <p>
+                            <span className="font-medium">Price:</span>{" "}
+                            {new Intl.NumberFormat("id-ID", {
+                              style: "currency",
+                              currency: productsByIDState?.currency || "IDR",
+                              minimumFractionDigits: 0,
+                            }).format(productsByIDState?.price || 0)}
+                          </p>
+                        </div>
+                      </section>
+
+                      <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        {/* === Informasi Pembayaran === */}
+                        <div>
+                          <h4 className="font-semibold text-accent mb-2">Payment Details</h4>
+                          <div className="divider m-0 mb-4"></div>
+                          <div className="space-y-1 text-sm">
+                            <p>
+                              <span className="font-medium">Amount:</span>{" "}
+                              {new Intl.NumberFormat("id-ID", {
+                                style: "currency",
+                                currency: productsByIDState?.currency || "IDR",
+                                minimumFractionDigits: 0,
+                              }).format(productsByIDState?.price || 0)}
+                            </p>
+                            <p><span className="font-medium">Method:</span> {paymentMethod?.toUpperCase()} Virtual Account</p>
+                          </div>
+                        </div>
+
+                        {/* === Informasi Pelanggan === */}
+                        <div>
+                          <h4 className="font-semibold text-accent mb-2">Customer Information</h4>
+                          <div className="divider m-0 mb-4"></div>
+                          <div className="space-y-1 text-sm">
+                            <p><span className="font-medium">Name:</span> {userState?.name}</p>
+                            <p><span className="font-medium">Email:</span> {userState?.email}</p>
+                            <p><span className="font-medium">Phone:</span> {userState?.phone || '-'}</p>
+                          </div>
+                        </div>
+                      </section>
+
                     </div>
 
+                    {/* <div className="modal-action mt-6">
+                      <button className="btn btn-error" onClick={handleSubmit}>Checkout</button>
+                      <button className="btn" onClick={() => document.getElementById('checkout_confirm_modal').close()}>Cancel</button>
+                    </div> */}
+                    <div className="modal-action mt-6">
+                      <button className="btn btn-error" onClick={handleSubmit}>Checkout</button>
+                      <label htmlFor="checkout_confirm_modal" className="btn">Cancel</label>
+                    </div>
                   </div>
-                </dialog>
+                </div>
+
+
+
 
               </div>
 
             </div>
 
-          </div>
+          </form>
 
         ) : (
           <div className="flex justify-center items-center h-screen">
