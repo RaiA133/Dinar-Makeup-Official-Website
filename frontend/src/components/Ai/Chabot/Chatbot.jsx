@@ -143,7 +143,7 @@ const Chatbot = () => {
         try {
           const el = document.querySelector(step.element);
           if (!el) {
-            console.warn("❌ Invalid selector or element not found: " + step.element);
+            console.warn("Invalid selector or element not found: " + step.element);
             return null;
           }
           return {
@@ -152,7 +152,7 @@ const Chatbot = () => {
             position: step.position
           };
         } catch (err) {
-          console.warn("⚠️ Skipping invalid selector: " + step.element  + "—" + err.message);
+          console.warn("Skipping invalid selector: " + step.element  + "—" + err.message);
           return null;
         }
       })
@@ -258,7 +258,7 @@ const Chatbot = () => {
                     Pakai AI Tour Guide
                     <div className="animate-spin-slow">
                       <SparklesIcon className="h-5 w-5 text-primary animate-pulse" />
-                    </div> 
+                    </div>
                     ?
                   </div>
                 </div>
