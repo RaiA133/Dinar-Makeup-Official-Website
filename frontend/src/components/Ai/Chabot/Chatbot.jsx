@@ -161,8 +161,8 @@ const Chatbot = () => {
 
   const startTour = useCallback(() => { // INTROJS
     setShowChatbot(false);
-    console.log("introJsSteps", introJsSteps.step);
-    console.log("steps", resolveSteps(introJsSteps.step));
+    // console.log("introJsSteps", introJsSteps.step);
+    // console.log("steps", resolveSteps(introJsSteps.step));
     navigate(introJsSteps.url);
     setTimeout(() => {
       introJs()
@@ -214,7 +214,7 @@ const Chatbot = () => {
             {messages.map((message, index) => (
 
               <div key={index} className={`chat my-2 ${message.sender === 'user' ? 'chat-end' : 'chat-start'}`}>
-                <div className={`chat-bubble ${message.sender === 'user' ? 'chat-bubble-error' : ''}`}>
+                <div className={`chat-bubble ${message.sender === 'user' ? 'chat-bubble-error text-base-100' : ''}`}>
                   <MarkdownRenderer>{message.text}</MarkdownRenderer>
                 </div>
               </div>
@@ -239,7 +239,7 @@ const Chatbot = () => {
               <div className="chat my-2 chat-start">
                 <div className="chat-bubble flex items-center gap-4 max-w-11/12 skeleton">
                   <div className="animate-spin-slow">
-                    <SparklesIcon className="h-6 w-6 text-primary animate-pulse" />
+                    <SparklesIcon className="h-5 w-5 text-primary animate-pulse" />
                   </div>
                   <div className="flex flex-col">
                     <p className="text-xs text-base-content">
@@ -254,24 +254,25 @@ const Chatbot = () => {
             {askToGuideButton && !showGuideButton && !isLoadingChatGuide && (
               <div className='flex items-center justify-start'>
                 <div className="chat my-2 chat-start w-full">
-                  <div className="chat-bubble">
-                    Pakai AI Tour Guide ?
+                  <div className="chat-bubble flex items-center gap-1">
+                    Pakai AI Tour Guide
+                    <div className="animate-spin-slow">
+                      <SparklesIcon className="h-5 w-5 text-primary animate-pulse" />
+                    </div> 
+                    ?
                   </div>
                 </div>
                 <div className="flex justify-center gap-2">
-                  <button className='btn btn-sm btn-error' onClick={handleUseAiTourGuide}>Ya</button>
+                  <button className='btn btn-sm btn-error text-base-100' onClick={handleUseAiTourGuide}>Ya</button>
                   <button className='btn btn-sm' onClick={() => setAskToGuideButton(false)}>Tidak</button>
                 </div>
               </div>
             )}
 
             {/* START AI TOUR GUIDE */}
-            {showGuideButton && (
-              <div className="flex justify-center w-full">
-                <button className='btn' onClick={startTour}>
-                  {/* <div className="animate-spin-slow">
-                    <SparklesIcon className="h-6 w-6 text-primary animate-pulse" />
-                  </div> */}
+            {showGuideButton && !isLoading && (
+              <div className="flex justify-center w-full mt-5">
+                <button className='btn bg-gradient-to-br from-error to-accent text-base-100 hover:shadow-md animate-pulse hover:animate-none' onClick={startTour}>
                   Mulai AI Tour Guide
                 </button>
               </div>
@@ -295,7 +296,7 @@ const Chatbot = () => {
                 </label>
                 <div className="validator-hint hidden">Enter valid email address</div>
               </div>
-              <button className="btn btn-error join-item"
+              <button className="btn btn-error join-item text-base-100"
                 disabled={isLoading || !inputValue.trim()}>
                 <PaperAirplaneIcon className="h-5 w-5" />
               </button>
