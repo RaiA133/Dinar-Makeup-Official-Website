@@ -4,7 +4,7 @@ function Makeups() {
   const data = {
     "regularMakeupPackages": [
       {
-        "name": "Siraman Package",
+        "name": "Makeup Regular: Siraman Package",
         "priceOwner": "Rp 750.000",
         "priceTeam": "Rp 600.000",
         "popular": true,
@@ -24,7 +24,7 @@ function Makeups() {
         ]
       },
       {
-        "name": "Pre-Wedding / Tunangan / Wisuda",
+        "name": "Makeup Regular: Pre-Wedding / Tunangan / Wisuda",
         "priceOwner": "Rp 350.000",
         "priceTeam": "Rp 250.000",
         "popular": false,
@@ -42,7 +42,7 @@ function Makeups() {
         ]
       },
       {
-        "name": "Bridesmaid/Family Makeup",
+        "name": "Makeup Regular: Bridesmaid/Family Makeup",
         "priceOwner": "Rp 300.000",
         "priceTeam": "Rp 200.000",
         "popular": false,
@@ -62,7 +62,7 @@ function Makeups() {
     ],
     "weddingMakeupPackages": [
       {
-        "name": "Basic Wedding Package",
+        "name": "Wedding Makeup: Basic Wedding Package",
         "price": "Rp 7.000.000",
         "popular": true,
         "features": [
@@ -87,7 +87,7 @@ function Makeups() {
         ]
       },
       {
-        "name": "Standard Wedding Package",
+        "name": "Wedding Makeup: Standard Wedding Package",
         "price": "Rp 6.000.000",
         "popular": false,
         "features": [
@@ -109,7 +109,7 @@ function Makeups() {
         ]
       },
       {
-        "name": "Akad Only Package",
+        "name": "Wedding Makeup: Akad Only Package",
         "price": "Rp 2.500.000 - Rp 3.000.000",
         "popular": false,
         "features": [
@@ -225,7 +225,7 @@ function Makeups() {
 
         {/* Wedding General Terms */}
         <div className="bg-gray-50 rounded-xl p-6 mb-10">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Wedding General Terms & Conditions</h3>
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Wedding Makeup General Terms & Conditions</h3>
           <ul className="space-y-3 text-gray-600">
             {data.generalWeddingTerms.map((term, i) => (
               <li key={i} className="flex">

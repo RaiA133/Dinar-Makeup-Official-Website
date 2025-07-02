@@ -1,13 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { ArrowPathIcon, PaperAirplaneIcon } from '@heroicons/react/24/solid';
-import { healthCheck, chatBot, guideBot } from "../../../modules/fetch/chatbot";
-import { ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/solid';
+import { PaperAirplaneIcon, SparklesIcon, ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/solid';
+import { chatBot, guideBot } from "../../../modules/fetch/chatbot";
 import { GoogleGenAI } from "@google/genai";
 import { useNavigate } from 'react-router-dom';
 import MarkdownRenderer from './MarkdownRenderer';
 import introJs from 'intro.js';
 import 'intro.js/introjs.css';
-
+import 'intro.js/themes/introjs-modern.css';
 // import { GoogleAuth } from 'google-auth-library';
 
 const Chatbot = () => {
@@ -17,37 +16,23 @@ const Chatbot = () => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingChatGuide, setIsLoadingChatGuide] = useState(false);
   const [showChatbot, setShowChatbot] = useState(false);
-  const [introJsSteps, setIntroJsSteps] = useState([
-    {
-      element: '.navbar',
-      intro: 'Ini adalah navbar',
-      position: 'bottom'
-    },
-    {
-      element: '.hero-content',
-      intro: 'Ini adalah Hero',
-      position: 'right'
-    },
-    {
-      element: '.login',
-      intro: 'Klik di sini untuk login',
-      position: 'left'
-    },
-  ])
+
+  const [inputValueGuide, setInputValueGuide] = useState('');
+  const [askToGuideButton, setAskToGuideButton] = useState(false);
+  const [showGuideButton, setShowGuideButton] = useState(false);
+  const [introJsSteps, setIntroJsSteps] = useState([])
+
   const messagesEndRef = useRef(null);
 
-
-
-
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || "YOUR_API_KEY" });
-
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (inputValue.trim() === '' || isLoading) return;
 
-    // Tambahkan pesan USER
+    // pesan USER
     const newUserMessage = {
       id: messages.length + 1,
       text: inputValue,
@@ -56,68 +41,9 @@ const Chatbot = () => {
 
     setMessages([...messages, newUserMessage]);
     setInputValue('');
-    setIsLoading(true);
+    setIsLoading(true)
 
     try {
-
-      // ====================================================================================================================================
-
-      // // DECISION MAKER
-      // const decision = ai.chats.create({
-      //   model: "gemini-2.5-flash",
-      //   history: [
-      //     {
-      //       role: "model",
-      //       parts: [{
-      //         text: `beri saya output simple saja berupa 'chat' atau 'tour'. tentukan dari pesan yg akan diinput. Jika pertanyaan menyangkut 
-      //         pertanyaan seperti letak halaman, dan info lain yang menanyakan lokasi tampilan di website output adalah 'tour' saja, tapi jika 
-      //         konversesi biasa berikan output 'chat' saja`
-      //       }],
-      //     }
-      //   ],
-      // });
-      // const decisionResponse = await decision.sendMessage({
-      //   message: inputValue
-      // });
-
-      // if (decisionResponse.text == "tour") {
-
-      //   console.log(decisionResponse);
-      //   console.log('ini tour');
-      //   return
-
-      //   const response = await guideBot(inputValue);
-
-      // } else if (decisionResponse.text == "chat") {
-
-      //   console.log(decisionResponse);
-      //   console.log('ini chat');
-      //   return
-
-      //   chatHistory = messages.map(msg => ({
-      //     role: msg.sender === 'user' ? 'user' : 'model',
-      //     parts: [{ text: msg.text }]
-      //   }));
-
-      //   chat = ai.chats.create({
-      //     model: "gemini-2.5-flash",
-      //     history: [
-      //       {
-      //         role: "model",
-      //         parts: [{
-      //           text: `Nama ada adalah Dinar, Anda adalah asisten virtual untuk Dinar Makeup, sebuah layanan makeup profesional.
-      //           Ambil data dan informasi seluruhnya dari website ini : https://dinar-makeup-official-website.vercel.app/
-      //           ` }],
-      //       },
-      //       ...chatHistory
-      //     ],
-      //     config: {
-      //       tools: [{ urlContext: {} }, { googleSearch: {} }],
-      //     },
-      //   });
-      // }
-
-      // ====================================================================================================================================
 
       let chatHistory;
       chatHistory = messages.map(msg => ({
@@ -125,20 +51,49 @@ const Chatbot = () => {
         parts: [{ text: msg.text }]
       }));
 
-      const chatbotAPI = await chatBot(inputValue, chatHistory);
+      // ====================================================================================================================================
+
+      const decision = ai.chats.create({ // DECISION MAKER
+        model: "gemini-2.5-flash",
+        history: [
+          {
+            role: "model",
+            parts: [{
+              text: `beri saya output simple saja berupa 'chat' atau 'tour'. tentukan dari pesan yg akan diinput. Jika pertanyaan menyangkut 
+              pertanyaan seperti letak halaman, dan info lain yang menanyakan lokasi tampilan di website output adalah 'tour' saja, tapi jika 
+              konversesi biasa berikan output 'chat' saja`
+            }],
+          }
+        ],
+      });
+
+      const decisionResponse = await decision.sendMessage({ message: inputValue });
+
+      // ====================================================================================================================================
+
+      const chatbotAPI = await chatBot(inputValue, chatHistory); // HIT API CHATBOT
       const result = chatbotAPI.data;
 
       let text = ''
       if (result.status == "200") text = result.data;
       else text = 'Terjadi masalah, coba lagi nanti';
 
-      // Tambahkan response AI
+      // Tambahkan response AI chat
       const botResponse = {
         id: messages.length + 2,
         text,
         sender: 'bot'
       };
       setMessages(prev => [...prev, botResponse]);
+
+      // ====================================================================================================================================
+
+      if (decisionResponse.text == "tour") {
+        setInputValueGuide(inputValue) // Simpan data pesan untuk AI TourGuide
+        setAskToGuideButton(true)
+        setIntroJsSteps([])
+        setShowGuideButton(false)
+      }
 
     } catch (error) {
       console.error('Error calling Gemini API:', error);
@@ -149,9 +104,9 @@ const Chatbot = () => {
       };
       setMessages(prev => [...prev, errorMessage]);
     } finally {
+      setIsLoadingChatGuide(false)
       setIsLoading(false);
     }
-
   };
 
   // Auto-scroll ke pesan terbaru
@@ -161,17 +116,69 @@ const Chatbot = () => {
 
   // ===============================================================================================================
 
-  const startTour = useCallback(() => {
-    introJs().setOptions({
-      steps: introJsSteps,
-      nextLabel: 'next',
-      prevLabel: 'back',
-      skipLabel: 'x',
-      doneLabel: 'done',
-      showProgress: true
-    })
-      .start();
-  }, []);
+  const handleUseAiTourGuide = useCallback(async () => { // HIT API AI TOURGUIDE
+    setIsLoadingChatGuide(true);
+    try {
+      let chatHistory = messages.map(msg => ({
+        role: msg.sender === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.text }]
+      }));
+
+      const fetch = await guideBot(inputValueGuide, chatHistory);
+      const response = fetch.data;
+      if (response) {
+        setIntroJsSteps(response.data?.[0]);
+        setShowGuideButton(true);
+      }
+    } catch (err) {
+      console.error('Gagal memuat tour guide:', err);
+    } finally {
+      setIsLoadingChatGuide(false);
+    }
+  }, [inputValueGuide, messages]);
+
+  const resolveSteps = (stepsFromApi) => { // GUNAKAN TARGET ELEMENT UNTUK INTROJS, YG ERROR TIDAK DIGUNAKAN
+    return stepsFromApi
+      .map(step => {
+        try {
+          const el = document.querySelector(step.element);
+          if (!el) {
+            console.warn(`❌ Invalid selector or element not found: "${step.element}"`);
+            return null;
+          }
+          return {
+            element: el,
+            intro: step.intro,
+            position: step.position
+          };
+        } catch (err) {
+          console.warn(`⚠️ Skipping invalid selector: "${step.element}" — ${err.message}`);
+          return null;
+        }
+      })
+      .filter(Boolean); // buang hasil null
+  };
+
+  const startTour = useCallback(() => { // INTROJS
+    setShowChatbot(false);
+    console.log("introJsSteps", introJsSteps.step);
+    console.log("steps", resolveSteps(introJsSteps.step));
+    navigate(introJsSteps.url);
+    setTimeout(() => {
+      introJs()
+        .setOptions({
+          steps: resolveSteps(introJsSteps.step),
+          nextLabel: "next",
+          prevLabel: "back",
+          skipLabel: "x",
+          doneLabel: "done",
+          showProgress: true,
+        })
+        .start();
+    }, 1000);
+  }, [introJsSteps]);
+
+
 
   return (
     <div className="">
@@ -190,37 +197,86 @@ const Chatbot = () => {
         <div className="flex flex-col h-full max-w-xs sm:max-w-md mx-auto bg-base-100 rounded-lg shadow-lg overflow-hidden">
 
           {/* Header Chatbot */}
-          <div className="bg-error text-base-100 p-4 flex items-center">
-            <div className="w-10 h-10 rounded-full bg-base-100 flex items-center justify-center text-error font-bold">
-              DM
+          <div className="bg-error text-base-100 p-4 flex items-center justify-between">
+            <div className="flex items-center">
+              <div className="w-10 h-10 rounded-full bg-base-100 flex items-center justify-center text-error font-bold">
+                DM
+              </div>
+              <div className="ml-3">
+                <h3 className="font-bold">Dinar Makeup Assistant</h3>
+                <p className="text-xs">Online</p>
+              </div>
             </div>
-            <div className="ml-3">
-              <h3 className="font-bold">Dinar Makeup Assistant</h3>
-              <p className="text-xs">Online</p>
-            </div>
-            {/* <button className='btn' onClick={startTour} style={{ marginTop: '20px' }}>
-                  Mulai Tour Guide
-                </button> */} 
           </div>
 
           {/* Area Pesan */}
           <div className="flex-1 p-4 overflow-y-auto bg-base-50 max-h-96 text-xs">
-            {messages.map((message) => (
+            {messages.map((message, index) => (
 
-              <div key={message.id} className={`chat ${message.sender === 'user' ? 'chat-end' : 'chat-start'}`}>
+              <div key={index} className={`chat my-2 ${message.sender === 'user' ? 'chat-end' : 'chat-start'}`}>
                 <div className={`chat-bubble ${message.sender === 'user' ? 'chat-bubble-error' : ''}`}>
                   <MarkdownRenderer>{message.text}</MarkdownRenderer>
                 </div>
               </div>
 
             ))}
-            {isLoading && (
-              <div className="flex justify-start mb-4">
-                <div className="bg-base-100 text-base-800 px-4 py-2 rounded-lg rounded-bl-none shadow">
-                  <ArrowPathIcon className="h-5 w-5 animate-spin" />
+
+            {/* LOADING CHATBOT */}
+            {isLoading && !isLoadingChatGuide && (
+              <div className="chat my-2 chat-start">
+                <div className="chat-bubble flex gap-5 items-center max-w-11/12">
+                  <div className="flex w-92 flex-col gap-2">
+                    <div className="skeleton bg-neutral-content h-2 w-11/12"></div>
+                    <div className="skeleton bg-neutral-content h-2 w-9/12"></div>
+                    <div className="skeleton bg-neutral-content h-2 w-7/12"></div>
+                  </div>
                 </div>
               </div>
             )}
+
+            {/* LOADING AI TOUR GUIDE */}
+            {isLoadingChatGuide && (
+              <div className="chat my-2 chat-start">
+                <div className="chat-bubble flex items-center gap-4 max-w-11/12 skeleton">
+                  <div className="animate-spin-slow">
+                    <SparklesIcon className="h-6 w-6 text-primary animate-pulse" />
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="text-xs text-base-content">
+                      AI sedang membuatkan tour guide untuk Anda.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* HIT API AI TOUR GUIDE ? */}
+            {askToGuideButton && !showGuideButton && !isLoadingChatGuide && (
+              <div className='flex items-center justify-start'>
+                <div className="chat my-2 chat-start w-full">
+                  <div className="chat-bubble">
+                    Pakai AI Tour Guide ?
+                  </div>
+                </div>
+                <div className="flex justify-center gap-2">
+                  <button className='btn btn-sm btn-error' onClick={handleUseAiTourGuide}>Ya</button>
+                  <button className='btn btn-sm' onClick={() => setAskToGuideButton(false)}>Tidak</button>
+                </div>
+              </div>
+            )}
+
+            {/* START AI TOUR GUIDE */}
+            {showGuideButton && (
+              <div className="flex justify-center w-full">
+                <button className='btn' onClick={startTour}>
+                  {/* <div className="animate-spin-slow">
+                    <SparklesIcon className="h-6 w-6 text-primary animate-pulse" />
+                  </div> */}
+                  Mulai AI Tour Guide
+                </button>
+              </div>
+            )}
+
             <div ref={messagesEndRef} />
           </div>
 
