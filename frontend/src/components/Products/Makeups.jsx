@@ -62,7 +62,7 @@ function Makeups() {
     ],
     "weddingMakeupPackages": [
       {
-        "name": "Wedding Makeup: Basic Wedding Package",
+        "name": "Makeup Wedding: Basic Wedding Package",
         "price": "Rp 7.000.000",
         "popular": true,
         "features": [
@@ -87,7 +87,7 @@ function Makeups() {
         ]
       },
       {
-        "name": "Wedding Makeup: Standard Wedding Package",
+        "name": "Makeup Wedding: Standard Wedding Package",
         "price": "Rp 6.000.000",
         "popular": false,
         "features": [
@@ -109,7 +109,7 @@ function Makeups() {
         ]
       },
       {
-        "name": "Wedding Makeup: Akad Only Package",
+        "name": "Makeup Wedding: Akad Only Package",
         "price": "Rp 2.500.000 - Rp 3.000.000",
         "popular": false,
         "features": [
