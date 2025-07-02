@@ -64,7 +64,7 @@ function Weddings() {
               //   document.getElementById('my_modal_product').showModal();
               // }}
               // style={{ cursor: "pointer" }}
-              id={product.id}
+              id={`wedding-package_${product.id}`}
               className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 group overflow-hidden"
               key={index}>
 
