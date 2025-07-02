@@ -98,25 +98,25 @@ function HomePage() {
       >
         {/* Bunga-bunga (4 buah) */}
         <img
-          src="/img/home/bg-flower.png"
+          src="/img/background/bg-flower.png"
           alt="flower"
           className="absolute top-[10%] left-[-60px] w-full sm:w-1/2 opacity-30 z-0 pointer-events-none"
           style={{ transform: `rotate(${rotateAngles[0]}deg)` }}
         />
         <img
-          src="/img/home/bg-flower.png"
+          src="/img/background/bg-flower.png"
           alt="flower"
           className="absolute top-[50%] left-[-80px] w-full sm:w-1/2 opacity-30 z-0 pointer-events-none"
           style={{ transform: `rotate(${rotateAngles[1]}deg)` }}
         />
         <img
-          src="/img/home/bg-flower.png"
+          src="/img/background/bg-flower.png"
           alt="flower"
           className="absolute top-[20%] right-[-60px] w-full sm:w-1/2 opacity-30 z-0 pointer-events-none"
           style={{ transform: `rotate(${rotateAngles[2]}deg)` }}
         />
         <img
-          src="/img/home/bg-flower.png"
+          src="/img/background/bg-flower.png"
           alt="flower"
           className="absolute top-[65%] right-[-80px] w-full sm:w-1/2 opacity-30 z-0 pointer-events-none"
           style={{ transform: `rotate(${rotateAngles[3]}deg)` }}

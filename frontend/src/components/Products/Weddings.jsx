@@ -6,6 +6,9 @@ import { UserContext } from "../../contexts/UserContext";
 import toast from "react-hot-toast";
 import { FiCheck, FiShoppingCart } from "react-icons/fi";
 
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
+
 function Weddings() {
   let location = useLocation();
   const navigate = useNavigate();
@@ -220,28 +223,51 @@ function Weddings() {
 
                 <div className="max-h-[75vh] overflow-y-auto">
                   {/* Key Features */}
+
                   <div className="py-6 border-b border-base-100">
-                    <h3 className="text-lg font-semibold text-base-700 mb-3">Highlight Features</h3>
+                    <h3 className="text-lg font-semibold text-base-700 mb-3">Fitur Sorotan</h3>
                     <div className="grid grid-cols-2 gap-3 text-xs sm:text-sm md:text-md">
-                      {productsByIDState?.detail_groups?.slice(0, 4).map((group, idx) => (
-                        <div key={idx} className="flex items-start">
-                          <div className="bg-error/10 p-2 rounded-full mr-3">
-                            <FiCheck className="text-error" />
+                      {productsByIDState?.detail_groups?.slice(0, 4).map((group, idx) => {
+                        const tooltipId = `tooltip-team-${idx}`; // ID unik untuk tiap tooltip
+
+                        return (
+                          <div key={idx} className="flex items-start">
+
+                            {/* Tooltip terpisah untuk setiap elemen */}
+                            <Tooltip
+                              id={tooltipId}
+                              delayShow={0}
+                              events={['click']}
+                              style={{ backgroundColor: "rgb(229, 139, 139)", color: "#FFFFFF", maxWidth: "200px", textAlign: "center" }}
+                              content={
+                                <span className="w-2">{group.detail_items?.[0]?.description || 'Included'}</span>
+                              }
+                            />
+
+                            <div className="bg-error/10 p-2 rounded-full mr-3">
+                              <FiCheck className="text-error" />
+                            </div>
+
+                            <div
+                              data-tooltip-id={tooltipId} // cocok dengan ID tooltip di atas
+                              data-tooltip-place="top"
+                              data-tooltip-variant="light"
+                            >
+                              <h4 className="font-medium">{group.group_name}</h4>
+                              <p className="text-sm text-base-500 line-clamp-1">
+                                {group.detail_items?.[0]?.description || 'Included'}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <h4 className="font-medium">{group.group_name}</h4>
-                            <p className="text-sm text-base-500 line-clamp-1">
-                              {group.detail_items?.[0]?.description || 'Included'}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
 
+
                   {/* Detailed Specifications */}
                   <div className="py-6 flex-grow overflow-y-auto">
-                    <h3 className="text-lg font-semibold text-base-700 mb-4">Package Details</h3>
+                    <h3 className="text-lg font-semibold text-base-700 mb-4">Detail Paket</h3>
                     <div className="space-y-4">
                       {productsByIDState?.detail_groups?.map((group) => (
                         <div key={group.id} className="collapse collapse-plus bg-base-100 border border-base-200">
@@ -274,9 +300,9 @@ function Weddings() {
 
                 {/* Sticky Footer */}
                 <div className="sticky bottom-0 bg-base-100 pt-4 pb-7 border-t border-base-100">
-                  <div className="flex gap-4">
+                  <div className="flex gap-3">
                     <button
-                      className="btn btn-error flex-1 gap-2 hover:shadow-lg transition-all"
+                      className="btn btn-error flex-1 gap-2 w-full hover:shadow-lg transition-all text-xs sm:text-md"
                       onClick={() => {
                         if (isLogin) {
                           if (isProfileFulfill) navigate(`/order/${productsByIDState?.id}`);
@@ -294,11 +320,11 @@ function Weddings() {
                         }
                       }}
                     >
-                      <FiShoppingCart /> Order Now
+                      <FiShoppingCart /> <span className="flex">Order</span>
                     </button>
                     <form method="dialog" className="flex-1">
-                      <button className="btn btn-outline w-full hover:bg-base-50">
-                        Cencel
+                      <button className="btn btn-outline w-full hover:bg-base-50 text-xs sm:text-md">
+                        Batal
                       </button>
                     </form>
                   </div>

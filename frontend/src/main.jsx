@@ -10,7 +10,7 @@ import { AdminContextProvider } from './contexts/AdminContext.jsx';
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Router>
-      <GoogleOAuthProvider clientId={import.meta.env.VITE_AI_GOOGLE_CLIENT_ID}>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
         <UserContextProvider>
           <ProductsContextProvider>
             <AdminContextProvider>

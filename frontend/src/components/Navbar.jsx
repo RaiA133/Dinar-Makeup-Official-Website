@@ -1,10 +1,10 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
-import logoDinarMakeupCrop from '/img/logo/logoDinarMakeupCrop.jpg';
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from "js-cookie";
 import { UserContext } from '../contexts/UserContext';
 import { googleLogout } from '@react-oauth/google';
+import Logo from './Navbar/Logo';
 
 
 function Navbar() {
@@ -54,8 +54,7 @@ function Navbar() {
 
         {/* Logo Dinar Makeup */}
         <a style={{ cursor: 'pointer' }} onClick={() => navigate("/")} className='flex items-center gap-5'>
-          <img className="w-10 rounded-full lg:ms-5" src={logoDinarMakeupCrop} />
-          <span className='font-rochester text-sm sm:text-xl md:text-2xl '>Dinar Makeups</span>
+          <Logo />
         </a>
 
       </div>
