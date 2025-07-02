@@ -34,7 +34,7 @@ function Weddings() {
 
       {/* Header Section */}
       {window.location.pathname === "/" && (
-        <div className="flex justify-center text-center gap-10 my-10 items-center">
+        <div id="header-wedding-packages" className="flex justify-center text-center gap-10 my-10 items-center">
           <div className="p-2">
             <h2 className="text-5xl font-bold mb-7 text-base-950">Paket</h2>
             <p className="text-lg text-base-600">
@@ -47,7 +47,7 @@ function Weddings() {
       <section>
 
         {location.pathname == "/pricing" && (
-          <div className="text-center mb-16">
+          <div id="header-wedding-packages-type-wedding" className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-base-900 mb-4">Wedding Packages</h1>
             <p className="text-lg text-base-600 max-w-2xl mx-auto">
               Paket yang Disesuaikan untuk Setiap Cerita Cinta
@@ -64,6 +64,7 @@ function Weddings() {
               //   document.getElementById('my_modal_product').showModal();
               // }}
               // style={{ cursor: "pointer" }}
+              id={product.id}
               className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 group overflow-hidden"
               key={index}>
 
@@ -270,7 +271,7 @@ function Weddings() {
                     <h3 className="text-lg font-semibold text-base-700 mb-4">Detail Paket</h3>
                     <div className="space-y-4">
                       {productsByIDState?.detail_groups?.map((group) => (
-                        <div key={group.id} className="collapse collapse-plus bg-base-100 border border-base-200">
+                        <div key={group.id} id={group.id} className="collapse collapse-plus bg-base-100 border border-base-200">
                           <input type="radio" name="product-accordion" />
                           <div className="collapse-title font-medium text-md sm:text-lg flex items-center">
                             <div className="absolute w-8 h-8 rounded-full bg-error/10 flex items-center justify-center mr-3">
@@ -283,7 +284,7 @@ function Weddings() {
                           <div className="collapse-content">
                             <ul className="space-y-3 pl-2">
                               {group?.detail_items?.map((item) => (
-                                <li key={item?.id} className="flex items-center">
+                                <li key={item?.id} id={item.id} className="flex items-center">
                                   <div className="bg-success/10 p-1 rounded-full mr-3 mt-1">
                                     <FiCheck className="text-success text-sm" />
                                   </div>
@@ -338,7 +339,7 @@ function Weddings() {
       </section>
 
       {window.location.pathname === "/" && (
-        <div className="flex justify-center text-center gap-10 my-10 items-center">
+        <div id="tombol-data-wedding-selengkapnya" className="flex justify-center text-center gap-10 my-10 items-center">
           <div className="flex justify-end items-center p-2">
             <button
               className="btn btn-error btn-outline text-base-content hover:btn-error btn-lg"

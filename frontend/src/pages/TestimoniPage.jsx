@@ -50,7 +50,7 @@ export default function TestimoniPage() {
     <div className="mx-3">
       {/* Judul hanya di halaman home */}
       {window.location.pathname === "/" && (
-        <div className="text-center mb-12">
+        <div id='testimoni-header' className="text-center mb-12">
           <h2 className="text-5xl font-bold text-base-950 mb-4">Ulasan Tentang Kami</h2>
           <div className="flex justify-center gap-2">
             {[...Array(5)].map((_, i) => (
@@ -60,13 +60,13 @@ export default function TestimoniPage() {
         </div>
       )}
 
-      <section>
+      <section id='testimoni-content'>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center items-center gap-y-8 lg:gap-y-0 flex-wrap md:flex-wrap lg:flex-nowrap lg:flex-row lg:justify-between lg:gap-x-8 max-w-sm sm:max-w-2xl lg:max-w-full mx-auto">
 
-            <div className="w-full lg:w-2/5">
+            <div id='testimoni-content-detail' className="w-full lg:w-2/5">
               <span className="text-sm text-base-500 font-medium mb-4 block">Suara Hati Klien yang Telah Kami Layani</span>
-              <h2 className="text-4xl font-bold text-base-900 leading-[3.25rem] mb-8">
+              <h2 id='testimoni-content-detail-header' className="text-4xl font-bold text-base-900 leading-[3.25rem] mb-8">
                 Semua Pelanggan yang Memberikan{' '}
                 <span className="bg-clip-text bg-gradient-to-tr text-error">
                   Feedback
@@ -74,7 +74,7 @@ export default function TestimoniPage() {
               </h2>
 
               {/* Slider controls */}
-              <div className="flex items-center justify-center lg:justify-start gap-5">
+              <div id='testimoni-content-detail-slider-btn' className="flex items-center justify-center lg:justify-start gap-5">
                 <button id="slider-button-left" className='btn btn-outline btn-error px-5 w-fit'><FaChevronLeft/></button>
                 <button id="slider-button-right" className='btn btn-outline btn-error px-5 w-fit'><FaChevronRight/></button>
               </div>
@@ -105,7 +105,7 @@ export default function TestimoniPage() {
               >
                 {testimonials.map((testimonial) => (
                   <SwiperSlide key={testimonial.id}>
-                    <div className="group bg-base-100 border border-solid border-base-300 rounded-2xl max-sm:max-w-sm max-sm:mx-auto p-6 transition-all duration-500 hover:border-primary">
+                    <div id={`data-testimoni-${testimonial.id}`} className="group bg-base-100 border border-solid border-base-300 rounded-2xl max-sm:max-w-sm max-sm:mx-auto p-6 transition-all duration-500 hover:border-primary">
                       <div className="flex items-center gap-4 mb-4">
                         <div className="avatar">
                           <div className="w-16 rounded-full">
