@@ -53,6 +53,24 @@ const Chatbot = () => {
 
       // ====================================================================================================================================
 
+      const chatbotAPI = await chatBot(inputValue, chatHistory); // HIT API CHATBOT
+      const result = chatbotAPI.data;
+
+      let text = ''
+      if (result.status == "200") text = result.data;
+      else text = 'Terjadi masalah, coba lagi nanti';
+
+      // Tambahkan response AI chat
+      const botResponse = {
+        id: messages.length + 2,
+        text,
+        sender: 'bot'
+      };
+      setMessages(prev => [...prev, botResponse]);
+      setIsLoading(false);
+
+      // ====================================================================================================================================
+
       const decision = ai.chats.create({ // DECISION MAKER
         model: "gemini-2.5-flash",
         history: [
@@ -68,23 +86,6 @@ const Chatbot = () => {
       });
 
       const decisionResponse = await decision.sendMessage({ message: inputValue });
-
-      // ====================================================================================================================================
-
-      const chatbotAPI = await chatBot(inputValue, chatHistory); // HIT API CHATBOT
-      const result = chatbotAPI.data;
-
-      let text = ''
-      if (result.status == "200") text = result.data;
-      else text = 'Terjadi masalah, coba lagi nanti';
-
-      // Tambahkan response AI chat
-      const botResponse = {
-        id: messages.length + 2,
-        text,
-        sender: 'bot'
-      };
-      setMessages(prev => [...prev, botResponse]);
 
       // ====================================================================================================================================
 
@@ -105,7 +106,6 @@ const Chatbot = () => {
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoadingChatGuide(false)
-      setIsLoading(false);
     }
   };
 
