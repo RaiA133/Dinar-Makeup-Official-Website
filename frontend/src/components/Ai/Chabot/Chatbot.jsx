@@ -200,7 +200,7 @@ const Chatbot = () => {
             </div>
             {/* <button className='btn' onClick={startTour} style={{ marginTop: '20px' }}>
                   Mulai Tour Guide
-                </button> */}
+                </button> */} 
           </div>
 
           {/* Area Pesan */}
