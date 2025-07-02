@@ -143,7 +143,7 @@ const Chatbot = () => {
         try {
           const el = document.querySelector(step.element);
           if (!el) {
-            console.warn(`❌ Invalid selector or element not found: "${step.element}"`);
+            console.warn("❌ Invalid selector or element not found: " + step.element);
             return null;
           }
           return {
@@ -152,7 +152,7 @@ const Chatbot = () => {
             position: step.position
           };
         } catch (err) {
-          console.warn(`⚠️ Skipping invalid selector: "${step.element}" — ${err.message}`);
+          console.warn("⚠️ Skipping invalid selector: " + step.element  + "—" + err.message);
           return null;
         }
       })

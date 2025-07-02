@@ -168,6 +168,7 @@ function Makeups() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {data.weddingMakeupPackages.map((pkg, index) => (
             <div
+              id={`makeup-wedding-package-${index}`}
               key={index}
               className={`relative rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl ${pkg.popular ? 'border-2 border-error' : 'border border-gray-200'}`}
             >
