@@ -38,7 +38,7 @@ function Gallery() {
 
       {/* Judul (hanya ada di menu home) */}
       {window.location.pathname === "/" && (
-        <div className="flex justify-center text-center gap-10 my-10 items-center">
+        <div id="header-gallery-packages" className="flex justify-center text-center gap-10 my-10 items-center">
           <div className="p-2">
             <h2 className="text-5xl font-bold mb-7 text-base-950">Galeri Kami</h2>
             <p className="text-lg text-base-600">
@@ -80,10 +80,11 @@ function Gallery() {
         {/* )} */}
 
         {location.pathname !== "/" && (
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <div id="gallery-grid" className="grid grid-cols-2 gap-4 md:grid-cols-4">
             <div className="grid gap-4">
               <div >
                 <LazyLoadImage
+                  id="IMG_5814"
                   className="h-auto max-w-full rounded-lg object-cover object-center"
                   effect="opacity"
                   src={`/img/gallery/weddings/IMG_5814.PNG`}
@@ -92,6 +93,7 @@ function Gallery() {
               </div>
               <div>
                 <LazyLoadImage
+                  id="IMG_5787"
                   className="h-auto max-w-full rounded-lg object-cover object-center"
                   effect="opacity"
                   src={`/img/gallery/makeups/IMG_5787.PNG`}
@@ -100,6 +102,7 @@ function Gallery() {
               </div>
               <div>
                 <LazyLoadImage
+                  id="IMG_5819"
                   className="h-auto max-w-full rounded-lg object-cover object-center"
                   effect="opacity"
                   src={`/img/gallery/weddings/IMG_5819.PNG`}
@@ -108,6 +111,7 @@ function Gallery() {
               </div>
               <div>
                 <LazyLoadImage
+                  id="IMG_5847"
                   className="h-auto max-w-full rounded-lg object-cover object-center"
                   effect="opacity"
                   src={`/img/gallery/weddings/IMG_5847.PNG`}
@@ -118,6 +122,7 @@ function Gallery() {
             <div className="grid gap-4">
               <div>
                 <LazyLoadImage
+                  id="IMG_5777"
                   className="h-auto max-w-full rounded-lg object-cover object-center"
                   effect="opacity"
                   src={`/img/gallery/makeups/IMG_5777.PNG`}
@@ -126,6 +131,7 @@ function Gallery() {
               </div>
               <div>
                 <LazyLoadImage
+                  id="IMG_5851"
                   className="h-auto max-w-full rounded-lg object-cover object-center"
                   effect="opacity"
                   src={`/img/gallery/weddings/IMG_5851.PNG`}
@@ -134,6 +140,7 @@ function Gallery() {
               </div>
               <div>
                 <LazyLoadImage
+                  id="IMG_5786"
                   className="h-auto max-w-full rounded-lg object-cover object-center"
                   effect="opacity"
                   src={`/img/gallery/makeups/IMG_5786.PNG`}
@@ -144,6 +151,7 @@ function Gallery() {
             <div className="grid gap-4">
               <div>
                 <LazyLoadImage
+                  id="IMG_5805"
                   className="h-auto max-w-full rounded-lg object-cover object-center"
                   effect="opacity"
                   src={`/img/gallery/weddings/IMG_5805.PNG`}
@@ -152,6 +160,7 @@ function Gallery() {
               </div>
               <div>
                 <LazyLoadImage
+                  id="IMG_5794"
                   className="h-auto max-w-full rounded-lg object-cover object-center"
                   effect="opacity"
                   src={`/img/gallery/makeups/IMG_5794.PNG`}
@@ -160,6 +169,7 @@ function Gallery() {
               </div>
               <div>
                 <LazyLoadImage
+                  id="IMG_5797"
                   className="h-auto max-w-full rounded-lg object-cover object-center"
                   effect="opacity"
                   src={`/img/gallery/weddings/IMG_5797.PNG`}
@@ -170,6 +180,7 @@ function Gallery() {
             <div className="grid gap-4">
               <div>
                 <LazyLoadImage
+                  id="IMG_5848"
                   className="h-auto max-w-full rounded-lg object-cover object-center"
                   effect="opacity"
                   src={`/img/gallery/weddings/IMG_5848.PNG`}
@@ -178,6 +189,7 @@ function Gallery() {
               </div>
               <div>
                 <LazyLoadImage
+                  id="IMG_5803"
                   className="h-auto max-w-full rounded-lg object-cover object-center"
                   effect="opacity"
                   src={`/img/gallery/weddings/IMG_5803.PNG`}

@@ -4,7 +4,7 @@ function Contact() {
   return (
     <div className="mx-4 sm:mx-8 lg:mx-20 pb-20">
       {/* Header Section */}
-      <div className="text-center mb-16">
+      <div id='header-contact' className="text-center mb-16">
         <h1 className="text-4xl md:text-5xl font-bold text-base-900 mb-4">Kotak Kami</h1>
         <p className="text-lg text-base-600 max-w-2xl mx-auto">
           Hubungi Tim Dinar Makeup
@@ -12,7 +12,7 @@ function Contact() {
       </div>
 
       {/* Introduction Section */}
-      <div className="max-w-4xl mx-auto mb-16 space-y-6 text-center">
+      <div id='introduction-contact' className="max-w-4xl mx-auto mb-16 space-y-6 text-center">
         <p className="text-xl text-base-700 italic">
           "Siap merancang hari spesial Anda? Hubungi kami untuk konsultasi gratis. Kami dengan senang hati akan membantu menjawab semua pertanyaan Anda dan memberikan solusi terbaik untuk pernikahan Anda."
         </p>
@@ -24,9 +24,9 @@ function Contact() {
       </div>
 
       {/* Contact Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+      <div id='content-contact' className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
         {/* Map Section */}
-        <div className="rounded-xl overflow-hidden shadow-xl h-96">
+        <div id='map-contact' className="rounded-xl overflow-hidden shadow-xl h-96">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3959.6053260868666!2d107.7463964!3d-7.055574699999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68c728715530df%3A0x852616ff78dd6bc4!2sDinarMakeUp!5e0!3m2!1sen!2sid!4v1746799906670!5m2!1sen!2sid"
             className="w-full h-full border-0"
@@ -37,9 +37,9 @@ function Contact() {
         </div>
 
         {/* Contact Details */}
-        <div className="space-y-8">
+        <div id='contact-detail' className="space-y-8">
           {/* Address */}
-          <div className="flex items-start gap-6">
+          <div id='address-detail-contact' className="flex items-start gap-6">
             <div className="bg-error/10 p-3 rounded-full text-error">
               <FaMapMarkerAlt className="text-2xl" />
             </div>
@@ -52,7 +52,7 @@ function Contact() {
           </div>
 
           {/* Phone */}
-          <div className="flex items-start gap-6">
+          <div id='phone-detail-contact' className="flex items-start gap-6">
             <div className="bg-error/10 p-3 rounded-full text-error">
               <FaPhone className="text-2xl" />
             </div>
@@ -67,7 +67,7 @@ function Contact() {
           </div>
 
           {/* Email */}
-          <div className="flex items-start gap-6">
+          <div id='email-detail-contact' className="flex items-start gap-6">
             <div className="bg-error/10 p-3 rounded-full text-error">
               <FaEnvelope className="text-2xl" />
             </div>
@@ -82,7 +82,7 @@ function Contact() {
           </div>
 
           {/* Instagram */}
-          <div className="flex items-start gap-6">
+          <div id='instagram-detail-contact' className="flex items-start gap-6">
             <div className="bg-error/10 p-3 rounded-full text-error">
               <FaInstagram className="text-2xl" />
             </div>
@@ -97,7 +97,7 @@ function Contact() {
           </div>
 
           {/* Operating Hours */}
-          <div className="flex items-start gap-6">
+          <div id="operation-hour-detail-contact" className="flex items-start gap-6">
             <div className="bg-error/10 p-3 rounded-full text-error">
               <FaClock className="text-2xl" />
             </div>
@@ -115,13 +115,14 @@ function Contact() {
       </div>
 
       {/* Call to Action */}
-      <div className="bg-gradient-to-r from-accent to-error text-white rounded-xl p-8 text-center">
+      <div id='call-to-action-contact' className="bg-gradient-to-r from-accent to-error text-white rounded-xl p-8 text-center">
         <h2 className="text-2xl md:text-3xl font-bold mb-4">Punya Pertanyaan?</h2>
         <p className="text-lg mb-6 max-w-2xl mx-auto">
           Tim kami siap membantu Anda mewujudkan pernikahan impian Anda. Hubungi kami sekarang!
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <a
+            id='chat-via-whatsapp-contact'
             href="https://wa.me/628980000845"
             className="btn btn-outline btn-white hover:bg-white hover:text-base-content"
             target="_blank"
@@ -130,6 +131,7 @@ function Contact() {
             Chat via WhatsApp
           </a>
           <a
+            id='send-email-contact'
             href="mailto:dinar.dumilah@gmail.com"
             className="btn btn-outline btn-white hover:bg-white hover:text-base-content"
           >

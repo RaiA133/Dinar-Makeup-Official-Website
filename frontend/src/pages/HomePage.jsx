@@ -38,30 +38,31 @@ function HomePage() {
 
       {/* HERO */}
       <div
+        id='hero-home'
         className="hero min-h-lvh bg-cover bg-center pb-30"
         style={{
           backgroundImage:
             'linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.0), rgba(0,0,0,0.0), rgba(0,0,0,0.0), rgba(235,163,169,1)), url(/img/home/hero.jpg)',
         }}
       >
-        <div className="hero-content text-center w-fit backdrop-blur-xs">
+        <div id='hero-home-content' className="hero-content text-center w-fit backdrop-blur-xs">
           <div className="max-w-2xl space-y-4">
-            <div className="flex justify-center items-center gap-4">
+            <div id='hero-home-content-1' className="flex justify-center items-center gap-4">
               <div className="h-0.5 w-15 sm:w-25 bg-neutral"></div>
               <span className="text-neutral-700 font-light tracking-widest">TATA RIAS & WO PROFESIONAL</span>
               <div className="h-0.5 w-15 sm:w-25 bg-neutral"></div>
             </div>
 
-            <h1 className="text-5xl md:text-5xl font-poppins-bold leading-tight">
+            <h1 id='hero-home-content-2' className="text-5xl md:text-5xl font-poppins-bold leading-tight">
               <span className="text-neutral-700">DINAR</span>
               <span className="text-error"> MAKEUP</span>
             </h1>
 
-            <p className="text-md sm:text-sm md-text-md lg-text-lg lg:text-2xl font-light leading-relaxed text-neutral-700">
+            <p id='hero-home-content-3' className="text-md sm:text-sm md-text-md lg-text-lg lg:text-2xl font-light leading-relaxed text-neutral-700">
               Dengan Konsep Modern dan Kontemporer
             </p>
 
-            <div className="pt-4">
+            <div id='hero-home-content-tombol-jelajahi' className="pt-4">
               <button
                 onClick={() => navigate('/pricing')}
                 className="btn btn-error px-15 text-neutral-700 py-3 rounded-md hover:border-neutral hover:bg-transparent hover:text-neutral-700 transition-all duration-300"

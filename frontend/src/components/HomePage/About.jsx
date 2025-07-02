@@ -29,7 +29,7 @@ function About() {
           {/* Left Column */}
           <div className="space-y-8">
             {/* Hero Image */}
-            <div className="relative group overflow-hidden rounded-3xl shadow-2xl">
+            <div id="hero-about-image" className="relative group overflow-hidden rounded-3xl shadow-2xl">
               <img
                 src="/img/about/IMG_5926.PNG"
                 className="w-full h-auto object-cover transition-all duration-700 group-hover:scale-105"
@@ -41,7 +41,7 @@ function About() {
             </div>
 
             {/* Philosophy Card */}
-            <div className="card bg-gradient-to-br from-error to-accent text-base-100 p-10 transition-all duration-500 hover:shadow-2xl">
+            <div id="filosofi-about" className="card bg-gradient-to-br from-error to-accent text-base-100 p-10 transition-all duration-500 hover:shadow-2xl">
               <div className="flex justify-end gap-4 mb-4">
                 <FaHeart className="text-3xl" />
                 <h3 className="text-2xl font-bold">Filosofi Kami</h3>
@@ -58,9 +58,9 @@ function About() {
           {/* Right Column */}
           <div className="space-y-8">
             {/* Vision & Mission */}
-            <div className="space-y-6">
+            <div id="visi-misi-about" className="space-y-6">
               {/* Vision Card */}
-              <div className="bg-base-100 p-8 rounded-3xl shadow-lg border border-base-300 transition-all duration-300 hover:shadow-xl">
+              <div id="visi-about" className="bg-base-100 p-8 rounded-3xl shadow-lg border border-base-300 transition-all duration-300 hover:shadow-xl">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="bg-base-300 p-3 rounded-xl">
                     <FaRegLightbulb className="text-primary text-2xl" />
@@ -77,7 +77,7 @@ function About() {
               </div>
 
               {/* Mission Card */}
-              <div className="bg-base-100 p-8 rounded-3xl shadow-lg border border-base-300  transition-all duration-300 hover:shadow-xl">
+              <div id="misi-about" className="bg-base-100 p-8 rounded-3xl shadow-lg border border-base-300  transition-all duration-300 hover:shadow-xl">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="bg-base-300 p-3 rounded-xl">
                     <GoGoal className="text-accent text-2xl" />
@@ -95,7 +95,7 @@ function About() {
             </div>
 
             {/* Stats Section */}
-            <div className="stats shadow bg-base-200 transition-all duration-500 hover:shadow-lg w-full">
+            <div id="pengalaman-about" className="stats shadow bg-base-200 transition-all duration-500 hover:shadow-lg w-full">
 
               <div className="stat">
                 <div className="stat-figure text-accent">
@@ -121,7 +121,7 @@ function About() {
 
         {/* About Description */}
         {window.location.pathname === "/about" && (
-          <div className="mt-16 bg-gradient-to-r from-primary/5 to-secondary/5 p-10 rounded-3xl shadow-inner">
+          <div id="deskripsi-about" className="mt-16 bg-gradient-to-r from-primary/5 to-secondary/5 p-10 rounded-3xl shadow-inner">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-4 mb-8">
                 <MdBrush className="text-3xl text-primary" />
@@ -152,7 +152,7 @@ function About() {
       </section>
 
       {window.location.pathname === "/" && (
-        <div className="flex justify-center text-center gap-10 my-10 items-center">
+        <div id="tombol-data-about-selengkapnya" className="flex justify-center text-center gap-10 my-10 items-center">
           <div className="flex justify-end items-center p-2">
             <button
               className="btn btn-error btn-outline text-base-content hover:btn-error btn-lg"

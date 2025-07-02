@@ -23,7 +23,7 @@ function Team() {
 
       {/* Judul (hanya ada di menu home) */}
       {window.location.pathname === "/" && (
-        <div className="flex justify-center text-center gap-10 my-10 items-center">
+        <div id='header-team' className="flex justify-center text-center gap-10 my-10 items-center">
           <div className="p-2">
             <h2 className="text-5xl font-bold mb-7 text-base-950">Tim Kami</h2>
             <p className="text-lg text-base-600">
@@ -48,7 +48,7 @@ function Team() {
 
         <div className="carousel carousel-center bg-transparent neutral rounded-box max-w-full space-x-4 p-4">
           {dataTeams.map((src, index) => (
-            <div key={index} className="carousel-item">
+            <div id={`data-team-${index}`} key={index} className="carousel-item">
               <img
                 src={src}
                 alt="Team"
