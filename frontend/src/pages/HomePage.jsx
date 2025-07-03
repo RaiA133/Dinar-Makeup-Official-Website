@@ -10,6 +10,7 @@ import Rating from '../components/HomePage/Rating';
 import Contact from '../components/HomePage/Contact';
 import TestimoniPage from './TestimoniPage';
 import Team from '../components/HomePage/Team';
+import SeoMeta from '../components/Ai/Seo/SeoMeta';
 
 function HomePage() {
   const navigate = useNavigate();
@@ -34,6 +35,8 @@ function HomePage() {
 
   return (
     <div className="mx-0">
+
+      <SeoMeta slug={location.pathname} />
       <Toaster toastOptions={{ style: { maxWidth: '600px' } }} />
 
       {/* HERO */}

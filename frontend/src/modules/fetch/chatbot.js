@@ -33,7 +33,17 @@ async function guideBot(message, history) {
   }
 }
 
+async function seo(slug = 'home') {
+  try {
+    const response = await instance.post(`/ai/seo?slug=${slug}`);
+    return response;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
 export {
-  healthCheck, chatBot, guideBot,
+  healthCheck, chatBot, guideBot, seo, 
 };
 
