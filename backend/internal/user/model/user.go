@@ -40,7 +40,6 @@ func (u *User) HashPassword() error {
 	}
 	u.Password = string(hashedPass)
 	return nil
-
 }
 
 // prepare create user
