@@ -43,6 +43,7 @@ func (r *productPostgresRepository) CreateGroupItems(ctx context.Context, item *
 func (r *productPostgresRepository) UpdateProduct(ctx context.Context, product *model.Product) error {
 	tx := r.db.WithContext(ctx).Begin()
 
+	// Step 1: Update data produk utama
 	if err := tx.Model(&model.Product{}).
 		Where("id = ?", product.Id).
 		Updates(map[string]interface{}{
@@ -56,15 +57,32 @@ func (r *productPostgresRepository) UpdateProduct(ctx context.Context, product *
 		return err
 	}
 
-	if err := tx.Where("product_id = ?", product.Id).Delete(&model.ProductDetailItem{}).Error; err != nil {
-		tx.Rollback()
-		return err
-	}
-	if err := tx.Where("product_id = ?", product.Id).Delete(&model.ProductDetailGroup{}).Error; err != nil {
+	// Step 2: Ambil semua group_id dari product_detail_group
+	var groupIDs []uuid.UUID
+	if err := tx.Model(&model.ProductDetailGroup{}).
+		Where("product_id = ?", product.Id).
+		Pluck("id", &groupIDs).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
 
+	// Step 3: Hapus product_detail_item berdasarkan group_id
+	if len(groupIDs) > 0 {
+		if err := tx.Where("group_id IN ?", groupIDs).
+			Delete(&model.ProductDetailItem{}).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	// Step 4: Hapus product_detail_group berdasarkan product_id
+	if err := tx.Where("product_id = ?", product.Id).
+		Delete(&model.ProductDetailGroup{}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// Step 5: Insert ulang detail group dan item-nya
 	for _, group := range product.DetailGroups {
 		group.ProductId = product.Id
 		group.Id = uuid.New()
@@ -77,6 +95,7 @@ func (r *productPostgresRepository) UpdateProduct(ctx context.Context, product *
 		for _, item := range group.DetailItems {
 			item.GroupId = group.Id
 			item.Id = uuid.New()
+
 			if err := tx.Create(&item).Error; err != nil {
 				tx.Rollback()
 				return err
@@ -84,8 +103,7 @@ func (r *productPostgresRepository) UpdateProduct(ctx context.Context, product *
 		}
 	}
 
-	tx.Commit()
-	return nil
+	return tx.Commit().Error
 }
 
 func (p *productPostgresRepository) FindById(ctx context.Context, entity *model.Product) (*model.Product, error) {
