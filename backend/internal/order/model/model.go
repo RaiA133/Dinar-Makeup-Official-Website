@@ -28,4 +28,31 @@ type Order struct {
 	DeleteAt          *int64    `gorm:"column:deleted_at" json:"deleted_at"`
 	User              userModel.User
 	Product           productModel.Product
+
+	CustomerDetail CustomerDetail `gorm:"-"` // ✅ disimpan manual
+	DetailOrder    DetailOrder    `gorm:"-"`
+}
+
+type DetailOrder struct {
+	Id          uuid.UUID `gorm:"column:id;primary_key;default:uuid_generate_v4();<-:create" json:"id"`
+	OrderID     uuid.UUID `gorm:"column:order_id;not null" json:"order_id"`
+	AkadDate    string    `gorm:"column:akad_date;type:VARCHAR(255)" json:"akad_date"`
+	ShowDate    string    `gorm:"column:show_date;type:VARCHAR(255)" json:"show_date"`
+	Location    string    `gorm:"column:location;type:VARCHAR(255)" json:"location"`
+	AkadTime    string    `gorm:"column:akad_time;type:VARCHAR(255)" json:"akad_time"`
+	GuestCount  int64     `gorm:"column:guest_count" json:"guest_count"`
+	TechMeeting string    `gorm:"column:tech_meeting;type:VARCHAR(255)" json:"tech_meeting"`
+}
+
+type CustomerDetail struct {
+	Id             uuid.UUID `gorm:"column:id;primary_key;default:uuid_generate_v4();<-:create" json:"id"`
+	OrderID        uuid.UUID `gorm:"column:order_id;not null" json:"order_id"`
+	GroomFullName  string    `gorm:"column:groom_full_name;type:VARCHAR(255)" json:"groom_full_name"`
+	BrideFullName  string    `gorm:"column:bride_full_name;type:VARCHAR(255)" json:"bride_full_name"`
+	GroomAddress   string    `gorm:"column:groom_address;type:VARCHAR(255)" json:"groom_address"`
+	BrideAddress   string    `gorm:"column:bride_address;type:VARCHAR(255)" json:"bride_address"`
+	GroomEmail     string    `gorm:"column:groom_email;type:VARCHAR(255)" json:"groom_email"`
+	BrideEmail     string    `gorm:"column:bride_email;type:VARCHAR(255)" json:"bride_email"`
+	GroomInstagram string    `gorm:"column:groom_instagram;type:VARCHAR(255)" json:"groom_instagram"`
+	BrideInstagram string    `gorm:"column:bride_instagram;type:VARCHAR(255)" json:"bride_instagram"`
 }
