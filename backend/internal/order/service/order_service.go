@@ -147,7 +147,7 @@ func (or *orderService) CreateOrder(ctx context.Context, userId string, req *dto
 	}
 
 	// Insert To DB
-	if _, err := or.pgRepo.InsertOrder(ctx, &model.Order{
+	_, err = or.pgRepo.InsertOrder(ctx, &model.Order{
 		IdOrder:           genOrderId,
 		UserId:            dataUser.Id,
 		ProductId:         dataProduct.Id,
@@ -163,7 +163,26 @@ func (or *orderService) CreateOrder(ctx context.Context, userId string, req *dto
 		WeddingDate:       req.BookingDate,
 		TransactionTime:   resFormatMidtrans.TransactionTime,
 		ExpiredVa:         resFormatMidtrans.ExpiryTime,
-	}); err != nil {
+		CustomerDetail: model.CustomerDetail{
+			GroomFullName:  req.CustomerDetail.GroomFullName,
+			BrideFullName:  req.CustomerDetail.BrideFullName,
+			GroomAddress:   req.CustomerDetail.GroomAddress,
+			BrideAddress:   req.CustomerDetail.BrideAddress,
+			GroomEmail:     req.CustomerDetail.GroomEmail,
+			BrideEmail:     req.CustomerDetail.BrideEmail,
+			GroomInstagram: req.CustomerDetail.GroomInstagram,
+			BrideInstagram: req.CustomerDetail.BrideInstagram,
+		},
+		DetailOrder: model.DetailOrder{
+			AkadDate:    req.DetailOrder.AkadDate,
+			ShowDate:    req.DetailOrder.ShowDate,
+			Location:    req.DetailOrder.Location,
+			AkadTime:    req.DetailOrder.AkadTime,
+			GuestCount:  req.DetailOrder.GuestCount,
+			TechMeeting: req.DetailOrder.TechMeeting,
+		},
+	})
+	if err != nil {
 		logrus.WithError(err).Error("failed to insert order to DB")
 		return nil, fmt.Errorf("failed to save order: %w", err)
 	}

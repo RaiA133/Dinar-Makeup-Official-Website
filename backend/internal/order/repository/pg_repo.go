@@ -24,12 +24,33 @@ func NewOrderPGRepository(db *gorm.DB, cCL coreapi.Client) order.RepositoryInter
 }
 
 func (rp *orderPGRepository) InsertOrder(ctx context.Context, data *model.Order) (*model.Order, error) {
-	if err := rp.db.WithContext(ctx).Create(data).Error; err != nil {
+	returnVal := data
+
+	err := rp.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(&data).Error; err != nil {
+			return err
+		}
+
+		data.CustomerDetail.OrderID = data.Id
+		data.DetailOrder.OrderID = data.Id
+
+		if err := tx.Omit("Id").Create(&data.CustomerDetail).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Omit("Id").Create(&data.DetailOrder).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
 		return nil, err
 	}
-	return data, nil
-}
 
+	return returnVal, nil
+}
 func (rp *orderPGRepository) FindOrdersData(ctx context.Context, offset, limit int, search string) ([]*model.Order, int64, error) {
 	var orders []*model.Order
 	var total int64
@@ -80,7 +101,12 @@ func (rp *orderPGRepository) CheckTransaction(ctx context.Context, orderId strin
 
 func (rp *orderPGRepository) GetOrderByID(ctx context.Context, orderId string) (*model.Order, error) {
 	var data model.Order
-	if err := rp.db.WithContext(ctx).Preload("User").Where("id_order = ?", orderId).First(&data).Error; err != nil {
+	if err := rp.db.WithContext(ctx).
+		Preload("User").
+		Preload("CustomerDetail").
+		Preload("DetailOrder").
+		Where("id_order = ?", orderId).
+		First(&data).Error; err != nil {
 		return nil, err
 	}
 	return &data, nil
