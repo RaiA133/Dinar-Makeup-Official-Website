@@ -11,10 +11,12 @@ import (
 	"github.com/RianIhsan/wedding-organizer-be/internal/user"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/payment"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/utils"
+	"github.com/google/uuid"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"mime/multipart"
 	"strconv"
 )
 
@@ -31,6 +33,7 @@ type orderService struct {
 	UserService    user.UserService
 	ProductService products.ProductService
 	coreClient     coreapi.Client
+	cfg            *config.Config
 }
 
 func NewOrderService(config *ServiceConfig, coreMidtrans coreapi.Client) order.ServiceInterface {
@@ -39,6 +42,7 @@ func NewOrderService(config *ServiceConfig, coreMidtrans coreapi.Client) order.S
 		UserService:    config.UserService,
 		ProductService: config.ProductService,
 		coreClient:     coreMidtrans,
+		cfg:            config.Config,
 	}
 }
 
@@ -198,6 +202,17 @@ func (or *orderService) GetOrders(ctx context.Context, offset, limit int, search
 
 	var res []*dto.GetOrdersResponse
 	for _, order := range data {
+		// Mapping document orders
+		var documentOrders []dto.DocumentOrderResponse
+		for _, doc := range order.DocumentOrders {
+			documentOrders = append(documentOrders, dto.DocumentOrderResponse{
+				Id:       doc.Id.String(),
+				OrderID:  doc.OrderID.String(),
+				URL:      doc.URL,
+				FileName: doc.FileName,
+			})
+		}
+
 		res = append(res, &dto.GetOrdersResponse{
 			Id:                order.Id.String(),
 			OrderId:           order.IdOrder,
@@ -227,6 +242,7 @@ func (or *orderService) GetOrders(ctx context.Context, offset, limit int, search
 				TransactionTime: order.TransactionTime,
 				ExpiredVa:       order.ExpiredVa,
 			},
+			DocumentOrders: documentOrders, // ✅ tambahkan ini
 		})
 	}
 
@@ -298,4 +314,42 @@ func isValidPaymentMethod(method string) bool {
 		"cimb":          true,
 	}
 	return validPaymentMethods[method]
+}
+
+func (or *orderService) GetOrder(ctx context.Context, orderId string) (model.Order, error) {
+	data, err := or.pgRepo.GetOrderByID(ctx, orderId)
+	if err != nil {
+		return model.Order{}, errors.New("failed to fetch order data")
+	}
+	return *data, nil
+}
+
+func (or *orderService) RegisterDocument(ctx context.Context, orderId string, file multipart.File, fileName string) error {
+	secureURL, err := or.pgRepo.UploadFileToCloud(
+		ctx,
+		file,
+		fileName,
+		"https://mandiri-sentuh-1364643601.cos.ap-jakarta.myqcloud.com",
+		or.cfg.Tencent.TencentSecretID,
+		or.cfg.Tencent.TencentSecretKey,
+	)
+	if err != nil {
+		return errors.New("failed upload to cloud tencent")
+	}
+
+	orderUUID, err := uuid.Parse(orderId)
+	if err != nil {
+		fmt.Println("Error parsing UUID Order ID")
+		return err
+	}
+	_, err = or.pgRepo.InsertDocument(ctx, &model.DocumentOrder{
+		OrderID:  orderUUID,
+		URL:      secureURL,
+		FileName: fileName,
+	})
+
+	if err != nil {
+		return errors.New("failed to insert document to db")
+	}
+	return nil
 }
