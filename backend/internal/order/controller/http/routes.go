@@ -13,4 +13,6 @@ func MapOrderRoutes(router *gin.RouterGroup, controller order.ControllerInterfac
 	protected.Use(mw.AuthJwtMiddleware())
 	protected.POST("/order", controller.BookingWedding())
 	protected.GET("/order", controller.GetBookingWedding())
+	protected.GET("/order/:orderId", controller.GetOrder())
+	protected.POST("/order/document", controller.RegisterDocument())
 }

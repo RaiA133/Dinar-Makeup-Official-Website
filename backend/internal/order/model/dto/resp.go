@@ -16,17 +16,25 @@ type BookingData struct {
 	ExpiryTime        string `json:"expiry_time"`
 }
 
+type DocumentOrderResponse struct {
+	Id       string `json:"id"`
+	OrderID  string `json:"order_id"`
+	URL      string `json:"url"`
+	FileName string `json:"file_name"`
+}
+
 type GetOrdersResponse struct {
-	Id                string                 `json:"id"`
-	OrderId           string                 `json:"order_id"`
-	InstallmentAmount int64                  `json:"installment_amount"`
-	Outstanding       int64                  `json:"outstanding"`
-	InstallmentStatus string                 `json:"installment_status"`
-	WeddingDate       string                 `json:"wedding_date"`
-	Notes             string                 `json:"notes"`
-	User              UserInformation        `json:"user_information"`
-	Product           ProductInformation     `json:"product_information"`
-	Transaction       TransactionInformation `json:"transaction_information"`
+	Id                string                  `json:"id"`
+	OrderId           string                  `json:"order_id"`
+	InstallmentAmount int64                   `json:"installment_amount"`
+	Outstanding       int64                   `json:"outstanding"`
+	InstallmentStatus string                  `json:"installment_status"`
+	WeddingDate       string                  `json:"wedding_date"`
+	Notes             string                  `json:"notes"`
+	User              UserInformation         `json:"user_information"`
+	Product           ProductInformation      `json:"product_information"`
+	Transaction       TransactionInformation  `json:"transaction_information"`
+	DocumentOrders    []DocumentOrderResponse `json:"document_orders"` // ✅ ditambahkan
 }
 
 type UserInformation struct {

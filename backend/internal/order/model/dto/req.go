@@ -30,3 +30,7 @@ type DetailOrderRequest struct {
 	GuestCount  int64  `json:"guest_count"`
 	TechMeeting string `json:"tech_meeting"`
 }
+
+type InsertDocumentRequest struct {
+	OrderId string `json:"order_id"`
+}
