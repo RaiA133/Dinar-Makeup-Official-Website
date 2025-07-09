@@ -2,92 +2,128 @@ import { useContext, useState } from 'react';
 import { PaperAirplaneIcon, SparklesIcon } from '@heroicons/react/24/solid';
 import { ProductsContext } from '../../../contexts/ProductsContext';
 import { GoogleGenAI } from "@google/genai";
+import MarkdownRenderer from '../Chabot/MarkdownRenderer'; // opsional untuk preview prompt
 
-function ExtraFormImage() {
+function ExtraFormImage({ onImagePromptReady }) {
   const { productsByIDState } = useContext(ProductsContext);
-  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || "YOUR_API_KEY" });
+  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [resultPrompt, setResultPrompt] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // ====================================================================================================================================
+  const templatePrompts = [
+    "Wedding tema klasik elegan",
+    "Dekorasi pernikahan outdoor di taman",
+    "Desain kartu undangan bernuansa emas",
+  ];
 
-  const handleGenerateAI = async (e) => {
-    e.preventDefault();
-    setIsLoading(true)
-
+  const handleGeneratePrompt = async () => {
+    setIsLoading(true);
+    setResultPrompt('');
     try {
-      const decision = ai.chats.create({ // DECISION MAKER
-        model: "gemini-2.5-flash",
-        history: [
+      const stream = await ai.generateContentStream({
+        model: "gemini-1.5-flash",
+        contents: [
           {
-            role: "model",
-            parts: [{
-              text: `beri saya deskpripsi untuk mengisi data notes, dengan kebutuhan ${inputValue} berdasarkan data ${productsByIDState}`
-            }],
+            role: "user",
+            parts: [
+              {
+                text: `Buatkan deskripsi gambar pendek dan jelas untuk wedding organizer dengan konsep: "${inputValue}". Fokus pada elemen visual yang menonjol dan unik.`
+              }
+            ]
           }
-        ],
+        ]
       });
-      const decisionResponse = await decision.sendMessage({ message: inputValue });
-    } catch (error) {
-      
-    } finally {
-      setIsLoading(false)
-    }
-  }
 
-  // ====================================================================================================================================
+      let fullText = "";
+      for await (const chunk of stream) {
+        fullText += chunk.text || "";
+        setResultPrompt(fullText); // live streaming
+      }
+
+      if (onImagePromptReady) {
+        onImagePromptReady(fullText); // kirim ke parent jika perlu
+      }
+
+    } catch (error) {
+      console.error("Gagal generate prompt:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="dropdown dropdown-top dropdown-end join-item">
-      <div tabIndex={0} role="button" className="btn m-1">
+    <div className="relative">
+      <button type="button" className="btn m-1" onClick={() => setDropdownOpen(!dropdownOpen)}>
         <div className="animate-bounce">
           <SparklesIcon className="h-5 w-5 text-primary animate-pulse" />
         </div>
-      </div>
-      <div tabIndex={0} className="dropdown-content menu z-20 w-96 p-0 shadow-sm rounded-xl bg-base-100">
+      </button>
 
-        <section className='bg-error p-3'>
-          <h1 className='text-base-100  menu-title'>Generate AI</h1>
-        </section>
-        
-        <div className="divider mb-0">Template</div>
-        <section className='p-3'>
-          <div className='border border-base-300 rounded-xl p-5 grid gap-2'>
-            <button className='btn btn-sm' value={`Efisiensi Harga`}>Weeding Tema Random</button>
-            <button className='btn btn-sm' value={`Efisiensi Harga`}>Weeding Tema Alam Terbuka</button>
-            <button className='btn btn-sm'>Desain kartu undangan</button>
-          </div>
-        </section>
+      {dropdownOpen && (
+        <div className="absolute right-0 bottom-full mb-2 z-20 w-96 shadow-xl rounded-xl bg-base-100">
 
-        <div className="divider my-0">Atau</div>
-        <section className='p-3'>
-          <div>
-            <div className="join w-full">
-              <div className='w-full'>
-                <label className="input validator join-item w-full">
-                  <input
-                    type="text"
-                    // value={inputValue}
-                    // onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Ketik perintah.."
-                  // disabled={isLoading}
-                  />
-                </label>
+          {/* Header */}
+          <section className="bg-error p-3 rounded-t-xl">
+            <h1 className="text-base-100 font-bold">Generate Prompt Gambar</h1>
+          </section>
+
+          <section className="p-3 min-h-[200px] relative">
+            {isLoading && (
+              <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex justify-center items-center rounded-xl z-10">
+                <span className="loading loading-spinner loading-lg text-error"></span>
               </div>
+            )}
+
+            {/* Template Buttons */}
+            <div className="grid gap-2 mb-4">
+              {templatePrompts.map((template, i) => (
+                <button
+                  key={i}
+                  className="btn btn-sm"
+                  onClick={() => {
+                    setInputValue(template);
+                    handleGeneratePrompt();
+                  }}
+                  disabled={isLoading}
+                >
+                  {template}
+                </button>
+              ))}
+            </div>
+
+            {/* Input manual */}
+            <div className="join w-full">
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="Masukkan tema atau konsep..."
+                className="input input-bordered join-item w-full"
+                disabled={isLoading}
+              />
               <button
-                className="btn btn-error join-item text-base-100"
-              // disabled={isLoading || !inputValue.trim()}
+                className="btn btn-error join-item"
+                onClick={handleGeneratePrompt}
+                disabled={!inputValue || isLoading}
               >
-                <PaperAirplaneIcon className="h-5 w-5" onClick={handleGenerateAI} />
+                <PaperAirplaneIcon className="w-5 h-5" />
               </button>
             </div>
-          </div>
-        </section>
 
-      </div>
+            {/* Result */}
+            {resultPrompt && (
+              <div className="mt-4 border border-base-300 rounded-xl p-4 max-h-60 overflow-y-auto">
+                <MarkdownRenderer>{resultPrompt}</MarkdownRenderer>
+              </div>
+            )}
+          </section>
+        </div>
+      )}
     </div>
-  )
+  );
 }
 
-export default ExtraFormImage
+export default ExtraFormImage;

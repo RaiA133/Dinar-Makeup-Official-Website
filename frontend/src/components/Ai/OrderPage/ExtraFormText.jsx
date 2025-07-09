@@ -60,7 +60,7 @@ function ExtraFormText({ resultAIText, setResultAIText }) {
     <div className="absolute right-0 top-0">
       {/* Dropdown Content */}
       {dropdownOpen && (
-        <div className="absolute right-0 bottom-full mb-2 z-20 w-96 p-0 shadow-sm rounded-xl bg-base-100">
+        <div className="absolute right-0 bottom-full mb-2 z-20 w-83 sm:w-96 p-0 shadow-sm rounded-xl bg-base-100">
 
           {/* HEADER */}
           <section className="bg-error p-3 rounded-t-xl">
