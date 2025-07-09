@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { PaperAirplaneIcon, SparklesIcon, ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/solid';
-import { chatBot, guideBot } from "../../../modules/fetch/chatbot";
+import { chatBot, guideBot } from "../modules/fetch/ai";
 import { GoogleGenAI } from "@google/genai";
 import { useNavigate } from 'react-router-dom';
 import MarkdownRenderer from './MarkdownRenderer';

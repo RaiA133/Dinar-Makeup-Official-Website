@@ -1,7 +1,7 @@
 // src/components/Seo/SeoMeta.jsx
 import { Helmet } from 'react-helmet';
 import { useEffect, useState } from 'react';
-import { seo } from "../../../modules/fetch/chatbot";
+import { seo } from "../modules/fetch/ai";
 
 const SeoMetaRAG = ({ slug = 'home' }) => {
   const [meta, setMeta] = useState({ title: 'Dinar Makeup', description: 'Layanan Makeup dan Wedding Organizer Profesional.' });
