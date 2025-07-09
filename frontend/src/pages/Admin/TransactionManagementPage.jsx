@@ -95,27 +95,32 @@ function TransactionManagementPage() {
                 <dialog key={`detail_${transaction.id}`} id={`transaction_modal_${transaction.id}`} className="modal">
                   <div className="modal-box max-w-4xl">
                     <h3 className="font-bold text-lg mb-4 text-primary">Detail Transaksi</h3>
+
                     <div className=" gap-4 bg-base-200 p-5">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+
                         <div className="space-y-2">
                           <h4 className="font-semibold text-accent">Informasi Order</h4>
                           <div className="divider m-0"></div>
                           <p><span className="font-medium">Order ID :</span> {transaction.order_id}</p>
                           <p><span className="font-medium">Waktu Transaksi :</span> {transaction.transaction_information.transaction_time}</p>
                           <p><span className="font-medium">Wedding Date :</span> {transaction.wedding_date}</p>
-                          <p><span className="font-medium">Status Pelunasan :</span>
-                            <span className={`badge ml-2 ${transaction.installment_status === 'OUTSTANDING' ? 'badge-warning' : 'badge-success'}`}>
-                              {transaction.installment_status}
-                            </span>
-                          </p>
-                          <p><span className="font-medium">Catatan:</span> {transaction.notes || '-'}</p>
+                        </div>
+
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-accent">Informasi Pelanggan</h4>
+                          <div className="divider m-0"></div>
+                          <p><span className="font-medium">Nama :</span> {transaction.user_information.name}</p>
+                          <p><span className="font-medium">Email :</span> {transaction.user_information.email}</p>
+                          <p><span className="font-medium">Telepon :</span> {transaction.user_information.phone || '-'}</p>
+                          <p><span className="font-medium">NIK :</span> {transaction.user_information.nik}</p>
+                          <p><span className="font-medium">Alamat :</span> {transaction.user_information.address}</p>
                         </div>
 
                         <div className="space-y-2">
                           <h4 className="font-semibold text-accent">Detail Pembayaran</h4>
                           <div className="divider m-0"></div>
-                          <p><span className="font-medium">Jumlah Terbayar :</span> Rp. {transaction.installment_amount.toLocaleString()}</p>
-                          <p><span className="font-medium">Sisa Tagihan :</span> Rp. {transaction.outstanding.toLocaleString()}</p>
+                          
                           <p><span className="font-medium">Metode Pembayaran :</span> {transaction.transaction_information.payment_method.toUpperCase()}</p>
                           <p><span className="font-medium">VA Number :</span> {transaction.transaction_information.va_number}</p>
                           <p><span className="font-medium">Status Pembayaran :</span>
@@ -131,28 +136,22 @@ function TransactionManagementPage() {
                         </div>
 
                         <div className="space-y-2">
-                          <h4 className="font-semibold text-accent">Informasi Pelanggan</h4>
+                          <h4 className="font-semibold text-accent">Rencana Down payment (DP)</h4>
                           <div className="divider m-0"></div>
-                          <p><span className="font-medium">Nama :</span> {transaction.user_information.name}</p>
-                          <p><span className="font-medium">Email :</span> {transaction.user_information.email}</p>
-                          <p><span className="font-medium">Telepon :</span> {transaction.user_information.phone || '-'}</p>
-                          <p><span className="font-medium">NIK :</span> {transaction.user_information.nik}</p>
-                          <p><span className="font-medium">Alamat :</span> {transaction.user_information.address}</p>
+                          <p><span className="font-medium">Rencana DP :</span> Rp. {transaction.installment_amount.toLocaleString()}</p>
+                          <p><span className="font-medium">Sisa DP :</span> Rp. {transaction.outstanding.toLocaleString()}</p>
+                          <p><span className="font-medium">Status DP :</span>
+                            <span className={`badge ml-2 ${transaction.installment_status === 'OUTSTANDING' ? 'badge-warning' : 'badge-success'}`}>
+                              {transaction.installment_status}
+                            </span>
+                          </p>
                         </div>
 
                         <div className="space-y-2">
-                          <h4 className="font-semibold text-accent">Informasi Produk</h4>
+                          <h4 className="font-semibold text-accent">Data Tambahan</h4>
                           <div className="divider m-0"></div>
-                          <p><span className="font-medium">Paket :</span> {transaction.product_information.name}</p>
-                          <p><span className="font-medium">Harga :</span> Rp{parseInt(transaction.product_information.price).toLocaleString()}</p>
-                        </div>
-                      </div>
-
-                      <div>
-                        <h4 className="font-semibold text-accent">Data Tambahan</h4>
-                        <div className="divider m-0"></div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-5">
-                          <p><span className="font-medium">Notes :</span> {transaction.notes}</p>
+                          <p><span className="font-medium">Notes :</span></p>
+                          <div className="rounded-box w-full border border-stone-400 p-4">{transaction.notes || '-'}</div>
                           <div className="space-y-2">
                             <p className="font-medium">Dokumen / Desain : </p>
                             {transaction.document_orders ? (
@@ -206,10 +205,16 @@ function TransactionManagementPage() {
                               <p>-</p>
                             )}
                           </div>
-
                         </div>
-                      </div>
 
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-accent">Informasi Produk</h4>
+                          <div className="divider m-0"></div>
+                          <p><span className="font-medium">Paket :</span> {transaction.product_information.name}</p>
+                          <p><span className="font-medium">Harga :</span> Rp{parseInt(transaction.product_information.price).toLocaleString()}</p>
+                        </div>
+
+                      </div>
                     </div>
 
 
