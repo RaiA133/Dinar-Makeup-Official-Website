@@ -15,4 +15,5 @@ func MapOrderRoutes(router *gin.RouterGroup, controller order.ControllerInterfac
 	protected.GET("/order", controller.GetBookingWedding())
 	protected.GET("/order/:orderId", controller.GetOrder())
 	protected.POST("/order/document", controller.RegisterDocument())
+	protected.GET("/order/user", controller.GetOrdersByUserId())
 }

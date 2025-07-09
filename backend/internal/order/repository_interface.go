@@ -14,5 +14,5 @@ type RepositoryInterface interface {
 	ConfirmPayment(ctx context.Context, orderID, paymentStatus string) error
 	UploadFileToCloud(ctx context.Context, file multipart.File, fileName, baseURL, secretID, secretKey string) (string, error)
 	InsertDocument(ctx context.Context, entity *model.DocumentOrder) (*model.DocumentOrder, error)
-	// GetAllTransactionByUserID(ctx context.Context)
+	GetAllTransactionByUserID(ctx context.Context, userID string) ([]*model.Order, error)
 }

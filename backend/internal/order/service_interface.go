@@ -14,4 +14,5 @@ type ServiceInterface interface {
 	CancelPayment(ctx context.Context, orderId string) error
 	GetOrder(ctx context.Context, orderId string) (model.Order, error)
 	RegisterDocument(ctx context.Context, orderId string, file multipart.File, fileName string) error
+	GetTransactionsByUserId(ctx context.Context, userId string) ([]dto.GetOrdersResponse, error)
 }
