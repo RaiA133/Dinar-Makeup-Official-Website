@@ -172,3 +172,23 @@ func (oc *orderController) RegisterDocument() gin.HandlerFunc {
 		response.SendSuccesResponse(context, http.StatusOK, "success upload to cloud", nil)
 	}
 }
+
+func (oc *orderController) GetOrdersByUserId() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		auth := middleware.GetAuth(context)
+		if auth.Role != "user" && auth.Role != "admin" {
+			utils.LogErrorResponse(context, oc.logger, errors.New("access denied"))
+			response.SendErrorResponse(context, http.StatusForbidden, "access denied")
+			return
+		}
+
+		data, err := oc.service.GetTransactionsByUserId(context, auth.Id.String())
+		if err != nil {
+			utils.LogErrorResponse(context, oc.logger, err)
+			response.SendErrorResponse(context, http.StatusBadRequest, "failed get orders by user id")
+			return
+		}
+
+		response.SendSuccesResponse(context, 200, "success", data)
+	}
+}

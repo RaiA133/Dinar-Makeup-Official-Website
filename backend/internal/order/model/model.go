@@ -24,14 +24,14 @@ type Order struct {
 	TransactionTime   string    `gorm:"column:transaction_time;not null" json:"transaction_time"`
 	ExpiredVa         string    `gorm:"column:expired_va;type:VARCHAR(255)" json:"expired_va"`
 
-	CreatedAt int64  `gorm:"column:created_at;autoCreateTime:milli;<-:create" json:"created_at"`
-	UpdatedAt int64  `gorm:"column:updated_at;autoCreateTime:milli;autoUpdateTime:milli" json:"updated_at"`
-	DeleteAt  *int64 `gorm:"column:deleted_at" json:"deleted_at"`
-	User      userModel.User
-	Product   productModel.Product
+	CreatedAt int64                `gorm:"column:created_at;autoCreateTime:milli;<-:create" json:"created_at"`
+	UpdatedAt int64                `gorm:"column:updated_at;autoCreateTime:milli;autoUpdateTime:milli" json:"updated_at"`
+	DeleteAt  *int64               `gorm:"column:deleted_at" json:"deleted_at"`
+	User      userModel.User       `json:"user"`
+	Product   productModel.Product `json:"product"`
 
-	CustomerDetail CustomerDetail  `gorm:"-"`
-	DetailOrder    DetailOrder     `gorm:"-"`
+	CustomerDetail CustomerDetail  `gorm:"-" json:"customer_detail"`
+	DetailOrder    DetailOrder     `gorm:"-" json:"detail_order"`
 	DocumentOrders []DocumentOrder `gorm:"foreignKey:OrderID;references:Id" json:"document_orders"`
 }
 

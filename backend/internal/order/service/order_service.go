@@ -312,6 +312,10 @@ func isValidPaymentMethod(method string) bool {
 		"bri":           true,
 		"bni":           true,
 		"cimb":          true,
+		"mandiri":       true,
+		"maybank":       true,
+		"permata":       true,
+		"mega":          true,
 	}
 	return validPaymentMethods[method]
 }
@@ -352,4 +356,58 @@ func (or *orderService) RegisterDocument(ctx context.Context, orderId string, fi
 		return errors.New("failed to insert document to db")
 	}
 	return nil
+}
+
+func (or *orderService) GetTransactionsByUserId(ctx context.Context, userId string) ([]dto.GetOrdersResponse, error) {
+	dataTransaction, err := or.pgRepo.GetAllTransactionByUserID(ctx, userId)
+	if err != nil {
+		return []dto.GetOrdersResponse{}, errors.New("")
+	}
+	var res []dto.GetOrdersResponse
+	for _, order := range dataTransaction {
+		// Mapping document orders
+		var documentOrders []dto.DocumentOrderResponse
+		for _, doc := range order.DocumentOrders {
+			documentOrders = append(documentOrders, dto.DocumentOrderResponse{
+				Id:       doc.Id.String(),
+				OrderID:  doc.OrderID.String(),
+				URL:      doc.URL,
+				FileName: doc.FileName,
+			})
+		}
+
+		res = append(res, dto.GetOrdersResponse{
+			Id:                order.Id.String(),
+			OrderId:           order.IdOrder,
+			InstallmentAmount: order.InstallmentAmount,
+			Outstanding:       order.Outstanding,
+			InstallmentStatus: order.InstallmentStatus,
+			WeddingDate:       order.WeddingDate,
+			Notes:             order.Notes,
+			User: dto.UserInformation{
+				Id:      order.User.Id.String(),
+				Name:    order.User.Name,
+				Email:   order.User.Email,
+				Phone:   order.User.PhoneNumber,
+				NIK:     order.User.NIK,
+				Address: order.User.Address,
+			},
+			Product: dto.ProductInformation{
+				Id:    order.Product.Id.String(),
+				Name:  order.Product.Name,
+				Price: strconv.FormatInt(order.Product.Price, 10),
+			},
+			Transaction: dto.TransactionInformation{
+				VaNumber:        order.VaNumber,
+				OrderStatus:     order.OrderStatus,
+				PaymentStatus:   order.PaymentStatus,
+				PaymentMethod:   order.PaymentMethod,
+				TransactionTime: order.TransactionTime,
+				ExpiredVa:       order.ExpiredVa,
+			},
+			DocumentOrders: documentOrders,
+		})
+	}
+
+	return res, nil
 }
