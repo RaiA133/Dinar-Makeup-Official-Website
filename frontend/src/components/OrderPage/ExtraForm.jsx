@@ -11,7 +11,7 @@ function ExtraForm() {
 
       <fieldset className="fieldset">
         <legend className="fieldset-legend">File <span>(opsional)</span></legend>
-        <input type="file" className="file-input w-full" />
+        <input type="file" className="file-input w-full" name="documents" />
         <label className="">beri kami gambaran desain milikmu sendiri. Contoh : desain tema wedding, desain tamu undangan, dll </label>
       </fieldset>
     </div>

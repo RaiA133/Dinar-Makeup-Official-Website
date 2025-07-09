@@ -51,26 +51,38 @@ function OrderPage() {
     e.preventDefault();
 
     const data = {
-      nama_pria: e.target.nama_pria.value.trim(),
-      alamat_pria: e.target.alamat_pria.value.trim(),
-      email_pria: e.target.email_pria.value.trim(),
-      ig_pria: e.target.ig_pria.value.trim(),
-
-      nama_wanita: e.target.nama_wanita.value.trim(),
-      alamat_wanita: e.target.alamat_wanita.value.trim(),
-      email_wanita: e.target.email_wanita.value.trim(),
-      ig_wanita: e.target.ig_wanita.value.trim(),
-
-      tgl_akad: tgl_akad ? moment(new Date(tgl_akad)).format("YYYY-MM-DD") : "",
-      lokasi_pernikahan: e.target.lokasi_pernikahan.value.trim(),
-      tgl_acara: tgl_acara ? moment(new Date(tgl_acara)).format("YYYY-MM-DD") : "",
-      jam_akad: e.target.jam_akad.value.trim(),
-      jumlah_tamu: e.target.jumlah_tamu.value.trim(),
-      tgl_tech_meeting: tgl_tech_meeting ? moment(new Date(tgl_tech_meeting)).format("YYYY-MM-DD") : "",
+      product_id: productsByIDState.id,
+      amount: amount,
+      booking_date: moment(new Date()).format("YYYY-MM-DD"),
+      payment_method: paymentMethod,
+      notes: e.target.notes.value.trim(),
+      customer_detail: {
+        groom_full_name: e.target.nama_pria.value.trim(),
+        groom_address: e.target.alamat_pria.value.trim(),
+        groom_email: e.target.email_pria.value.trim(),
+        groom_instagram: e.target.ig_pria.value.trim(),
+  
+        bride_full_name: e.target.nama_wanita.value.trim(),
+        bride_address: e.target.alamat_wanita.value.trim(),
+        bride_email: e.target.email_wanita.value.trim(),
+        bride_instagram: e.target.ig_wanita.value.trim(),
+      },
+      detail_order: {
+        akad_date: tgl_akad ? moment(new Date(tgl_akad)).format("YYYY-MM-DD") : "",
+        location: e.target.lokasi_pernikahan.value.trim(),
+        show_date: tgl_acara ? moment(new Date(tgl_acara)).format("YYYY-MM-DD") : "",
+        akad_time: e.target.jam_akad.value.trim(),
+        guest_count: e.target.jumlah_tamu.value.trim(),
+        tech_meeting: tgl_tech_meeting ? moment(new Date(tgl_tech_meeting)).format("YYYY-MM-DD") : "",
+      },
 
       term_1: e.target.term_1.checked,
       term_2: e.target.term_2.checked,
+
+      documents: e.target.documents,
     };
+    console.log(data);
+    return
 
     // === Validasi Wajib ===
     const missingFields = [];
@@ -90,7 +102,7 @@ function OrderPage() {
 
     // === Valid Email (opsional tambahan) ===
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data.email_pria) || !emailRegex.test(data.email_wanita)) {
+    if (!emailRegex.test(data.groom_email) || !emailRegex.test(data.bride_email)) {
       toast.error("Format email tidak valid.", { duration: 3000 });
       return;
     }
