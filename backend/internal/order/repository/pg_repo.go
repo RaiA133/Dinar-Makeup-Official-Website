@@ -195,3 +195,22 @@ func (rp *orderPGRepository) InsertDocument(ctx context.Context, entity *model.D
 
 	return entity, nil
 }
+
+func (rp *orderPGRepository) GetAllTransactionByUserID(ctx context.Context, userID string) ([]*model.Order, error) {
+	var orders []*model.Order
+
+	err := rp.db.WithContext(ctx).
+		Preload("User").
+		Preload("Product").
+		Preload("CustomerDetail").
+		Preload("DetailOrder").
+		Where("user_id = ?", userID).
+		Order("created_at DESC").
+		Find(&orders).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return orders, nil
+}
