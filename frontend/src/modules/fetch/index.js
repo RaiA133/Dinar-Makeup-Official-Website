@@ -25,7 +25,6 @@ async function login(email, password) {
 // Function for login user endpoint
 async function loginGoogle(id_token) {
   try {
-    console.log(id_token);
     const response = await instance.post("/login/google", { id_token });
     return response.data;
   } catch (error) {
@@ -60,7 +59,6 @@ async function createOrder(data) {
 //  Function for upload any file after order endpoint
 async function uploadDocumentOrder(formData) {
   const formDataObject = Object.fromEntries(formData.entries());
-  console.log('formDataObject', formDataObject);
   try {
     const response = await instance.post(`/order/document`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },

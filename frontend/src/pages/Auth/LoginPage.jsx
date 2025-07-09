@@ -106,7 +106,7 @@ function LoginPage() {
             <div className="divider">Atau</div>
 
             <div className="card-actions justify-center">
-              <GoogleLoginButton redirectTo="/" />
+              <GoogleLoginButton redirectTo="/login" />
             </div>
 
             <div className="card-actions justify-center mt-4">

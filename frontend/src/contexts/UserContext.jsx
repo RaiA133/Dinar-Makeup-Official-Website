@@ -12,25 +12,18 @@ export const UserContextProvider = ({ children }) => {
   const [img_profile_link, set_img_profile_link] = useState("");
   const [isLogin, setIsLogin] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
-  const [isTokenExist, setisTokenExist] = useState(false)
+
+  const [refresh, setRefresh] = useState(0); // use this on useEffect that set from callback below
   console.log("isLogin", isLogin);
   useEffect(() => {
-    let token = Cookies.get("token");
-    if (token) setisTokenExist(true);
-    else setisTokenExist(false);
-  }, [])
 
-  useEffect(() => {
-    const fetchData = async () => {
-      
+    const checkLogin = async () => {
       try {
         const response = await getMe(); // get semua data profile mu
         if (response.status === 200) {
           setIsLogin(true)
-
           if (response.data.role == "admin") setIsAdmin(true) // kondisi admin / bukan ada disini
           else setIsAdmin(false)
-
           setUserState(response.data); //mengirim response get diatas ke react context
         } else {
           googleLogout();
@@ -43,12 +36,17 @@ export const UserContextProvider = ({ children }) => {
         Cookies.remove("token");
       }
     };
-    fetchData();
-  }, [navigate, isTokenExist]) // ini artinya akan berjalan tanpa refresh
+    checkLogin();
+
+  }, [navigate, refresh]) // ini artinya akan berjalan tanpa refresh
 
   const updateUser = useCallback((response) => {
     localStorage.setItem("User", JSON.stringify(response));
     setUserState(response);
+  }, []);
+
+  const refreshCallback = useCallback(() => {
+    setRefresh(Math.random())
   }, []);
 
   return (
@@ -59,6 +57,7 @@ export const UserContextProvider = ({ children }) => {
       isLogin, setIsLogin,
       isAdmin, setIsAdmin,
       updateUser,
+      refreshCallback,
     }}>
       {children}
     </UserContext.Provider>

@@ -1,13 +1,15 @@
 // src/components/GoogleLoginButton.jsx
-import React from 'react';
-import { GoogleLogin } from '@react-oauth/google';
-import Cookies from "js-cookie";
-import toast from 'react-hot-toast';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 import { loginGoogle } from "../../modules/fetch";
+import { UserContext } from '../../contexts/UserContext';
+import toast from 'react-hot-toast';
+import Cookies from "js-cookie";
 
-function GoogleLoginButton() {
+function GoogleLoginButton({ redirectTo = "/" }) {
   const navigate = useNavigate();
+  const { refreshUser } = useContext(UserContext)
 
   return (
     <GoogleLogin
@@ -25,11 +27,11 @@ function GoogleLoginButton() {
               sameSite: "strict",
             });
 
-            navigate("/");
+            refreshUser();
+            navigate(redirectTo);
           }
         } catch (error) {
           console.error('Login failed:', error);
-          toast.error('Login gagal. Coba lagi.', { duration: 2500 });
         }
       }}
       onError={() => {
