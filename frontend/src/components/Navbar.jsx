@@ -11,15 +11,7 @@ function Navbar() {
   let location = useLocation();
   const navigate = useNavigate()
 
-  const { userState, img_profile_link, set_img_profile_link, isAdmin } = useContext(UserContext)
-  const [isLogin, setIsLogin] = useState(false);
-
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (token) {
-      setIsLogin(true);
-    }
-  }, []);
+  const { userState, isAdmin, isLogin, setIsLogin } = useContext(UserContext)
 
   return (
     <div className={`${location.pathname == '/' ? 'absolute' : 'shadow-sm'} z-99 navbar bg-transparant xl:px-25 ${location.pathname == '/' && 'text-[rgb(57,78,106)]'}`}>
