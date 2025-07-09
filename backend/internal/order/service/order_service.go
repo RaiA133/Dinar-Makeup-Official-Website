@@ -131,7 +131,6 @@ func (or *orderService) CreateOrder(ctx context.Context, userId string, req *dto
 
 	// Format Response
 	resFormatMidtrans := dto.BookingData{
-		TransactionID:     orderToMidtrans.TransactionID,
 		OrderID:           orderToMidtrans.OrderID,
 		GrossAmount:       orderToMidtrans.GrossAmount,
 		PaymentType:       orderToMidtrans.PaymentType,
@@ -151,7 +150,7 @@ func (or *orderService) CreateOrder(ctx context.Context, userId string, req *dto
 	}
 
 	// Insert To DB
-	_, err = or.pgRepo.InsertOrder(ctx, &model.Order{
+	dataOrder, err := or.pgRepo.InsertOrder(ctx, &model.Order{
 		IdOrder:           genOrderId,
 		UserId:            dataUser.Id,
 		ProductId:         dataProduct.Id,
@@ -190,6 +189,8 @@ func (or *orderService) CreateOrder(ctx context.Context, userId string, req *dto
 		logrus.WithError(err).Error("failed to insert order to DB")
 		return nil, fmt.Errorf("failed to save order: %w", err)
 	}
+
+	resFormatMidtrans.TransactionID = dataOrder.Id.String()
 
 	return resFormatMidtrans, nil
 }
