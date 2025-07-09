@@ -44,11 +44,17 @@ function ExtraFormText({ resultAIText, setResultAIText }) {
       }
     } catch (error) {
       console.error("AI error:", error);
-    } 
+    }
   };
 
-
   // ====================================================================================================================================
+
+  const templateNotes = [
+    "Tambahan Dokumentasi",
+    "Kursi VIP Keluarga",
+    "Transportasi Keluarga",
+    "Efisiensi Biaya",
+  ]
 
   return (
     <div className="absolute right-0 top-0">
@@ -74,19 +80,24 @@ function ExtraFormText({ resultAIText, setResultAIText }) {
               ) : (
                 <>
                   <div className="divider my-0">Template</div>
+
                   <div className="grid gap-2">
-                    <button
-                      className="btn btn-sm"
-                      disabled={isLoading}
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        const template = "Efisiensi Harga";
-                        setInputValue(template);
-                        await handleGenerateAIWithPrompt();
-                      }}
-                    >
-                      Efisiensi Harga
-                    </button>
+                    {templateNotes.map((templateNote, index) => {
+                      return (
+                        <button className="btn btn-sm"
+                          key={index}
+                          disabled={isLoading}
+                          onClick={async (e) => {
+                            e.preventDefault();
+                            setInputValue(templateNote);
+                            await handleGenerateAIWithPrompt();
+                          }}
+                        >
+                          {templateNote}
+                        </button>
+                      );
+                    })}
+
                   </div>
 
                   <div className="divider my-0">Atau</div>
