@@ -83,20 +83,20 @@ function OrderPage() {
     };
 
     // === Validasi Wajib ===
-    // const missingFields = [];
+    const missingFields = [];
 
-    // for (const [key, value] of Object.entries(data)) {
-    //   if ((typeof value === "string" && value === "") || (typeof value === "boolean" && value === false)) {
-    //     missingFields.push(key);
-    //   }
-    // }
+    for (const [key, value] of Object.entries(data)) {
+      if ((typeof value === "string" && value === "") || (typeof value === "boolean" && value === false)) {
+        missingFields.push(key);
+      }
+    }
 
-    // if (missingFields.length > 0) {
-    //   toast.error("Mohon lengkapi semua data dan setujui syarat & ketentuan.", {
-    //     duration: 3000,
-    //   });
-    //   return;
-    // }
+    if (missingFields.length > 0) {
+      toast.error("Mohon lengkapi semua data dan setujui syarat & ketentuan.", {
+        duration: 3000,
+      });
+      return;
+    }
 
     // // === Valid Email (opsional tambahan) ===
     // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -111,28 +111,6 @@ function OrderPage() {
 
 
   const handleSubmit = async () => {
-    // console.log(formData)
-    // const paymentPass = {
-    //   "transaction_id": "f3056c3c-9875-4440-86b3-f9d1cec2bab1",
-    //   "order_id": "DNRWO-130625-nPj3s",
-    //   "gross_amount": "19500000.00",
-    //   "payment_type": "bank_transfer",
-    //   "transaction_time": "2025-06-13 10:13:24",
-    //   "transaction_status": "pending",
-    //   "fraud_status": "accept",
-    //   "status_code": "",
-    //   "bank_name": "bca",
-    //   "va": "88272172134443448645477",
-    //   "status_message": "Success, Bank Transfer transaction is created",
-    //   "currency": "IDR",
-    //   "expiry_time": moment().utcOffset(7).add(1, 'day').format('YYYY-MM-DD HH:mm:ss'),
-    // }
-    // sessionStorage.setItem('paymentData', JSON.stringify(paymentPass));
-    // toast.success('ini mut dah bisa kan liat payment :) ?', {
-    //   duration: 6000,
-    // });
-    // navigate("/payment")
-    // return
     try {
       // 1. Buat order
       const response = await createOrder(formData);
@@ -148,7 +126,6 @@ function OrderPage() {
 
           try {
             const uploadResponse = await uploadDocumentOrder(imageFormData);
-            console.log("Upload success", uploadResponse);
             toast.success(uploadResponse.message || "Dokumen berhasil diunggah", {
               duration: 3000,
             });
@@ -166,16 +143,14 @@ function OrderPage() {
             }
           }
         }
-        
-        // success booking wedding
-        // success upload to cloud
 
         // 3. Simpan dan redirect
         sessionStorage.setItem("paymentData", JSON.stringify(response.data));
         toast.success(response.message || "Pemesanan berhasil!", {
           duration: 5000,
         });
-        // navigate("/payment");
+        navigate("/payment");
+
       }
     } catch (error) {
       const err = error?.response?.data;
