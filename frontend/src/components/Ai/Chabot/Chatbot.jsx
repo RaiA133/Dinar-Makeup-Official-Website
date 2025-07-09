@@ -313,8 +313,11 @@ const Chatbot = () => {
             </section>
           ) : (
             <div>
-              <div className="card-actions justify-center">
+              <div className="card-actions justify-center my-5 space-y-2 rounded-md border border-stone-300 mx-5 p-5 ">
                 <GoogleLoginButton redirectTo="/" />
+                <div className='text-center text-sm'>
+                  <div>Untuk menggunakan chatbot diharapkan untuk login. Atau lakukan <a href="" className=' link-neutral text-primary'>registrasi</a> akun</div>
+                </div>
               </div>
             </div>
           )}
