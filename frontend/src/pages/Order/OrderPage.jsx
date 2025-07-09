@@ -531,6 +531,7 @@ function OrderPage() {
                         </div>
                       </fieldset>
 
+                      {/* Data Optional */}
                       <ExtraForm />
 
                     </div>
@@ -640,7 +641,6 @@ function OrderPage() {
                     </label>
                   </div>
 
-
                 </div>
 
                 <div className="divider"></div>
@@ -741,10 +741,10 @@ function OrderPage() {
                     </div> */}
 
                     <div className="modal-action mt-6">
-                      <button 
-                      className="btn btn-error" 
-                      onClick={handleSubmit}
-                      disabled={isSubmitting}
+                      <button
+                        className="btn btn-error"
+                        onClick={handleSubmit}
+                        disabled={isSubmitting}
                       >{isSubmitting ? (
                         <span className="loading loading-spinner"></span>
                       ) : (
@@ -754,9 +754,7 @@ function OrderPage() {
                     </div>
                   </div>
                 </div>
-
-
-
+                {/* END MODAL CONFIRM BOOKING */}
 
               </div>
 
