@@ -16,6 +16,7 @@ type Config struct {
 	Cloudinary CloudinaryConfig
 	Midtrans   MidtransConfig
 	Google     GoogleConfig
+	Tencent    TencentCloud
 }
 type ServerConfig struct {
 	Host         string
@@ -76,6 +77,14 @@ type MidtransConfig struct {
 type GoogleConfig struct {
 	ClientID  string
 	SecretKey string
+}
+
+type TencentCloud struct {
+	TencentSecretID    string
+	TencentSecretKey   string
+	TencentRegion      string
+	TencentBucketName  string
+	TencentCosEndpoint string
 }
 
 func NewAppConfig(configPath string) (*Config, error) {
@@ -148,6 +157,12 @@ func NewAppConfig(configPath string) (*Config, error) {
 	// Google
 	cfg.Google.ClientID = v.GetString("GOOGLE_CLIENT_ID")
 	cfg.Google.SecretKey = v.GetString("GOOGLE_SECRET_KEY")
+
+	cfg.Tencent.TencentSecretID = v.GetString("TENCENT_SECRET_ID")
+	cfg.Tencent.TencentSecretKey = v.GetString("TENCENT_SECRET_KEY")
+	cfg.Tencent.TencentRegion = v.GetString("TENCENT_REGION")
+	cfg.Tencent.TencentBucketName = v.GetString("TENCENT_BUCKET_NAME")
+	cfg.Tencent.TencentCosEndpoint = v.GetString("TENCENT_COS_ENDPOINT")
 
 	return cfg, nil
 }

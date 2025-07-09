@@ -109,3 +109,66 @@ func (oc *orderController) CallbackURL() gin.HandlerFunc {
 		response.SendSuccesResponse(c, http.StatusOK, "success callback url", notifPayload)
 	}
 }
+
+func (oc *orderController) GetOrder() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		auth := middleware.GetAuth(c)
+		if auth.Role != "user" && auth.Role != "admin" {
+			utils.LogErrorResponse(c, oc.logger, errors.New("access denied"))
+			response.SendErrorResponse(c, http.StatusForbidden, "access denied")
+			return
+		}
+
+		orderId := c.Param("orderId")
+		if orderId == "" {
+			utils.LogErrorResponse(c, oc.logger, errors.New("order ID is required"))
+			response.SendErrorResponse(c, http.StatusBadRequest, "order ID is required")
+			return
+		}
+
+		data, err := oc.service.GetOrder(c, orderId)
+		if err != nil {
+			utils.LogErrorResponse(c, oc.logger, err)
+			response.SendErrorResponse(c, http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		response.SendSuccesResponse(c, http.StatusOK, "success get order", data)
+	}
+}
+
+func (oc *orderController) RegisterDocument() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		orderId := context.PostForm("order_id")
+		auth := middleware.GetAuth(context)
+		if auth.Role != "user" && auth.Role != "admin" {
+			utils.LogErrorResponse(context, oc.logger, errors.New("access denied"))
+			response.SendErrorResponse(context, http.StatusForbidden, "access denied")
+			return
+		}
+
+		fileHeader, err := context.FormFile("file")
+		if err != nil {
+			utils.LogErrorResponse(context, oc.logger, errors.New("invalid file form"))
+			response.SendErrorResponse(context, http.StatusBadRequest, "invalid file form")
+			return
+		}
+
+		file, err := fileHeader.Open()
+		if err != nil {
+			utils.LogErrorResponse(context, oc.logger, errors.New("failed to open file"))
+			response.SendErrorResponse(context, http.StatusBadRequest, "failed to open file")
+			return
+		}
+		defer file.Close()
+
+		err = oc.service.RegisterDocument(context, orderId, file, fileHeader.Filename)
+		if err != nil {
+			utils.LogErrorResponse(context, oc.logger, errors.New("insert document failed"))
+			response.SendErrorResponse(context, http.StatusBadRequest, "insert document failed")
+			return
+		}
+
+		response.SendSuccesResponse(context, http.StatusOK, "success upload to cloud", nil)
+	}
+}

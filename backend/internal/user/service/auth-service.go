@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"github.com/RianIhsan/wedding-organizer-be/config"
 	"github.com/RianIhsan/wedding-organizer-be/internal/user"
 	"github.com/RianIhsan/wedding-organizer-be/internal/user/model"
@@ -104,10 +103,6 @@ func (a *authService) LoginWithGoogle(ctx context.Context, idToken string) (*dto
 	if err != nil {
 		return nil, errors.New("failed to generate token")
 	}
-	fmt.Println("=======================================")
-	fmt.Println("Access Token: ", accessToken)
-	fmt.Println("Refresh Token: ", refreshToken)
-	fmt.Println("=======================================")
 
 	return &dto.JwtToken{
 		AccessToken:  accessToken,
