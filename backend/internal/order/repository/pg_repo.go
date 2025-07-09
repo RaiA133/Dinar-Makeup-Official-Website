@@ -90,9 +90,6 @@ func (rp *orderPGRepository) FindOrdersData(ctx context.Context, offset, limit i
 
 func (rp *orderPGRepository) CheckTransaction(ctx context.Context, orderId string) (string, error) {
 	var paymentStatus string
-	fmt.Println("================================")
-	fmt.Println("ORDER ID = ", orderId)
-	fmt.Println("================================")
 
 	transactionStatus, err := rp.coreClient.CheckTransaction(orderId)
 	if err != nil {
@@ -118,7 +115,7 @@ func (rp *orderPGRepository) GetOrderByID(ctx context.Context, orderId string) (
 
 	var result joinResult
 
-	query := `
+	query := `	
 		SELECT 
 			o.id_order, o.user_id, o.product_id, o.final_amount, o.installment_amount,
 			o.outstanding, o.installment_status, o.va_number, o.order_status,
@@ -153,10 +150,6 @@ func (rp *orderPGRepository) GetOrderByID(ctx context.Context, orderId string) (
 
 func (rp *orderPGRepository) ConfirmPayment(ctx context.Context, orderID, paymentStatus string) error {
 	var data model.Order
-	fmt.Println("================================")
-	fmt.Println("ORDER ID = ", orderID)
-	fmt.Println("PAYMENT STATUS = ", paymentStatus)
-	fmt.Println("================================")
 	if err := rp.db.WithContext(ctx).Model(data).Where("id_order = ?", orderID).Update("payment_status", paymentStatus).Error; err != nil {
 		return err
 	}
