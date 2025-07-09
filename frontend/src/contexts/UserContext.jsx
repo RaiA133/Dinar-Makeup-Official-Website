@@ -12,9 +12,17 @@ export const UserContextProvider = ({ children }) => {
   const [img_profile_link, set_img_profile_link] = useState("");
   const [isLogin, setIsLogin] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
+  const [isTokenExist, setisTokenExist] = useState(false)
+  console.log("isLogin", isLogin);
+  useEffect(() => {
+    let token = Cookies.get("token");
+    if (token) setisTokenExist(true);
+    else setisTokenExist(false);
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {
+      
       try {
         const response = await getMe(); // get semua data profile mu
         if (response.status === 200) {
@@ -36,7 +44,7 @@ export const UserContextProvider = ({ children }) => {
       }
     };
     fetchData();
-  }, [navigate]) // ini artinya akan berjalan tanpa refresh
+  }, [navigate, isTokenExist]) // ini artinya akan berjalan tanpa refresh
 
   const updateUser = useCallback((response) => {
     localStorage.setItem("User", JSON.stringify(response));
