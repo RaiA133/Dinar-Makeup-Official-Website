@@ -36,7 +36,7 @@ function HomePage() {
   return (
     <div className="mx-0">
 
-      <SeoMeta slug={location.pathname} />
+      {/* <SeoMeta slug={location.pathname} /> */}
       <Toaster toastOptions={{ style: { maxWidth: '600px' } }} />
 
       {/* HERO */}

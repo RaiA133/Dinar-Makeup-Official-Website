@@ -1,5 +1,4 @@
 // src/components/Seo/SeoMeta.jsx
-import { Helmet } from 'react-helmet-async';
 import { useEffect, useRef, useState } from 'react';
 import { GoogleGenAI } from '@google/genai';
 
@@ -67,10 +66,10 @@ anda bisa crawl website, tolong cari info data knowladge dari sana untuk membuat
   console.log('meta', meta);
 
   return (
-    <Helmet>
+    <div>
       <title>{meta.title}</title>
       <meta name="description" content={meta.description} />
-    </Helmet>
+    </div>
   );
 };
 
