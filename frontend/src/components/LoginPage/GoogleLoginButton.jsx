@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 
 function GoogleLoginButton({ redirectTo = "/" }) {
   const navigate = useNavigate();
-  const { refreshUser } = useContext(UserContext)
+  const { refreshCallback } = useContext(UserContext)
 
   return (
     <GoogleLogin
@@ -27,7 +27,7 @@ function GoogleLoginButton({ redirectTo = "/" }) {
               sameSite: "strict",
             });
 
-            refreshUser();
+            refreshCallback();
             navigate(redirectTo);
           }
         } catch (error) {
