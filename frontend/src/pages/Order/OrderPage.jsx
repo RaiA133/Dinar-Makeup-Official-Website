@@ -38,6 +38,7 @@ function OrderPage() {
   const [tgl_tech_meeting, set_tgl_tech_meeting] = useState("")
   const [rangeDP, setRangeDP] = useState(100);
   const [paymentMethod, setPaymentMethod] = useState("bca");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const bookedDate = [] // ['2025-06-1', '2025-06-2', '2025-06-3', '2025-06-4']; // need api for this, couse currect API is for admin
   let notAvailableDate = [
@@ -55,7 +56,6 @@ function OrderPage() {
       amount: amount,
       booking_date: moment(new Date()).format("YYYY-MM-DD"),
       payment_method: paymentMethod,
-      notes: e.target.notes.value.trim(),
       customer_detail: {
         groom_full_name: e.target.nama_pria.value.trim(),
         groom_address: e.target.alamat_pria.value.trim(),
@@ -79,6 +79,7 @@ function OrderPage() {
       term_1: e.target.term_1.checked,
       term_2: e.target.term_2.checked,
 
+      notes: e.target.notes.value.trim(),
       documents: e.target.documents.files,
     };
 
@@ -86,10 +87,16 @@ function OrderPage() {
     const missingFields = [];
 
     for (const [key, value] of Object.entries(data)) {
-      if ((typeof value === "string" && value === "") || (typeof value === "boolean" && value === false)) {
+      // Skip pengecekan untuk notes dan documents
+      if (["notes", "documents"].includes(key)) continue;
+
+      if ((typeof value === "string" && value.trim() === "") ||
+        (typeof value === "boolean" && value === false) ||
+        (typeof value === "number" && isNaN(value))) {
         missingFields.push(key);
       }
     }
+
 
     if (missingFields.length > 0) {
       toast.error("Mohon lengkapi semua data dan setujui syarat & ketentuan.", {
@@ -111,6 +118,8 @@ function OrderPage() {
 
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
+
     try {
       // 1. Buat order
       const response = await createOrder(formData);
@@ -175,6 +184,8 @@ function OrderPage() {
           duration: 6000,
         });
       }
+    } finally {
+      setIsSubmitting(false);
     }
 
 
@@ -728,9 +739,18 @@ function OrderPage() {
                       <button className="btn btn-error" onClick={handleSubmit}>Checkout</button>
                       <button className="btn" onClick={() => document.getElementById('checkout_confirm_modal').close()}>Cancel</button>
                     </div> */}
+
                     <div className="modal-action mt-6">
-                      <button className="btn btn-error" onClick={handleSubmit}>Checkout</button>
-                      <label htmlFor="checkout_confirm_modal" className="btn">Cancel</label>
+                      <button 
+                      className="btn btn-error" 
+                      onClick={handleSubmit}
+                      disabled={isSubmitting}
+                      >{isSubmitting ? (
+                        <span className="loading loading-spinner"></span>
+                      ) : (
+                        "Checkout"
+                      )}</button>
+                      <label htmlFor="checkout_confirm_modal" className="btn" disabled={isSubmitting}>Cancel</label>
                     </div>
                   </div>
                 </div>

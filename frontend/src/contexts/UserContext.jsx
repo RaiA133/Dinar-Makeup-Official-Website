@@ -14,7 +14,7 @@ export const UserContextProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false)
 
   const [refresh, setRefresh] = useState(0); // use this on useEffect that set from callback below
-  console.log("isLogin", isLogin);
+  
   useEffect(() => {
 
     const checkLogin = async () => {
