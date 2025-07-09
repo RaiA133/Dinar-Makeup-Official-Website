@@ -8,6 +8,7 @@ function TransactionManagementPage() {
   let location = useLocation();
   const navigate = useNavigate();
   const { transcactionState, setTranscactionState, refreshCallback } = useContext(AdminContext)
+  console.log(transcactionState);
 
   const totalPages = transcactionState?.metadata?.total_pages || 0;
   const currentPage = transcactionState?.metadata?.current_page || 1;
@@ -33,95 +34,189 @@ function TransactionManagementPage() {
                   <tr>
                     <th className="w-12">#</th>
                     <th>Order ID</th>
-                    <th>Status</th>
+                    <th>Sisa Tagihan</th>
+                    <th>Status Bayar</th>
                     <th>Wedding Date</th>
+                    <th>Tanggal Transaksi</th>
                     <th className="w-32">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {transcactionState?.data?.map((transaction, index) => (
-                    <tr key={transaction.id} className="hover">
-                      <td>{index + 1}</td>
-                      <td>
-                        <span className="py-7 sm:py-0 badge badge-outline badge-primary badge-xs sm:badge-md text-center">
-                          {transaction.order_id}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={`badge badge-xs sm:badge-md ${transaction.transaction_information.payment_status === 'pending' ? 'badge-warning' : 'badge-success'}`}>
-                          {transaction.transaction_information.payment_status}
-                        </span>
-                      </td>
-                      <td>{transaction.wedding_date}</td>
-                      <td className="flex gap-1">
-                        <button
-                          className="btn btn-xs btn-ghost"
-                          onClick={() => document.getElementById(`transaction_modal_${transaction.id}`).showModal()}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                          </svg>
-                        </button>
+                  {transcactionState?.data
+                    ?.sort((a, b) => new Date(b.transaction_information.transaction_time) - new Date(a.transaction_information.transaction_time))
+                    .map((transaction, index) => (
+                      <tr key={transaction.id} className="hover">
+                        <td>{index + 1}</td>
+                        <td>
+                          <span className="py-7 sm:py-0 badge badge-outline badge-primary badge-sm text-center">
+                            {transaction.order_id}
+                          </span>
+                        </td>
+                        <td>Rp. {transaction.outstanding.toLocaleString()}</td>
+                        <td>
+                          <span className={`badge badge-sm ml-2 ${transaction.transaction_information.payment_status === 'pending'
+                            ? 'badge-warning'
+                            : transaction.transaction_information.payment_status === 'success'
+                              ? 'badge-success'
+                              : 'badge-error'
+                            }`}>
+                            {transaction.transaction_information.payment_status.toUpperCase()}
+                          </span>
+                        </td>
+                        <td>{transaction.wedding_date}</td>
+                        <td>{transaction.transaction_information.transaction_time}</td>
+                        <td className="flex gap-1">
+                          <button
+                            className="btn btn-xs btn-ghost"
+                            onClick={() => document.getElementById(`transaction_modal_${transaction.id}`).showModal()}
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                          </button>
 
-                        <button
-                          className="btn btn-xs btn-ghost text-error"
-                          onClick={() => document.getElementById(`transaction_delete_modal_${transaction.id}`).showModal()}
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                          <button
+                            className="btn btn-xs btn-ghost text-error"
+                            onClick={() => document.getElementById(`transaction_delete_modal_${transaction.id}`).showModal()}
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
 
               {/* Transaction Detail Modals */}
               {transcactionState?.data?.map((transaction) => (
                 <dialog key={`detail_${transaction.id}`} id={`transaction_modal_${transaction.id}`} className="modal">
-                  <div className="modal-box max-w-2xl">
-                    <h3 className="font-bold text-lg mb-4 text-primary">Transaction Details</h3>
+                  <div className="modal-box max-w-4xl">
+                    <h3 className="font-bold text-lg mb-4 text-primary">Detail Transaksi</h3>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-accent">Order Information</h4>
-                        <div className="divider m-0"></div>
-                        <p><span className="font-medium">Order ID:</span> {transaction.order_id}</p>
-                        <p><span className="font-medium">Status:</span>
-                          <span className={`badge ml-2 ${transaction.transaction_information.payment_status === 'pending' ? 'badge-warning' : 'badge-success'}`}>
-                            {transaction.transaction_information.payment_status}
-                          </span>
-                        </p>
-                        <p><span className="font-medium">Wedding Date:</span> {transaction.wedding_date}</p>
-                        <p><span className="font-medium">Notes:</span> {transaction.notes}</p>
-                      </div>
+                    <div className=" gap-4 bg-base-200 p-5">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
 
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-accent">Payment Details</h4>
-                        <div className="divider m-0"></div>
-                        <p><span className="font-medium">Amount:</span> Rp{transaction.installment_amount.toLocaleString()}</p>
-                        <p><span className="font-medium">Outstanding:</span> Rp{transaction.outstanding.toLocaleString()}</p>
-                        <p><span className="font-medium">Method:</span> {transaction.transaction_information.payment_method.toUpperCase()}</p>
-                        <p><span className="font-medium">VA Number:</span> {transaction.transaction_information.va_number}</p>
-                      </div>
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-accent">Informasi Order</h4>
+                          <div className="divider m-0"></div>
+                          <p><span className="font-medium">Order ID :</span> {transaction.order_id}</p>
+                          <p><span className="font-medium">Waktu Transaksi :</span> {transaction.transaction_information.transaction_time}</p>
+                          <p><span className="font-medium">Wedding Date :</span> {transaction.wedding_date}</p>
+                        </div>
 
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-accent">Customer Information</h4>
-                        <div className="divider m-0"></div>
-                        <p><span className="font-medium">Name:</span> {transaction.user_information.name}</p>
-                        <p><span className="font-medium">Email:</span> {transaction.user_information.email}</p>
-                        <p><span className="font-medium">Phone:</span> {transaction.user_information.phone || '-'}</p>
-                      </div>
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-accent">Informasi Pelanggan</h4>
+                          <div className="divider m-0"></div>
+                          <p><span className="font-medium">Nama :</span> {transaction.user_information.name}</p>
+                          <p><span className="font-medium">Email :</span> {transaction.user_information.email}</p>
+                          <p><span className="font-medium">Telepon :</span> {transaction.user_information.phone || '-'}</p>
+                          <p><span className="font-medium">NIK :</span> {transaction.user_information.nik}</p>
+                          <p><span className="font-medium">Alamat :</span> {transaction.user_information.address}</p>
+                        </div>
 
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-accent">Product Information</h4>
-                        <div className="divider m-0"></div>
-                        <p><span className="font-medium">Package:</span> {transaction.product_information.name}</p>
-                        <p><span className="font-medium">Price:</span> Rp{parseInt(transaction.product_information.price).toLocaleString()}</p>
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-accent">Detail Pembayaran</h4>
+                          <div className="divider m-0"></div>
+                          
+                          <p><span className="font-medium">Metode Pembayaran :</span> {transaction.transaction_information.payment_method.toUpperCase()}</p>
+                          <p><span className="font-medium">VA Number :</span> {transaction.transaction_information.va_number}</p>
+                          <p><span className="font-medium">Status Pembayaran :</span>
+                            <span className={`badge ml-2 ${transaction.transaction_information.payment_status === 'pending'
+                              ? 'badge-warning'
+                              : transaction.transaction_information.payment_status === 'success'
+                                ? 'badge-success'
+                                : 'badge-error'
+                              }`}>
+                              {transaction.transaction_information.payment_status.toUpperCase()}
+                            </span>
+                          </p>
+                        </div>
+
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-accent">Rencana Down payment (DP)</h4>
+                          <div className="divider m-0"></div>
+                          <p><span className="font-medium">Rencana DP :</span> Rp. {transaction.installment_amount.toLocaleString()}</p>
+                          <p><span className="font-medium">Sisa DP :</span> Rp. {transaction.outstanding.toLocaleString()}</p>
+                          <p><span className="font-medium">Status DP :</span>
+                            <span className={`badge ml-2 ${transaction.installment_status === 'OUTSTANDING' ? 'badge-warning' : 'badge-success'}`}>
+                              {transaction.installment_status}
+                            </span>
+                          </p>
+                        </div>
+
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-accent">Data Tambahan</h4>
+                          <div className="divider m-0"></div>
+                          <p><span className="font-medium">Notes :</span></p>
+                          <div className="rounded-box w-full border border-stone-400 p-4">{transaction.notes || '-'}</div>
+                          <div className="space-y-2">
+                            <p className="font-medium">Dokumen / Desain : </p>
+                            {transaction.document_orders ? (
+                              <div className="space-y-3">
+                                {Array.isArray(transaction.document_orders) ? transaction.document_orders.map((doc, idx) => {
+                                  const fileUrl = doc; // Ganti jika object: doc.url atau doc.path
+                                  const fileExt = fileUrl.file_name.split('.').pop().toLowerCase();
+                                  if (fileExt === 'pdf') {
+                                    return (
+                                      <iframe
+                                        key={idx}
+                                        src={`https://docs.google.com/gview?url=${encodeURIComponent(fileUrl.url)}&embedded=true`}
+                                        className="w-full h-64 border rounded"
+                                        title={`Dokumen ${idx + 1}`}
+                                      />
+                                    );
+                                  }
+                                  if (['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(fileExt)) {
+                                    return (
+                                      <div key={idx}>
+                                        <img
+                                          src={fileUrl.url}
+                                          alt={`Gambar ${idx + 1}`}
+                                          className="max-w-full rounded border cursor-pointer"
+                                          onClick={() => document.getElementById(`image_modal_${idx}`).showModal()}
+                                        />
+                                        <dialog id={`image_modal_${idx}`} className="modal modal-bottom sm:modal-middle">
+                                          <div className="modal-box p-0">
+                                            <img src={fileUrl.url} alt={`Preview Gambar ${idx + 1}`} className="w-full max-h-full object-contain rounded-t" />
+                                          </div>
+                                          <form method="dialog" className="modal-backdrop">
+                                            <button>close</button>
+                                          </form>
+                                        </dialog>
+                                      </div>
+                                    );
+                                  } else {
+                                    return (
+                                      <div key={idx}>
+                                        <a href={fileUrl.url} target="_blank" rel="noopener noreferrer" className="link link-primary">
+                                          {fileUrl.file_name}
+                                        </a>
+                                      </div>
+                                    );
+                                  }
+                                }) : (
+                                  <p>Tipe dokumen tidak valid</p>
+                                )}
+                              </div>
+                            ) : (
+                              <p>-</p>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-accent">Informasi Produk</h4>
+                          <div className="divider m-0"></div>
+                          <p><span className="font-medium">Paket :</span> {transaction.product_information.name}</p>
+                          <p><span className="font-medium">Harga :</span> Rp{parseInt(transaction.product_information.price).toLocaleString()}</p>
+                        </div>
+
                       </div>
                     </div>
+
 
                     <div className="modal-action">
                       <form method="dialog">

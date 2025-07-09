@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { ProductsContext } from "../../contexts/ProductsContext";
 import { UserContext } from "../../contexts/UserContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { createOrder, getProductByID } from "../../modules/fetch";
+import { createOrder, getProductByID, uploadDocumentOrder } from "../../modules/fetch";
 
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
@@ -11,6 +11,7 @@ import moment from 'moment';
 import toast, { Toaster } from "react-hot-toast";
 
 import { FaCheck, FaShoppingCart, FaRegFileAlt, FaBox, FaCreditCard } from "react-icons/fa";
+import ExtraForm from "../../components/OrderPage/ExtraForm";
 
 function OrderPage() {
   const { id } = useParams();
@@ -50,49 +51,59 @@ function OrderPage() {
     e.preventDefault();
 
     const data = {
-      nama_pria: e.target.nama_pria.value.trim(),
-      alamat_pria: e.target.alamat_pria.value.trim(),
-      email_pria: e.target.email_pria.value.trim(),
-      ig_pria: e.target.ig_pria.value.trim(),
+      product_id: productsByIDState.id,
+      amount: amount,
+      booking_date: moment(new Date()).format("YYYY-MM-DD"),
+      payment_method: paymentMethod,
+      notes: e.target.notes.value.trim(),
+      customer_detail: {
+        groom_full_name: e.target.nama_pria.value.trim(),
+        groom_address: e.target.alamat_pria.value.trim(),
+        groom_email: e.target.email_pria.value.trim(),
+        groom_instagram: e.target.ig_pria.value.trim(),
 
-      nama_wanita: e.target.nama_wanita.value.trim(),
-      alamat_wanita: e.target.alamat_wanita.value.trim(),
-      email_wanita: e.target.email_wanita.value.trim(),
-      ig_wanita: e.target.ig_wanita.value.trim(),
-
-      tgl_akad: tgl_akad ? moment(new Date(tgl_akad)).format("YYYY-MM-DD") : "",
-      lokasi_pernikahan: e.target.lokasi_pernikahan.value.trim(),
-      tgl_acara: tgl_acara ? moment(new Date(tgl_acara)).format("YYYY-MM-DD") : "",
-      jam_akad: e.target.jam_akad.value.trim(),
-      jumlah_tamu: e.target.jumlah_tamu.value.trim(),
-      tgl_tech_meeting: tgl_tech_meeting ? moment(new Date(tgl_tech_meeting)).format("YYYY-MM-DD") : "",
+        bride_full_name: e.target.nama_wanita.value.trim(),
+        bride_address: e.target.alamat_wanita.value.trim(),
+        bride_email: e.target.email_wanita.value.trim(),
+        bride_instagram: e.target.ig_wanita.value.trim(),
+      },
+      detail_order: {
+        akad_date: tgl_akad ? moment(new Date(tgl_akad)).format("YYYY-MM-DD") : "",
+        location: e.target.lokasi_pernikahan.value.trim(),
+        show_date: tgl_acara ? moment(new Date(tgl_acara)).format("YYYY-MM-DD") : "",
+        akad_time: e.target.jam_akad.value.trim(),
+        guest_count: parseInt(e.target.jumlah_tamu.value),
+        tech_meeting: tgl_tech_meeting ? moment(new Date(tgl_tech_meeting)).format("YYYY-MM-DD") : "",
+      },
 
       term_1: e.target.term_1.checked,
       term_2: e.target.term_2.checked,
+
+      documents: e.target.documents.files,
     };
 
     // === Validasi Wajib ===
-    const missingFields = [];
+    // const missingFields = [];
 
-    for (const [key, value] of Object.entries(data)) {
-      if ((typeof value === "string" && value === "") || (typeof value === "boolean" && value === false)) {
-        missingFields.push(key);
-      }
-    }
+    // for (const [key, value] of Object.entries(data)) {
+    //   if ((typeof value === "string" && value === "") || (typeof value === "boolean" && value === false)) {
+    //     missingFields.push(key);
+    //   }
+    // }
 
-    if (missingFields.length > 0) {
-      toast.error("Mohon lengkapi semua data dan setujui syarat & ketentuan.", {
-        duration: 3000,
-      });
-      return;
-    }
+    // if (missingFields.length > 0) {
+    //   toast.error("Mohon lengkapi semua data dan setujui syarat & ketentuan.", {
+    //     duration: 3000,
+    //   });
+    //   return;
+    // }
 
-    // === Valid Email (opsional tambahan) ===
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data.email_pria) || !emailRegex.test(data.email_wanita)) {
-      toast.error("Format email tidak valid.", { duration: 3000 });
-      return;
-    }
+    // // === Valid Email (opsional tambahan) ===
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // if (!emailRegex.test(data.groom_email) || !emailRegex.test(data.bride_email)) {
+    //   toast.error("Format email tidak valid.", { duration: 3000 });
+    //   return;
+    // }
 
     setFormData(data);
     document.getElementById("checkout_confirm_modal").checked = true;
@@ -100,55 +111,98 @@ function OrderPage() {
 
 
   const handleSubmit = async () => {
-    console.log(formData)
-    const paymentPass = {
-      "transaction_id": "f3056c3c-9875-4440-86b3-f9d1cec2bab1",
-      "order_id": "DNRWO-130625-nPj3s",
-      "gross_amount": "19500000.00",
-      "payment_type": "bank_transfer",
-      "transaction_time": "2025-06-13 10:13:24",
-      "transaction_status": "pending",
-      "fraud_status": "accept",
-      "status_code": "",
-      "bank_name": "bca",
-      "va": "88272172134443448645477",
-      "status_message": "Success, Bank Transfer transaction is created",
-      "currency": "IDR",
-      "expiry_time": moment().utcOffset(7).add(1, 'day').format('YYYY-MM-DD HH:mm:ss'),
-    }
-    sessionStorage.setItem('paymentData', JSON.stringify(paymentPass));
-    toast.success('ini mut dah bisa kan liat payment :) ?', {
-      duration: 6000,
-    });
-    navigate("/payment")
-    return
+    // console.log(formData)
+    // const paymentPass = {
+    //   "transaction_id": "f3056c3c-9875-4440-86b3-f9d1cec2bab1",
+    //   "order_id": "DNRWO-130625-nPj3s",
+    //   "gross_amount": "19500000.00",
+    //   "payment_type": "bank_transfer",
+    //   "transaction_time": "2025-06-13 10:13:24",
+    //   "transaction_status": "pending",
+    //   "fraud_status": "accept",
+    //   "status_code": "",
+    //   "bank_name": "bca",
+    //   "va": "88272172134443448645477",
+    //   "status_message": "Success, Bank Transfer transaction is created",
+    //   "currency": "IDR",
+    //   "expiry_time": moment().utcOffset(7).add(1, 'day').format('YYYY-MM-DD HH:mm:ss'),
+    // }
+    // sessionStorage.setItem('paymentData', JSON.stringify(paymentPass));
+    // toast.success('ini mut dah bisa kan liat payment :) ?', {
+    //   duration: 6000,
+    // });
+    // navigate("/payment")
+    // return
     try {
-      const response = await createOrder(data);
-      console.log(response);
+      // 1. Buat order
+      const response = await createOrder(formData);
+
       if (response.status === 200) {
-        const successMessage = response.message;
-        sessionStorage.setItem('paymentData', JSON.stringify(response.data)); // riwayat payment masih
-        toast.success(successMessage, {
-          duration: 6000,
+        const transactionId = response.data.transaction_id;
+
+        // 2. Upload dokumen (jika ada)
+        if (formData.documents?.length > 0) {
+          const imageFormData = new FormData();
+          imageFormData.append("order_id", transactionId);
+          imageFormData.append("file", formData.documents[0]);
+
+          try {
+            const uploadResponse = await uploadDocumentOrder(imageFormData);
+            console.log("Upload success", uploadResponse);
+            toast.success(uploadResponse.message || "Dokumen berhasil diunggah", {
+              duration: 3000,
+            });
+          } catch (uploadErr) {
+            const err = uploadErr?.response?.data;
+
+            if (err?.status === 400) {
+              toast.error("Upload dokumen gagal: " + err.message, {
+                duration: 4000,
+              });
+            } else {
+              toast.error("Gagal upload dokumen. Coba lagi nanti.", {
+                duration: 4000,
+              });
+            }
+          }
+        }
+        
+        // success booking wedding
+        // success upload to cloud
+
+        // 3. Simpan dan redirect
+        sessionStorage.setItem("paymentData", JSON.stringify(response.data));
+        toast.success(response.message || "Pemesanan berhasil!", {
+          duration: 5000,
         });
-        navigate("/payment")
+        // navigate("/payment");
       }
     } catch (error) {
-      if (error.response.data.status === 400) { // error validation
-        const rawError = error.response.data.message;
-        const errorMessages = formatMixedErrors(rawError);
-        errorMessages.forEach(message => {
-          toast.error(message, {
-            duration: 2500,
-          });
+      const err = error?.response?.data;
+
+      if (err?.status === 400) {
+        const rawError = err.message;
+        // Optional: jika `formatMixedErrors` undefined, gunakan fallback
+        if (typeof formatMixedErrors === "function") {
+          const errorMessages = formatMixedErrors(rawError);
+          errorMessages.forEach((message) =>
+            toast.error(message, { duration: 2500 })
+          );
+        } else {
+          toast.error(rawError, { duration: 3000 });
+        }
+      } else if (err?.status === 500) {
+        toast.error(err.message || "Terjadi kesalahan server", {
+          duration: 6000,
         });
-      } else if (error.response.data.status === 500) {
-        toast.error(error.response.data.message, {
+      } else {
+        toast.error("Gagal melakukan pemesanan", {
           duration: 6000,
         });
       }
-      return;
     }
+
+
   }
 
 
@@ -183,7 +237,7 @@ function OrderPage() {
 
                 {/* SECTION : Review Paket */}
                 <div className="bg-base-100 collapse collapse-arrow join-item border-base-300 border">
-                  <input type="radio" name="my-accordion-4" />
+                  <input type="radio" name="order-accordion" />
 
                   {/* Header */}
                   <div className="collapse-title font-semibold">
@@ -326,13 +380,15 @@ function OrderPage() {
 
                 {/* SECTION : Pengisian FORM Booking */}
                 <div className="bg-base-100 collapse collapse-arrow join-item border-base-300 border">
-                  <input type="radio" name="my-accordion-4" defaultChecked />
+                  <input type="radio" name="order-accordion" defaultChecked />
 
                   {/* Header */}
                   <div className="collapse-title font-semibold">
                     <div className="flex items-center gap-5 text-error">
                       <FaCreditCard size={40} />
-                      <div className="text-md sm:text-xl text-base-content">Pengisian Form Booking</div>
+                      <div className="text-base-content">
+                        <div className="text-md sm:text-xl">Pengisian Form Booking</div>
+                      </div>
                     </div>
                   </div>
 
@@ -405,7 +461,7 @@ function OrderPage() {
                             </button>
                             <div popover="auto" id="tgl_akad" className="dropdown" style={{ positionAnchor: "--tgl_akad" }}>
                               <DayPicker
-                              required
+                                required
                                 className="react-day-picker"
                                 mode="single"
                                 captionLayout="dropdown"
@@ -488,6 +544,8 @@ function OrderPage() {
                           <span>Saya telah membaca kebijakan pembatalan</span>
                         </div>
                       </fieldset>
+
+                      <ExtraForm />
 
                     </div>
 
@@ -618,26 +676,26 @@ function OrderPage() {
                         <div className="divider m-0 mb-4"></div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                           <div className="space-y-1">
-                            <p><span className="font-medium">Nama Pria:</span> {formData?.nama_pria}</p>
-                            <p><span className="font-medium">Alamat Pria:</span> {formData?.alamat_pria}</p>
-                            <p><span className="font-medium">Email Pria:</span> {formData?.email_pria}</p>
-                            <p><span className="font-medium">Instagram Pria:</span> {formData?.ig_pria}</p>
+                            <p><span className="font-medium">Nama Pria:</span> {formData?.customer_detail?.groom_full_name}</p>
+                            <p><span className="font-medium">Alamat Pria:</span> {formData?.customer_detail?.groom_address}</p>
+                            <p><span className="font-medium">Email Pria:</span> {formData?.customer_detail?.groom_email}</p>
+                            <p><span className="font-medium">Instagram Pria:</span> {formData?.customer_detail?.groom_instagram}</p>
                           </div>
                           <div className="space-y-1">
-                            <p><span className="font-medium">Nama Wanita:</span> {formData?.nama_wanita}</p>
-                            <p><span className="font-medium">Alamat Wanita:</span> {formData?.alamat_wanita}</p>
-                            <p><span className="font-medium">Email Wanita:</span> {formData?.email_wanita}</p>
-                            <p><span className="font-medium">Instagram Wanita:</span> {formData?.ig_wanita}</p>
+                            <p><span className="font-medium">Nama Wanita:</span> {formData?.customer_detail?.bride_full_name}</p>
+                            <p><span className="font-medium">Alamat Wanita:</span> {formData?.customer_detail?.bride_address}</p>
+                            <p><span className="font-medium">Email Wanita:</span> {formData?.customer_detail?.bride_email}</p>
+                            <p><span className="font-medium">Instagram Wanita:</span> {formData?.customer_detail?.bride_instagram}</p>
                           </div>
                           <div className="space-y-1">
-                            <p><span className="font-medium">Tanggal Akad:</span> {formData?.tgl_akad}</p>
-                            <p><span className="font-medium">Jam Akad:</span> {formData?.jam_akad}</p>
-                            <p><span className="font-medium">Tanggal Acara:</span> {formData?.tgl_acara}</p>
+                            <p><span className="font-medium">Tanggal Akad:</span> {formData?.detail_order?.akad_date}</p>
+                            <p><span className="font-medium">Jam Akad:</span> {formData?.detail_order?.akad_time}</p>
+                            <p><span className="font-medium">Tanggal Acara:</span> {formData?.detail_order?.show_date}</p>
                           </div>
                           <div className="space-y-1">
-                            <p><span className="font-medium">Jumlah Tamu:</span> {formData?.jumlah_tamu}</p>
-                            <p><span className="font-medium">Tanggal Tech Meeting:</span> {formData?.tgl_tech_meeting}</p>
-                            <p><span className="font-medium">Lokasi Pernikahan:</span> {formData?.lokasi_pernikahan}</p>
+                            <p><span className="font-medium">Jumlah Tamu:</span> {formData?.detail_order?.guest_count}</p>
+                            <p><span className="font-medium">Tanggal Tech Meeting:</span> {formData?.detail_order?.tech_meeting}</p>
+                            <p><span className="font-medium">Lokasi Pernikahan:</span> {formData?.detail_order?.location}</p>
                           </div>
                         </div>
                       </section>

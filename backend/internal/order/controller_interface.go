@@ -8,4 +8,5 @@ type ControllerInterface interface {
 	CallbackURL() gin.HandlerFunc
 	GetOrder() gin.HandlerFunc
 	RegisterDocument() gin.HandlerFunc
+	GetOrdersByUserId() gin.HandlerFunc
 }

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/RianIhsan/wedding-organizer-be/internal/order"
 	"github.com/RianIhsan/wedding-organizer-be/internal/order/model"
-	modelUser "github.com/RianIhsan/wedding-organizer-be/internal/user/model"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/payment"
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/pkg/errors"
@@ -90,9 +89,6 @@ func (rp *orderPGRepository) FindOrdersData(ctx context.Context, offset, limit i
 
 func (rp *orderPGRepository) CheckTransaction(ctx context.Context, orderId string) (string, error) {
 	var paymentStatus string
-	fmt.Println("================================")
-	fmt.Println("ORDER ID = ", orderId)
-	fmt.Println("================================")
 
 	transactionStatus, err := rp.coreClient.CheckTransaction(orderId)
 	if err != nil {
@@ -108,55 +104,48 @@ func (rp *orderPGRepository) CheckTransaction(ctx context.Context, orderId strin
 	return "", errors.New("transaction not found")
 }
 
-func (rp *orderPGRepository) GetOrderByID(ctx context.Context, orderId string) (*model.Order, error) {
-	type joinResult struct {
-		model.Order
-		User           modelUser.User       `gorm:"embedded"`
-		CustomerDetail model.CustomerDetail `gorm:"embedded"`
-		DetailOrder    model.DetailOrder    `gorm:"embedded"`
-	}
+func (rp *orderPGRepository) GetOrderByID(ctx context.Context, idOrder string) (*model.Order, error) {
+	var order model.Order
 
-	var result joinResult
-
-	query := `
-		SELECT 
-			o.id_order, o.user_id, o.product_id, o.final_amount, o.installment_amount,
-			o.outstanding, o.installment_status, o.va_number, o.order_status,
-			o.payment_status, o.payment_method, o.notes, o.wedding_date,
-			o.transaction_time, o.expired_va, o.created_at, o.updated_at,
-
-			u.id AS user_id, u.name, u.email, u.phone_number, u.role, -- sesuaikan kolom user
-			cd.id AS customer_id, cd.groom_full_name, cd.bride_full_name,
-			cd.groom_address, cd.bride_address, cd.groom_email, cd.bride_email,
-			cd.groom_instagram, cd.bride_instagram,
-			dd.id AS detail_id, dd.akad_date, dd.show_date, dd.location,
-			dd.akad_time, dd.guest_count, dd.tech_meeting
-		FROM orders o
-		LEFT JOIN users u ON o.user_id = u.id
-		LEFT JOIN customer_details cd ON o.id_order = cd.order_id
-		LEFT JOIN detail_orders dd ON o.id_order = dd.order_id
-		WHERE o.id_order = $1
-		LIMIT 1
-	`
-
-	if err := rp.db.WithContext(ctx).Raw(query, orderId).Scan(&result).Error; err != nil {
+	// Query order utama beserta user dan product
+	err := rp.db.WithContext(ctx).
+		Preload("User").
+		Preload("Product").
+		Where("id = ?", idOrder).
+		First(&order).Error
+	if err != nil {
 		return nil, err
 	}
 
-	// Mapping manual
-	result.Order.User = result.User
-	result.Order.CustomerDetail = result.CustomerDetail
-	result.Order.DetailOrder = result.DetailOrder
+	// Query relasi: CustomerDetail
+	var customer model.CustomerDetail
+	if err := rp.db.WithContext(ctx).
+		Where("order_id = ?", order.Id).
+		First(&customer).Error; err == nil {
+		order.CustomerDetail = customer
+	}
 
-	return &result.Order, nil
+	// Query relasi: DetailOrder
+	var detail model.DetailOrder
+	if err := rp.db.WithContext(ctx).
+		Where("order_id = ?", order.Id).
+		First(&detail).Error; err == nil {
+		order.DetailOrder = detail
+	}
+
+	// Query relasi: DocumentOrders (slice)
+	var documents []model.DocumentOrder
+	if err := rp.db.WithContext(ctx).
+		Where("order_id = ?", order.Id).
+		Find(&documents).Error; err == nil {
+		order.DocumentOrders = documents
+	}
+
+	return &order, nil
 }
 
 func (rp *orderPGRepository) ConfirmPayment(ctx context.Context, orderID, paymentStatus string) error {
 	var data model.Order
-	fmt.Println("================================")
-	fmt.Println("ORDER ID = ", orderID)
-	fmt.Println("PAYMENT STATUS = ", paymentStatus)
-	fmt.Println("================================")
 	if err := rp.db.WithContext(ctx).Model(data).Where("id_order = ?", orderID).Update("payment_status", paymentStatus).Error; err != nil {
 		return err
 	}
@@ -201,4 +190,22 @@ func (rp *orderPGRepository) InsertDocument(ctx context.Context, entity *model.D
 	}
 
 	return entity, nil
+}
+
+func (rp *orderPGRepository) GetAllTransactionByUserID(ctx context.Context, userID string) ([]*model.Order, error) {
+	var orders []*model.Order
+
+	err := rp.db.WithContext(ctx).
+		Preload("User").
+		Preload("Product").
+		Preload("DocumentOrders").
+		Where("user_id = ?", userID).
+		Order("created_at DESC").
+		Find(&orders).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return orders, nil
 }

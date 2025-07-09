@@ -57,6 +57,21 @@ async function createOrder(data) {
   }
 }
 
+//  Function for upload any file after order endpoint
+async function uploadDocumentOrder(formData) {
+  const formDataObject = Object.fromEntries(formData.entries());
+  console.log('formDataObject', formDataObject);
+  try {
+    const response = await instance.post(`/order/document`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
 //Update Profile
 async function updateProfile(data) {
   console.log(data);
@@ -77,7 +92,7 @@ async function updateProfileAvatar(formData) {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return response.data;
-  } 
+  }
   catch (error) {
     const file = formData.get('file');
     if (file && file.size > 2000000) {
@@ -210,8 +225,8 @@ export {
   getAllProducts, getProductByID,
   createProduct, updateProduct, uploadImageProduct, deleteProductByID, deleteImageProduct,
   getMe, updateProfile, updateProfileAvatar,
-  createOrder,
+  createOrder, uploadDocumentOrder,
   getAllUsers, deleteUserByID,
-  getAllTrasaction, 
+  getAllTrasaction,
 };
 
