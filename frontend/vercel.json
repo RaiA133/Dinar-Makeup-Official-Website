@@ -5,5 +5,10 @@
       "dest": "/",
       "status": 200
     }
-  ]
+  ],
+  "build": {
+    "env": {
+      "NPM_FLAGS": "--legacy-peer-deps"
+    }
+  },
 }
