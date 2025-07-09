@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useContext } from 'react';
 import { PaperAirplaneIcon, SparklesIcon, ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/solid';
 import { chatBot, guideBot } from "../modules/fetch/ai";
 import { GoogleGenAI } from "@google/genai";
@@ -7,10 +7,15 @@ import MarkdownRenderer from './MarkdownRenderer';
 import introJs from 'intro.js';
 import 'intro.js/introjs.css';
 import 'intro.js/themes/introjs-modern.css';
+import GoogleLoginButton from '../../LoginPage/GoogleLoginButton';
+import { UserContext } from '../../../contexts/UserContext';
+import Cookies from "js-cookie";
 // import { GoogleAuth } from 'google-auth-library';
 
 const Chatbot = () => {
   const navigate = useNavigate();
+  const { isLogin } = useContext(UserContext)
+
   const [messages, setMessages] = useState([
     { id: 1, text: 'Halo! Saya Dinar, asisten virtual Dinar Makeup. Ada yang bisa saya bantu?', sender: 'bot' }
   ]);
@@ -152,7 +157,7 @@ const Chatbot = () => {
             position: step.position
           };
         } catch (err) {
-          console.warn("Skipping invalid selector: " + step.element  + "—" + err.message);
+          console.warn("Skipping invalid selector: " + step.element + "—" + err.message);
           return null;
         }
       })
@@ -209,100 +214,110 @@ const Chatbot = () => {
             </div>
           </div>
 
-          {/* Area Pesan */}
-          <div className="flex-1 p-4 overflow-y-auto bg-base-50 max-h-96 text-xs">
-            {messages.map((message, index) => (
+          {isLogin ? (
+            <section>
+              {/* Area Pesan */}
+              <div className="flex-1 p-4 overflow-y-auto bg-base-50 max-h-96 text-xs">
+                {messages.map((message, index) => (
 
-              <div key={index} className={`chat my-2 ${message.sender === 'user' ? 'chat-end' : 'chat-start'}`}>
-                <div className={`chat-bubble ${message.sender === 'user' ? 'chat-bubble-error text-base-100' : ''}`}>
-                  <MarkdownRenderer>{message.text}</MarkdownRenderer>
-                </div>
-              </div>
-
-            ))}
-
-            {/* LOADING CHATBOT */}
-            {isLoading && !isLoadingChatGuide && (
-              <div className="chat my-2 chat-start">
-                <div className="chat-bubble flex gap-5 items-center max-w-11/12">
-                  <div className="flex w-92 flex-col gap-2">
-                    <div className="skeleton bg-neutral-content h-2 w-11/12"></div>
-                    <div className="skeleton bg-neutral-content h-2 w-9/12"></div>
-                    <div className="skeleton bg-neutral-content h-2 w-7/12"></div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* LOADING AI TOUR GUIDE */}
-            {isLoadingChatGuide && (
-              <div className="chat my-2 chat-start">
-                <div className="chat-bubble flex items-center gap-4 max-w-11/12 skeleton">
-                  <div className="animate-spin-slow">
-                    <SparklesIcon className="h-5 w-5 text-primary animate-pulse" />
-                  </div>
-                  <div className="flex flex-col">
-                    <p className="text-xs text-base-content">
-                      AI sedang membuatkan tour guide untuk Anda.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* HIT API AI TOUR GUIDE ? */}
-            {askToGuideButton && !showGuideButton && !isLoadingChatGuide && (
-              <div className='flex items-center justify-start'>
-                <div className="chat my-2 chat-start w-full">
-                  <div className="chat-bubble flex items-center gap-1">
-                    Pakai AI Tour Guide
-                    <div className="animate-spin-slow">
-                      <SparklesIcon className="h-5 w-5 text-primary animate-pulse" />
+                  <div key={index} className={`chat my-2 ${message.sender === 'user' ? 'chat-end' : 'chat-start'}`}>
+                    <div className={`chat-bubble ${message.sender === 'user' ? 'chat-bubble-error text-base-100' : ''}`}>
+                      <MarkdownRenderer>{message.text}</MarkdownRenderer>
                     </div>
-                    ?
                   </div>
+
+                ))}
+
+                {/* LOADING CHATBOT */}
+                {isLoading && !isLoadingChatGuide && (
+                  <div className="chat my-2 chat-start">
+                    <div className="chat-bubble flex gap-5 items-center max-w-11/12">
+                      <div className="flex w-92 flex-col gap-2">
+                        <div className="skeleton bg-neutral-content h-2 w-11/12"></div>
+                        <div className="skeleton bg-neutral-content h-2 w-9/12"></div>
+                        <div className="skeleton bg-neutral-content h-2 w-7/12"></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* LOADING AI TOUR GUIDE */}
+                {isLoadingChatGuide && (
+                  <div className="chat my-2 chat-start">
+                    <div className="chat-bubble flex items-center gap-4 max-w-11/12 skeleton">
+                      <div className="animate-spin-slow">
+                        <SparklesIcon className="h-5 w-5 text-primary animate-pulse" />
+                      </div>
+                      <div className="flex flex-col">
+                        <p className="text-xs text-base-content">
+                          AI sedang membuatkan tour guide untuk Anda.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* HIT API AI TOUR GUIDE ? */}
+                {askToGuideButton && !showGuideButton && !isLoadingChatGuide && (
+                  <div className='flex items-center justify-start'>
+                    <div className="chat my-2 chat-start w-full">
+                      <div className="chat-bubble flex items-center gap-1">
+                        Pakai AI Tour Guide
+                        <div className="animate-spin-slow">
+                          <SparklesIcon className="h-5 w-5 text-primary animate-pulse" />
+                        </div>
+                        ?
+                      </div>
+                    </div>
+                    <div className="flex justify-center gap-2">
+                      <button className='btn btn-sm btn-error text-base-100' onClick={handleUseAiTourGuide}>Ya</button>
+                      <button className='btn btn-sm' onClick={() => setAskToGuideButton(false)}>Tidak</button>
+                    </div>
+                  </div>
+                )}
+
+                {/* START AI TOUR GUIDE */}
+                {showGuideButton && !isLoading && (
+                  <div className="flex justify-center w-full mt-5">
+                    <button className='btn bg-gradient-to-br from-error to-accent text-base-100 hover:shadow-md animate-pulse hover:animate-none' onClick={startTour}>
+                      Mulai AI Tour Guide
+                    </button>
+                  </div>
+                )}
+
+                <div ref={messagesEndRef} />
+              </div>
+
+              {/* Input Pesan */}
+              <form onSubmit={handleSendMessage} className="p-4 bg-base-100 border-t">
+                <div className="join w-full">
+                  <div className='w-full'>
+                    <label className="input validator join-item w-full">
+                      <input
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        placeholder="Ketik pesan Anda.."
+                        disabled={isLoading}
+                      />
+                    </label>
+                    <div className="validator-hint hidden">Enter valid email address</div>
+                  </div>
+                  <button className="btn btn-error join-item text-base-100"
+                    disabled={isLoading || !inputValue.trim()}>
+                    <PaperAirplaneIcon className="h-5 w-5" />
+                  </button>
                 </div>
-                <div className="flex justify-center gap-2">
-                  <button className='btn btn-sm btn-error text-base-100' onClick={handleUseAiTourGuide}>Ya</button>
-                  <button className='btn btn-sm' onClick={() => setAskToGuideButton(false)}>Tidak</button>
-                </div>
-              </div>
-            )}
+              </form>
 
-            {/* START AI TOUR GUIDE */}
-            {showGuideButton && !isLoading && (
-              <div className="flex justify-center w-full mt-5">
-                <button className='btn bg-gradient-to-br from-error to-accent text-base-100 hover:shadow-md animate-pulse hover:animate-none' onClick={startTour}>
-                  Mulai AI Tour Guide
-                </button>
+            </section>
+          ) : (
+            <div>
+              <div className="card-actions justify-center">
+                <GoogleLoginButton redirectTo="/" />
               </div>
-            )}
-
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input Pesan */}
-          <form onSubmit={handleSendMessage} className="p-4 bg-base-100 border-t">
-            <div className="join w-full">
-              <div className='w-full'>
-                <label className="input validator join-item w-full">
-                  <input
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Ketik pesan Anda.."
-                    disabled={isLoading}
-                  />
-                </label>
-                <div className="validator-hint hidden">Enter valid email address</div>
-              </div>
-              <button className="btn btn-error join-item text-base-100"
-                disabled={isLoading || !inputValue.trim()}>
-                <PaperAirplaneIcon className="h-5 w-5" />
-              </button>
             </div>
-          </form>
-
+          )}
 
           {/* <input
               type="text"
