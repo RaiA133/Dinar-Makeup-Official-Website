@@ -46,7 +46,6 @@ async function getMe() {
 
 //  Function for create order endpoint
 async function createOrder(data) {
-  console.log(data);
   try {
     const response = await instance.post("/order", data);
     return response.data;
@@ -72,7 +71,6 @@ async function uploadDocumentOrder(formData) {
 
 //Update Profile
 async function updateProfile(data) {
-  console.log(data);
   try {
     const response = await instance.put('/user', data);
     return response.data;
