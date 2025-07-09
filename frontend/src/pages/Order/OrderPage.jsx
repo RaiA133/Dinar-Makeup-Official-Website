@@ -11,6 +11,7 @@ import moment from 'moment';
 import toast, { Toaster } from "react-hot-toast";
 
 import { FaCheck, FaShoppingCart, FaRegFileAlt, FaBox, FaCreditCard } from "react-icons/fa";
+import ExtraForm from "../../components/OrderPage/ExtraForm";
 
 function OrderPage() {
   const { id } = useParams();
@@ -183,7 +184,7 @@ function OrderPage() {
 
                 {/* SECTION : Review Paket */}
                 <div className="bg-base-100 collapse collapse-arrow join-item border-base-300 border">
-                  <input type="radio" name="my-accordion-4" />
+                  <input type="radio" name="order-accordion" />
 
                   {/* Header */}
                   <div className="collapse-title font-semibold">
@@ -326,13 +327,15 @@ function OrderPage() {
 
                 {/* SECTION : Pengisian FORM Booking */}
                 <div className="bg-base-100 collapse collapse-arrow join-item border-base-300 border">
-                  <input type="radio" name="my-accordion-4" defaultChecked />
+                  <input type="radio" name="order-accordion" defaultChecked />
 
                   {/* Header */}
                   <div className="collapse-title font-semibold">
                     <div className="flex items-center gap-5 text-error">
-                      <FaCreditCard size={40} />
-                      <div className="text-md sm:text-xl text-base-content">Pengisian Form Booking</div>
+                    <FaCreditCard size={40} />
+                      <div className="text-base-content">
+                        <div className="text-md sm:text-xl">Pengisian Form Booking</div>
+                      </div>
                     </div>
                   </div>
 
@@ -488,6 +491,8 @@ function OrderPage() {
                           <span>Saya telah membaca kebijakan pembatalan</span>
                         </div>
                       </fieldset>
+
+                      <ExtraForm />
 
                     </div>
 
