@@ -88,7 +88,7 @@ function Navbar() {
                   </div>
                 </li>
 
-                <li><a>Settings</a></li>
+                <li><a onClick={() => navigate("/transactions")}>Transactions</a></li>
 
                 {isAdmin && (
                   <li><a onClick={() => navigate("/admin")}>Administrator</a></li>

@@ -33,7 +33,7 @@ import CreateProductManagementPage from './pages/Admin/ProductManagement/CreateP
 import OrderPage from './pages/Order/OrderPage';
 import PaymentPage from './pages/Order/PaymentPage';
 import Chatbot from './components/Ai/Chabot/Chatbot';
-
+import TransactionsPage from './pages/TransactionsPage';
 
 // Framer Motion (Efek Transisi Faded Perpindahan Page)
 const PageMotionWrapper = ({ children }) => (
@@ -75,6 +75,7 @@ function App() {
 
           {/* Login Route */}
           <Route path="/profile" element={<LoginRoute><PageMotionWrapper><ProfilePage /></PageMotionWrapper></LoginRoute>} />
+          <Route path="/transactions" element={<LoginRoute><PageMotionWrapper><TransactionsPage /></PageMotionWrapper></LoginRoute>} />
           <Route path="/order/:id" element={<LoginRoute><PageMotionWrapper><OrderPage /></PageMotionWrapper></LoginRoute>} />
           <Route path="/payment" element={<LoginRoute><PageMotionWrapper><PaymentPage /></PageMotionWrapper></LoginRoute>} />
 
