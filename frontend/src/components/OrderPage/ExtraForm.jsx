@@ -4,6 +4,8 @@ import ExtraFormImage from "../Ai/OrderPage/ExtraFormImage"
 
 function ExtraForm() {
   const [resultAIText, setResultAIText] = useState('');
+  const [resultImage, setResultImage] = useState(null);
+
   return (
     <div className="md:mb-10">
       {/* Header */}
@@ -35,12 +37,18 @@ function ExtraForm() {
         <legend className="fieldset-legend">File <span>(opsional)</span></legend>
         <div className="join">
 
-          <input type="file" className="file-input w-full join-item" name="documents" />
+          <input className="file-input w-full join-item" type="file" name="documents" />
 
           {/* Generate Desain / Gambaran Tema dengan AI  */}
-          <ExtraFormImage />
+          <ExtraFormImage
+            resultImage={resultImage}
+            setResultImage={setResultImage}
+          />
 
         </div>
+        {resultImage && (
+          <p className="text-sm text-green-500 mt-1">Gambar dari AI berhasil dibuat.</p>
+        )}
         <label className="">beri kami gambaran desain milikmu sendiri. Contoh : desain tema wedding, desain tamu undangan, dll </label>
       </fieldset>
 

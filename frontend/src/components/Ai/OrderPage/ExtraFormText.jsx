@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { PaperAirplaneIcon, SparklesIcon } from '@heroicons/react/24/solid';
 import { ProductsContext } from '../../../contexts/ProductsContext';
 import { GoogleGenAI } from "@google/genai";
