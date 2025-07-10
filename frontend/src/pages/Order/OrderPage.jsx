@@ -125,7 +125,6 @@ function OrderPage() {
     try {
       // 1. Buat order
       const response = await createOrder(formData);
-      console.log('HIT API ORDER', response);
       if (response.status === 200) {
         const transactionId = response.data.transaction_id;
 

@@ -44,6 +44,16 @@ async function getMe() {
   }
 }
 
+async function GetAllMyTransaction() {
+  try {
+    const response = await instance.get(`/order/user`);
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
 //  Function for create order endpoint
 async function createOrder(data) {
   try {
@@ -220,7 +230,7 @@ export {
   register, login, loginGoogle,
   getAllProducts, getProductByID,
   createProduct, updateProduct, uploadImageProduct, deleteProductByID, deleteImageProduct,
-  getMe, updateProfile, updateProfileAvatar,
+  getMe, GetAllMyTransaction, updateProfile, updateProfileAvatar,
   createOrder, uploadDocumentOrder,
   getAllUsers, deleteUserByID,
   getAllTrasaction,
