@@ -28,7 +28,6 @@ function OrderPage() {
         console.error("Error : ", error);
       }
     };
-
     if (id) fetchOrderData();
   }, [id]);
 
@@ -532,7 +531,7 @@ function OrderPage() {
                       </fieldset>
 
                       {/* Data Optional */}
-                      <ExtraForm />
+                      <ExtraForm formData={formData} handleValidationData={handleValidationData} />
 
                     </div>
 
@@ -543,9 +542,8 @@ function OrderPage() {
               </div>
             </div>
 
+            {/* Checkout */}
             <div className="md:col-span-5 xl:col-span-4">
-
-              {/* Checkout */}
               <div className="bg-base-100 border-base-300 border rounded-md p-5">
 
                 <div className="flex items-center gap-3 mb-10">
@@ -757,7 +755,6 @@ function OrderPage() {
                 {/* END MODAL CONFIRM BOOKING */}
 
               </div>
-
             </div>
 
           </form>
