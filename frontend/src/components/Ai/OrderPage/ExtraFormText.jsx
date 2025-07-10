@@ -4,13 +4,13 @@ import { ProductsContext } from '../../../contexts/ProductsContext';
 import { GoogleGenAI } from "@google/genai";
 import MarkdownRenderer from '../Chabot/MarkdownRenderer';
 
-function ExtraFormText({ resultAIText, setResultAIText }) {
+function ExtraFormText({ formData, resultAIText, setResultAIText }) {
   const { productsByIDState } = useContext(ProductsContext);
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || "YOUR_API_KEY" });
 
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [dropdownOpen, setdropdownOpen] = useState(false);
+  const [dropDownOpen, setDropdownOpen] = useState(false);
 
   // ====================================================================================================================================
 
@@ -59,7 +59,7 @@ function ExtraFormText({ resultAIText, setResultAIText }) {
   return (
     <div className="absolute right-0 top-0">
       {/* Dropdown Content */}
-      {dropdownOpen && (
+      {dropDownOpen && (
         <div className="absolute right-0 bottom-full mb-2 z-20 w-83 sm:w-96 p-0 shadow-sm rounded-xl bg-base-100">
 
           {/* HEADER */}
@@ -75,54 +75,50 @@ function ExtraFormText({ resultAIText, setResultAIText }) {
                 </div>
               )}
 
-              {resultAIText ? (
-                <div className='max-h-96 overflow-y-auto'><MarkdownRenderer>{resultAIText}</MarkdownRenderer></div>
-              ) : (
-                <>
-                  <div className="divider my-0">Template</div>
-
-                  <div className="grid gap-2">
-                    {templateNotes.map((templateNote, index) => {
-                      return (
-                        <button className="btn btn-sm"
-                          key={index}
-                          disabled={isLoading}
-                          onClick={async (e) => {
-                            e.preventDefault();
-                            setInputValue(templateNote);
-                            await handleGenerateAIWithPrompt();
-                          }}
-                        >
-                          {templateNote}
-                        </button>
-                      );
-                    })}
-
-                  </div>
-
-                  <div className="divider my-0">Atau</div>
-                  <div className="join w-full">
-                    <label className="input join-item w-full">
-                      <input
-                        type="text"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        placeholder="Ketik kebutuhan spesifik.."
-                        disabled={isLoading}
-                      />
-                    </label>
-                    <button
-                      className="btn btn-error join-item text-base-100"
-                      disabled={!inputValue.trim() || isLoading}
-                      onClick={(e) => {
+              <div className="divider my-0">Template</div>
+              <div className="grid gap-2">
+                {templateNotes.map((templateNote, index) => {
+                  return (
+                    <button className="btn btn-sm"
+                      key={index}
+                      disabled={isLoading}
+                      onClick={async (e) => {
                         e.preventDefault();
-                        handleGenerateAIWithPrompt();
+                        setInputValue(templateNote);
+                        await handleGenerateAIWithPrompt();
                       }}
                     >
-                      <PaperAirplaneIcon className="h-5 w-5" />
+                      {templateNote}
                     </button>
-                  </div>
-                </>
+                  );
+                })}
+              </div>
+
+              <div className="divider my-0">Atau</div>
+              <div className="join w-full">
+                <label className="input join-item w-full">
+                  <input
+                    type="text"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    placeholder="Ketik kebutuhan spesifik.."
+                    disabled={isLoading}
+                  />
+                </label>
+                <button
+                  className="btn btn-error join-item text-base-100"
+                  disabled={!inputValue.trim() || isLoading}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleGenerateAIWithPrompt();
+                  }}
+                >
+                  <PaperAirplaneIcon className="h-5 w-5" />
+                </button>
+              </div>
+
+              {!isLoading && resultAIText && (
+                <div className='max-h-96 overflow-y-auto'><MarkdownRenderer>{resultAIText}</MarkdownRenderer></div>
               )}
             </div>
           </section>
@@ -131,9 +127,9 @@ function ExtraFormText({ resultAIText, setResultAIText }) {
       )}
 
       {/* Toggle Button */}
-      <button className="btn m-1" type="button" onClick={() => setdropdownOpen(!dropdownOpen)}>
+      <button className="btn m-1 bg-neutral text-base-100" type="button" onClick={() => setDropdownOpen(!dropDownOpen)}>
         <div className="animate-bounce">
-          <SparklesIcon className="h-5 w-5 text-primary animate-pulse" />
+          <SparklesIcon className="h-5 w-5 animate-pulse" />
         </div>
       </button>
     </div>

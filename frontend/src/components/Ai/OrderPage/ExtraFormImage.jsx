@@ -4,13 +4,13 @@ import { ProductsContext } from '../../../contexts/ProductsContext';
 import { GoogleGenAI, Modality } from "@google/genai";
 
 
-function ExtraFormImage({ resultImage, setResultImage }) {
+function ExtraFormImage({ formData, resultImage, setResultImage }) {
   const { productsByIDState } = useContext(ProductsContext);
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropDownOpen, setDropdownOpen] = useState(false);
 
   const templatePrompts = [
     "Wedding tema klasik elegan",
@@ -18,11 +18,15 @@ function ExtraFormImage({ resultImage, setResultImage }) {
     "Desain kartu undangan bernuansa emas",
   ];
 
-  const contents = `buatkan saya desain ${inputValue} dengan budget ${productsByIDState.price} dari data paket ini\n\n ${productsByIDState}`;
-
+  const contents = `buatkan saya desain ${inputValue} dengan budget ${productsByIDState.price} dari data berikut ini \n\n 
+  Data Pelanggan : ${JSON.stringify(formData)}
+  Data Paket : \n\n ${JSON.stringify(productsByIDState)}`;
+  
   // ====================================================================================================================================
 
   const handleGenerateAIImageWithPrompt = async () => {
+    console.log(contents);
+    return
     setIsLoading(true);
     setResultImage(null);
 
@@ -54,13 +58,9 @@ function ExtraFormImage({ resultImage, setResultImage }) {
 
   return (
     <div className="relative">
-      <button type="button" className="btn m-1" onClick={() => setDropdownOpen(!dropdownOpen)}>
-        <div className="animate-bounce">
-          <SparklesIcon className="h-5 w-5 text-primary animate-pulse" />
-        </div>
-      </button>
 
-      {dropdownOpen && (
+
+      {dropDownOpen && (
         <div className="absolute right-0 bottom-full mb-2 z-20 w-96 shadow-xl rounded-xl bg-base-100">
 
           {/* Header */}
@@ -129,7 +129,7 @@ function ExtraFormImage({ resultImage, setResultImage }) {
                   <a
                     href={resultImage}
                     download="generated-image.png"
-                    className="absolute right-1 top-1 btn btn-sm px-2"  
+                    className="absolute right-1 top-1 btn btn-sm px-2 bg-neutral text-base-100"
                   >
                     <ArrowDownTrayIcon className="h-5 w-5 animate-bounce" />
                   </a>
@@ -142,6 +142,13 @@ function ExtraFormImage({ resultImage, setResultImage }) {
           </section>
         </div>
       )}
+
+      {/* Toggle Button */}
+      <button className="btn m-1 bg-neutral text-base-100" type="button" onClick={() => setDropdownOpen(!dropDownOpen)}>
+        <div className="animate-bounce">
+          <SparklesIcon className="h-5 w-5 animate-pulse" />
+        </div>
+      </button>
     </div>
   );
 }

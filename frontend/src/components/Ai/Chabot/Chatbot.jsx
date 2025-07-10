@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useContext } from 'react';
-import { PaperAirplaneIcon, SparklesIcon, ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/solid';
+import { PaperAirplaneIcon, SparklesIcon } from '@heroicons/react/24/solid';
 import { chatBot, guideBot } from "../modules/fetch/ai";
 import { GoogleGenAI } from "@google/genai";
 import { useNavigate } from 'react-router-dom';
@@ -192,7 +192,7 @@ const Chatbot = () => {
         onClick={() => setShowChatbot(!showChatbot)}
         className="btn fixed bottom-6 right-6 h-fit bg-neutral text-base-100 p-4 rounded-full shadow-lg hover:bg-neutral-600 transition-colors z-99"
       >
-        <ChatBubbleOvalLeftEllipsisIcon className="h-6 w-6" />
+        <SparklesIcon className="h-6 w-6" />
       </button>
 
 
