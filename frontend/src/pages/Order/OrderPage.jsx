@@ -47,48 +47,45 @@ function OrderPage() {
     ...bookedDate]
   let amount = (productsByIDState?.price * rangeDP) / 100;
 
-  const handleValidationData = (e) => {
-    e.preventDefault();
+  const handleValidationData = (e = null) => {
+    if (e) e.preventDefault(); // akan null jika handleValidationData bukan dari form form-data-order
+
+    const formEl = document.querySelector("#form-data-order");
+    if (!formEl) return;
 
     const data = {
       product_id: productsByIDState.id,
-      amount: amount,
+      amount,
       booking_date: moment(new Date()).format("YYYY-MM-DD"),
       payment_method: paymentMethod,
       customer_detail: {
-        groom_full_name: e.target.nama_pria.value.trim(),
-        groom_address: e.target.alamat_pria.value.trim(),
-        groom_email: e.target.email_pria.value.trim(),
-        groom_instagram: e.target.ig_pria.value.trim(),
-
-        bride_full_name: e.target.nama_wanita.value.trim(),
-        bride_address: e.target.alamat_wanita.value.trim(),
-        bride_email: e.target.email_wanita.value.trim(),
-        bride_instagram: e.target.ig_wanita.value.trim(),
+        groom_full_name: formEl.nama_pria.value.trim(),
+        groom_address: formEl.alamat_pria.value.trim(),
+        groom_email: formEl.email_pria.value.trim(),
+        groom_instagram: formEl.ig_pria.value.trim(),
+        bride_full_name: formEl.nama_wanita.value.trim(),
+        bride_address: formEl.alamat_wanita.value.trim(),
+        bride_email: formEl.email_wanita.value.trim(),
+        bride_instagram: formEl.ig_wanita.value.trim(),
       },
       detail_order: {
         akad_date: tgl_akad ? moment(new Date(tgl_akad)).format("YYYY-MM-DD") : "",
-        location: e.target.lokasi_pernikahan.value.trim(),
+        location: formEl.lokasi_pernikahan.value.trim(),
         show_date: tgl_acara ? moment(new Date(tgl_acara)).format("YYYY-MM-DD") : "",
-        akad_time: e.target.jam_akad.value.trim(),
-        guest_count: parseInt(e.target.jumlah_tamu.value),
+        akad_time: formEl.jam_akad.value.trim(),
+        guest_count: parseInt(formEl.jumlah_tamu.value),
         tech_meeting: tgl_tech_meeting ? moment(new Date(tgl_tech_meeting)).format("YYYY-MM-DD") : "",
       },
-
-      term_1: e.target.term_1.checked,
-      term_2: e.target.term_2.checked,
-
-      notes: e.target.notes.value.trim(),
-      documents: e.target.documents.files,
+      term_1: formEl.term_1.checked,
+      term_2: formEl.term_2.checked,
+      notes: formEl.notes.value.trim(),
+      documents: formEl.documents.files,
     };
 
-    // === Validasi Wajib ===
+    // Validasi wajib (opsional bisa ditambah lagi)
     const missingFields = [];
-
     for (const [key, value] of Object.entries(data)) {
-      // Skip pengecekan untuk notes dan documents
       if (["notes", "documents"].includes(key)) continue;
-
       if ((typeof value === "string" && value.trim() === "") ||
         (typeof value === "boolean" && value === false) ||
         (typeof value === "number" && isNaN(value))) {
@@ -96,11 +93,17 @@ function OrderPage() {
       }
     }
 
-
     if (missingFields.length > 0) {
-      toast.error("Mohon lengkapi semua data dan setujui syarat & ketentuan.", {
-        duration: 3000,
-      });
+      if (e == null) {
+        toast("Lengkapi semua data untuk membuat AI lebih baik", {
+          icon: 'ℹ️',
+          duration: 3000,
+        });
+      } else {
+        toast.error("Mohon lengkapi semua data dan setujui syarat & ketentuan.", {
+          duration: 3000,
+        });
+      }
       return;
     }
 
@@ -112,7 +115,7 @@ function OrderPage() {
     // }
 
     setFormData(data);
-    document.getElementById("checkout_confirm_modal").checked = true;
+    if (e) document.getElementById("checkout_confirm_modal").checked = true;
   };
 
 
@@ -187,11 +190,18 @@ function OrderPage() {
       setIsSubmitting(false);
     }
 
-
   }
 
-
-
+  const dataBank = [
+    { name: "bca", logo: "/img/banks/bca.png" },
+    { name: "bri", logo: "/img/banks/bri.png" },
+    { name: "bni", logo: "/img/banks/bni.png" },
+    { name: "cimb", logo: "/img/banks/cimb.png" },
+    { name: "mandiri", logo: "/img/banks/mandiri.png" },
+    { name: "maybank", logo: "/img/banks/maybank.png" },
+    { name: "permata", logo: "/img/banks/permata.png" },
+    { name: "mega", logo: "/img/banks/mega.png" },
+  ];
 
   return (
     <div
@@ -215,7 +225,7 @@ function OrderPage() {
 
         {Object.keys(productsByIDState).length > 0 ? (
 
-          <form className="grid grid-cols-1 md:grid-cols-12 gap-5 pb-20" onSubmit={handleValidationData}>
+          <form id="form-data-order" className="grid grid-cols-1 md:grid-cols-12 gap-5 pb-20" onSubmit={handleValidationData}>
 
             <div className="md:col-span-7 xl:col-span-8 join join-vertical">
               <div className="join join-vertical gap-5">
@@ -601,42 +611,26 @@ function OrderPage() {
                 <div className="w-full p-4">
                   <h2 className="text-lg font-semibold mb-4">Select Payment Method</h2>
 
-                  <div className="flex flex-col gap-3">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="bca"
-                        checked={paymentMethod === "bca"}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                        className="radio radio-error"
-                      />
-                      <span>BCA Virtual Account</span>
-                    </label>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="mandiri"
-                        checked={paymentMethod === "mandiri"}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                        className="radio radio-error"
-                      />
-                      <span>Mandiri Virtual Account</span>
-                    </label>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="danamon"
-                        checked={paymentMethod === "danamon"}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                        className="radio radio-error"
-                      />
-                      <span>Danamon Virtual Account</span>
-                    </label>
+                  <div className="grid grid-cols-1 gap-3">
+                    {dataBank.map((bank, index) => (
+                      <label key={index}
+                        className={`flex items-center gap-3 border-2 rounded-xl p-1 px-3 cursor-pointer transition
+                          ${paymentMethod === bank.name
+                            ? "border-error bg-error/10"
+                            : "border-base-200 hover:border-error/40"}`}
+                      >
+                        <input
+                          type="radio"
+                          name="payment"
+                          value={bank.name}
+                          checked={paymentMethod === bank.name}
+                          onChange={(e) => setPaymentMethod(e.target.value)}
+                          className="hidden"
+                        />
+                        <img src={bank.logo} alt={bank.name} className="w-10 h-10 object-contain" />
+                        <span className="text-sm font-medium uppercase">{bank.name} <span className="normal-case">VA</span></span>
+                      </label>
+                    ))}
                   </div>
 
                 </div>
