@@ -125,7 +125,7 @@ function OrderPage() {
     try {
       // 1. Buat order
       const response = await createOrder(formData);
-
+      console.log('HIT API ORDER', response);
       if (response.status === 200) {
         const transactionId = response.data.transaction_id;
 
@@ -182,7 +182,7 @@ function OrderPage() {
           duration: 6000,
         });
       } else {
-        toast.error("Gagal melakukan pemesanan", {
+        toast.error(err.message, {
           duration: 6000,
         });
       }
@@ -644,108 +644,205 @@ function OrderPage() {
 
                 <input type="checkbox" id="checkout_confirm_modal" className="modal-toggle" />
                 <div className="modal modal-bottom sm:modal-middle">
-                  <div className="modal-box sm:min-w-2xl">
-                    <h3 className="ont-bold text-lg mb-4 text-error">Order Details</h3>
+                  <div className="modal-box sm:min-w-4xl">
+                    <h3 className="font-bold text-lg mb-4 text-error">Detail Pesanan</h3>
 
-                    <div className="space-y-6">
+                    <div className="space-y-6 bg-base-200 p-5">
+
                       {/* === Informasi Pasangan & Acara === */}
                       <section>
-                        <h4 className="font-semibold text-accent mb-2">Order Information</h4>
+                        <h4 className="font-semibold text-accent mb-2">Informasi Pernikahan</h4>
                         <div className="divider m-0 mb-4"></div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                           <div className="space-y-1">
-                            <p><span className="font-medium">Nama Pria:</span> {formData?.customer_detail?.groom_full_name}</p>
-                            <p><span className="font-medium">Alamat Pria:</span> {formData?.customer_detail?.groom_address}</p>
-                            <p><span className="font-medium">Email Pria:</span> {formData?.customer_detail?.groom_email}</p>
-                            <p><span className="font-medium">Instagram Pria:</span> {formData?.customer_detail?.groom_instagram}</p>
+                            <p><span className="font-medium">Nama Pria :</span> {formData?.customer_detail?.groom_full_name}</p>
+                            <p><span className="font-medium">Alamat Pria :</span> {formData?.customer_detail?.groom_address}</p>
+                            <p><span className="font-medium">Email Pria :</span> {formData?.customer_detail?.groom_email}</p>
+                            <p><span className="font-medium">Instagram Pria :</span> {formData?.customer_detail?.groom_instagram}</p>
                           </div>
                           <div className="space-y-1">
-                            <p><span className="font-medium">Nama Wanita:</span> {formData?.customer_detail?.bride_full_name}</p>
-                            <p><span className="font-medium">Alamat Wanita:</span> {formData?.customer_detail?.bride_address}</p>
-                            <p><span className="font-medium">Email Wanita:</span> {formData?.customer_detail?.bride_email}</p>
-                            <p><span className="font-medium">Instagram Wanita:</span> {formData?.customer_detail?.bride_instagram}</p>
+                            <p><span className="font-medium">Nama Wanita :</span> {formData?.customer_detail?.bride_full_name}</p>
+                            <p><span className="font-medium">Alamat Wanita :</span> {formData?.customer_detail?.bride_address}</p>
+                            <p><span className="font-medium">Email Wanita :</span> {formData?.customer_detail?.bride_email}</p>
+                            <p><span className="font-medium">Instagram Wanita :</span> {formData?.customer_detail?.bride_instagram}</p>
                           </div>
                           <div className="space-y-1">
-                            <p><span className="font-medium">Tanggal Akad:</span> {formData?.detail_order?.akad_date}</p>
-                            <p><span className="font-medium">Jam Akad:</span> {formData?.detail_order?.akad_time}</p>
-                            <p><span className="font-medium">Tanggal Acara:</span> {formData?.detail_order?.show_date}</p>
+                            <p><span className="font-medium">Tanggal Akad :</span> {formData?.detail_order?.akad_date}</p>
+                            <p><span className="font-medium">Jam Akad :</span> {formData?.detail_order?.akad_time}</p>
+                            <p><span className="font-medium">Tanggal Resepsi :</span> {formData?.detail_order?.show_date}</p>
                           </div>
                           <div className="space-y-1">
-                            <p><span className="font-medium">Jumlah Tamu:</span> {formData?.detail_order?.guest_count}</p>
-                            <p><span className="font-medium">Tanggal Tech Meeting:</span> {formData?.detail_order?.tech_meeting}</p>
-                            <p><span className="font-medium">Lokasi Pernikahan:</span> {formData?.detail_order?.location}</p>
+                            <p><span className="font-medium">Jumlah Tamu :</span> {formData?.detail_order?.guest_count}</p>
+                            <p><span className="font-medium">Tanggal Tech Meeting :</span> {formData?.detail_order?.tech_meeting}</p>
+                            <p><span className="font-medium">Lokasi Pernikahan :</span> {formData?.detail_order?.location}</p>
                           </div>
                         </div>
                       </section>
 
                       {/* === Informasi Produk === */}
-                      <section>
-                        <h4 className="font-semibold text-accent mb-2">Product Information</h4>
-                        <div className="divider m-0 mb-4"></div>
-                        <div className="space-y-1 text-sm">
-                          <p><span className="font-medium">Package:</span> {productsByIDState?.name}</p>
-                          <p>
-                            <span className="font-medium">Price:</span>{" "}
-                            {new Intl.NumberFormat("id-ID", {
-                              style: "currency",
-                              currency: productsByIDState?.currency || "IDR",
-                              minimumFractionDigits: 0,
-                            }).format(productsByIDState?.price || 0)}
-                          </p>
-                        </div>
-                      </section>
-
                       <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        {/* === Informasi Pembayaran === */}
+
                         <div>
-                          <h4 className="font-semibold text-accent mb-2">Payment Details</h4>
+                          <h4 className="font-semibold text-accent mb-2">Informasi Produk</h4>
                           <div className="divider m-0 mb-4"></div>
                           <div className="space-y-1 text-sm">
+                            <p><span className="font-medium">Nama Produk :</span> {productsByIDState?.name}</p>
                             <p>
-                              <span className="font-medium">Amount:</span>{" "}
+                              <span className="font-medium">Harga :</span>{" "}
                               {new Intl.NumberFormat("id-ID", {
                                 style: "currency",
                                 currency: productsByIDState?.currency || "IDR",
                                 minimumFractionDigits: 0,
                               }).format(productsByIDState?.price || 0)}
                             </p>
-                            <p><span className="font-medium">Method:</span> {paymentMethod?.toUpperCase()} Virtual Account</p>
+                          </div>
+                        </div>
+
+                        <div className="space-y-2 text-sm">
+                          <h4 className="font-semibold text-accent">Rencana Down payment (DP)</h4>
+                          <div className="divider m-0 mb-4"></div>
+                          <p><span className="font-medium">Rencana DP : </span>
+                            {new Intl.NumberFormat("id-ID", {
+                              style: "currency",
+                              currency: productsByIDState?.currency || "IDR",
+                              minimumFractionDigits: 0,
+                            }).format(amount || 0)}
+                          </p>
+                          <p><span className="font-medium">Sisa DP : </span>
+                            {new Intl.NumberFormat("id-ID", {
+                              style: "currency",
+                              currency: productsByIDState?.currency || "IDR",
+                              minimumFractionDigits: 0,
+                            }).format(productsByIDState?.price - amount || 0)}
+                          </p>
+                        </div>
+
+                      </section>
+
+                      <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                        {/* === Informasi Pembayaran === */}
+                        <div>
+                          <h4 className="font-semibold text-accent mb-2">Detail Pembayaran</h4>
+                          <div className="divider m-0 mb-4"></div>
+                          <div className="space-y-1 text-sm">
+                            <p>
+                              <span className="font-medium">Jumlah Bayar : </span>{" "}
+                              {new Intl.NumberFormat("id-ID", {
+                                style: "currency",
+                                currency: productsByIDState?.currency || "IDR",
+                                minimumFractionDigits: 0,
+                              }).format(amount || 0)}
+                            </p>
+                            <p><span className="font-medium">Metode Pembayaran :</span> {paymentMethod?.toUpperCase()} Virtual Account</p>
                           </div>
                         </div>
 
                         {/* === Informasi Pelanggan === */}
                         <div>
-                          <h4 className="font-semibold text-accent mb-2">Customer Information</h4>
+                          <h4 className="font-semibold text-accent mb-2">Informasi Pemesan</h4>
                           <div className="divider m-0 mb-4"></div>
                           <div className="space-y-1 text-sm">
-                            <p><span className="font-medium">Name:</span> {userState?.name}</p>
-                            <p><span className="font-medium">Email:</span> {userState?.email}</p>
-                            <p><span className="font-medium">Phone:</span> {userState?.phone || '-'}</p>
+                            <p><span className="font-medium">Nama :</span> {userState?.name}</p>
+                            <p><span className="font-medium">Email :</span> {userState?.email}</p>
+                            <p><span className="font-medium">Telepon :</span> {userState?.phone || '-'}</p>
+                            <p><span className="font-medium">Alamat :</span> {userState?.address || '-'}</p>
                           </div>
                         </div>
+
+                      </section>
+
+                      <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                        {/* === Notes === */}
+                        <div>
+                          <h4 className="font-semibold text-accent mb-2">Catatan Tambahan</h4>
+                          <div className="divider m-0 mb-4"></div>
+                          {formData?.notes ? (
+                            <div className="rounded-box w-full border border-stone-400 p-4 text-sm">
+                              {formData?.notes}
+                            </div>
+                          ) : (
+                            <p className="text-sm text-gray-500">Tidak ada catatan ditambahkan.</p>
+                          )}
+                        </div>
+
+                        {/* === Dokumen === */}
+                        <div>
+                          <h4 className="font-semibold text-accent mb-2">Desain / Dokumen</h4>
+                          <div className="divider m-0 mb-4"></div>
+                          {formData?.documents && formData.documents.length > 0 ? (
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                              {Array.from(formData.documents).map((file, idx) => {
+                                const fileType = file.type;
+                                const fileURL = URL.createObjectURL(file);
+
+                                if (fileType.startsWith("image/")) {
+                                  return (
+                                    <div key={idx}>
+                                      <img
+                                        src={fileURL}
+                                        alt={`Gambar ${idx + 1}`}
+                                        className="w-full rounded border cursor-pointer"
+                                        onClick={() => document.getElementById(`image_modal_order_${idx}`).showModal()}
+                                      />
+                                      <dialog id={`image_modal_order_${idx}`} className="modal modal-bottom sm:modal-middle">
+                                        <div className="modal-box p-0">
+                                          <img
+                                            src={fileURL}
+                                            alt={`Preview Gambar ${idx + 1}`}
+                                            className="w-full max-h-full object-contain rounded-t"
+                                          />
+                                        </div>
+                                        <form method="dialog" className="modal-backdrop">
+                                          <button>close</button>
+                                        </form>
+                                      </dialog>
+                                    </div>
+                                  );
+                                }
+
+                                // Untuk file non-gambar (PDF, DOC, dll)
+                                return (
+                                  <div key={idx}>
+                                    <a
+                                      href={fileURL}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="link link-primary"
+                                    >
+                                      {file.name}
+                                    </a>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          ) : (
+                            <p className="text-sm text-gray-500">Tidak ada dokumen yang diunggah.</p>
+                          )}
+                        </div>
+
                       </section>
 
                     </div>
-
-                    {/* <div className="modal-action mt-6">
-                      <button className="btn btn-error" onClick={handleSubmit}>Checkout</button>
-                      <button className="btn" onClick={() => document.getElementById('checkout_confirm_modal').close()}>Cancel</button>
-                    </div> */}
 
                     <div className="modal-action mt-6">
                       <button
                         className="btn btn-error"
                         onClick={handleSubmit}
                         disabled={isSubmitting}
-                      >{isSubmitting ? (
-                        <span className="loading loading-spinner"></span>
-                      ) : (
-                        "Checkout"
-                      )}</button>
-                      <label htmlFor="checkout_confirm_modal" className="btn" disabled={isSubmitting}>Cancel</label>
+                      >
+                        {isSubmitting ? (
+                          <span className="loading loading-spinner"></span>
+                        ) : (
+                          "Checkout"
+                        )}
+                      </button>
+                      <label htmlFor="checkout_confirm_modal" className="btn" disabled={isSubmitting}>Batal</label>
                     </div>
                   </div>
                 </div>
+
                 {/* END MODAL CONFIRM BOOKING */}
 
               </div>

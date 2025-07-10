@@ -51,7 +51,13 @@ function TransactionManagementPage() {
                             {transaction.order_id}
                           </span>
                         </td>
-                        <td>Rp. {transaction.outstanding.toLocaleString()}</td>
+                        <td>
+                          {new Intl.NumberFormat("id-ID", {
+                            style: "currency",
+                            currency: transaction?.currency || "IDR",
+                            minimumFractionDigits: 0,
+                          }).format(transaction.outstanding || 0)}
+                        </td>
                         <td>
                           <span className={`badge badge-sm ml-2 ${transaction.transaction_information.payment_status === 'pending'
                             ? 'badge-warning'
@@ -119,8 +125,8 @@ function TransactionManagementPage() {
                         <div className="space-y-2">
                           <h4 className="font-semibold text-accent">Detail Pembayaran</h4>
                           <div className="divider m-0"></div>
-                          
-                          <p><span className="font-medium">Metode Pembayaran :</span> {transaction.transaction_information.payment_method.toUpperCase()}</p>
+
+                          <p><span className="font-medium">Metode Pembayaran :</span> {transaction.transaction_information.payment_method.toUpperCase()} Virtual Account</p>
                           <p><span className="font-medium">VA Number :</span> {transaction.transaction_information.va_number}</p>
                           <p><span className="font-medium">Status Pembayaran :</span>
                             <span className={`badge ml-2 ${transaction.transaction_information.payment_status === 'pending'
@@ -137,8 +143,20 @@ function TransactionManagementPage() {
                         <div className="space-y-2">
                           <h4 className="font-semibold text-accent">Rencana Down payment (DP)</h4>
                           <div className="divider m-0"></div>
-                          <p><span className="font-medium">Rencana DP :</span> Rp. {transaction.installment_amount.toLocaleString()}</p>
-                          <p><span className="font-medium">Sisa DP :</span> Rp. {transaction.outstanding.toLocaleString()}</p>
+                          <p><span className="font-medium">Rencana DP : </span>
+                            {new Intl.NumberFormat("id-ID", {
+                              style: "currency",
+                              currency: transaction?.currency || "IDR",
+                              minimumFractionDigits: 0,
+                            }).format(transaction.installment_amount || 0)}
+                          </p>
+                          <p><span className="font-medium">Sisa DP : </span>
+                            {new Intl.NumberFormat("id-ID", {
+                              style: "currency",
+                              currency: transaction?.currency || "IDR",
+                              minimumFractionDigits: 0,
+                            }).format(transaction?.outstanding || 0)}
+                          </p>
                           <p><span className="font-medium">Status DP :</span>
                             <span className={`badge ml-2 ${transaction.installment_status === 'OUTSTANDING' ? 'badge-warning' : 'badge-success'}`}>
                               {transaction.installment_status}
@@ -150,7 +168,7 @@ function TransactionManagementPage() {
                           <h4 className="font-semibold text-accent">Data Tambahan</h4>
                           <div className="divider m-0"></div>
                           <p><span className="font-medium">Notes :</span></p>
-                          <div className="rounded-box w-full border border-stone-400 p-4">{transaction.notes || '-'}</div>
+                          {transaction.notes ? (<div className="rounded-box w-full border border-stone-400 p-4">{transaction.notes}</div>) : '-'}
                           <div className="space-y-2">
                             <p className="font-medium">Dokumen / Desain : </p>
                             {transaction.document_orders ? (
@@ -209,8 +227,14 @@ function TransactionManagementPage() {
                         <div className="space-y-2">
                           <h4 className="font-semibold text-accent">Informasi Produk</h4>
                           <div className="divider m-0"></div>
-                          <p><span className="font-medium">Paket :</span> {transaction.product_information.name}</p>
-                          <p><span className="font-medium">Harga :</span> Rp{parseInt(transaction.product_information.price).toLocaleString()}</p>
+                          <p><span className="font-medium">Paket : </span>{transaction.product_information.name}</p>
+                          <p><span className="font-medium">Harga : </span>
+                            {new Intl.NumberFormat("id-ID", {
+                              style: "currency",
+                              currency: transaction?.currency || "IDR",
+                              minimumFractionDigits: 0,
+                            }).format(parseInt(transaction.product_information.price) || 0)}
+                          </p>
                         </div>
 
                       </div>

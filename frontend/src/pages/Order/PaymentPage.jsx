@@ -165,7 +165,7 @@ function PaymentPage() {
                   </div>
                   <div>
                     <p className="text-sm text-base-500">Bank</p>
-                    <p className="font-medium">{paymentData.bank_name.toUpperCase()}</p>
+                    <p className="font-medium">{paymentData.bank_name}</p>
                   </div>
                   <div>
                     <p className="text-sm text-base-500">Waktu Transaksi</p>
