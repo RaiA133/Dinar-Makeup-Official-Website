@@ -2,7 +2,7 @@ import { useState } from 'react';
 import ExtraFormText from "../Ai/OrderPage/ExtraFormText"
 import ExtraFormImage from "../Ai/OrderPage/ExtraFormImage"
 
-function ExtraForm({ formData }) {
+function ExtraForm({ formData, handleValidationData }) {
   const [resultAIText, setResultAIText] = useState('');
   const [resultImage, setResultImage] = useState(null);
 
@@ -26,6 +26,7 @@ function ExtraForm({ formData }) {
           {/* Generate Deskripsi Tambhan dengan AI */}
           <ExtraFormText
             formData={formData}
+            handleValidationData={handleValidationData}
             resultAIText={resultAIText}
             setResultAIText={setResultAIText}
           />
@@ -43,6 +44,7 @@ function ExtraForm({ formData }) {
           {/* Generate Desain / Gambaran Tema dengan AI  */}
           <ExtraFormImage
             formData={formData}
+            handleValidationData={handleValidationData}
             resultImage={resultImage}
             setResultImage={setResultImage}
           />

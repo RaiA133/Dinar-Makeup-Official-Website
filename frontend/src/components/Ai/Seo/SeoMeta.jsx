@@ -48,7 +48,7 @@ anda bisa crawl website, tolong cari info data knowladge dari sana untuk membuat
             tools: [{urlContext: {}}, {googleSearch: {}}],
           },
         });
-        console.log(response.text);
+        // console.log(response.text);
         const cleaned = response.text.replace(/```json|```/g, '').trim();
         const json = JSON.parse(cleaned);
         if (json?.title && json?.description) {
@@ -62,8 +62,8 @@ anda bisa crawl website, tolong cari info data knowladge dari sana untuk membuat
     fetchSEO();
   }, [slug]);
   
-  console.log('slug', slug);
-  console.log('meta', meta);
+  // console.log('slug', slug);
+  // console.log('meta', meta);
 
   return (
     <div>

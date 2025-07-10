@@ -4,13 +4,21 @@ import { ProductsContext } from '../../../contexts/ProductsContext';
 import { GoogleGenAI } from "@google/genai";
 import MarkdownRenderer from '../Chabot/MarkdownRenderer';
 
-function ExtraFormText({ formData, resultAIText, setResultAIText }) {
+function ExtraFormText({ formData, handleValidationData, resultAIText, setResultAIText }) {
   const { productsByIDState } = useContext(ProductsContext);
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || "YOUR_API_KEY" });
 
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [dropDownOpen, setDropdownOpen] = useState(false);
+
+  const formDataText = formData ? `\nData Pelanggan: ${JSON.stringify(formData, null, 2)}` : "";
+  const productDataText = productsByIDState ? `\nData Paket: ${JSON.stringify(productsByIDState, null, 2)}` : "";
+
+  const contents = `Beri saya isi notes tambahan di form pengisian data ketika order wedding organizer Dinar Makeup, dengan kebutuhan "${inputValue}". 
+  ${formDataText}
+  ${productDataText}
+  Notes merupakan deskripsi text yang singkat, jelas, dan langsung ke poin — tidak perlu terlalu panjang.`;
 
   // ====================================================================================================================================
 
@@ -24,10 +32,7 @@ function ExtraFormText({ formData, resultAIText, setResultAIText }) {
           {
             role: "user",
             parts: [{
-              text: `Beri saya isi notes tambahan di form pengisian data ketika order wedding organizer dinar makeup 
-                , dengan kebutuhan ${inputValue}, berdasarkan data produk berikut: ${JSON.stringify(productsByIDState)}.
-                Notes yang singkat saja dan on point jangan terlalu panjang.
-                `
+              text: contents
             }]
           }
         ]
@@ -84,6 +89,7 @@ function ExtraFormText({ formData, resultAIText, setResultAIText }) {
                       disabled={isLoading}
                       onClick={async (e) => {
                         e.preventDefault();
+                        handleValidationData()
                         setInputValue(templateNote);
                         await handleGenerateAIWithPrompt();
                       }}
@@ -108,9 +114,10 @@ function ExtraFormText({ formData, resultAIText, setResultAIText }) {
                 <button
                   className="btn btn-error join-item text-base-100"
                   disabled={!inputValue.trim() || isLoading}
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     e.preventDefault();
-                    handleGenerateAIWithPrompt();
+                    handleValidationData()
+                    await handleGenerateAIWithPrompt();
                   }}
                 >
                   <PaperAirplaneIcon className="h-5 w-5" />
@@ -127,7 +134,10 @@ function ExtraFormText({ formData, resultAIText, setResultAIText }) {
       )}
 
       {/* Toggle Button */}
-      <button className="btn m-1 bg-neutral text-base-100" type="button" onClick={() => setDropdownOpen(!dropDownOpen)}>
+      <button className="btn m-1 bg-neutral text-base-100" type="button" onClick={(e) => {
+        e.preventDefault();
+        setDropdownOpen(!dropDownOpen)
+      }}>
         <div className="animate-bounce">
           <SparklesIcon className="h-5 w-5 animate-pulse" />
         </div>
