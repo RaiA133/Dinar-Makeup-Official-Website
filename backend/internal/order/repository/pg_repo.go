@@ -220,5 +220,17 @@ func (rp *orderPGRepository) GetAllTransactionByUserID(ctx context.Context, user
 		return nil, err
 	}
 
+	for _, o := range orders {
+		var detail model.DetailOrder
+		if err := rp.db.WithContext(ctx).Where("order_id = ?", o.Id).First(&detail).Error; err == nil {
+			o.DetailOrder = detail
+		}
+
+		var customer model.CustomerDetail
+		if err := rp.db.WithContext(ctx).Where("order_id = ?", o.Id).First(&customer).Error; err == nil {
+			o.CustomerDetail = customer
+		}
+	}
+
 	return orders, nil
 }
