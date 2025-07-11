@@ -243,7 +243,27 @@ func (or *orderService) GetOrders(ctx context.Context, offset, limit int, search
 				TransactionTime: order.TransactionTime,
 				ExpiredVa:       order.ExpiredVa,
 			},
-			DocumentOrders: documentOrders, // ✅ tambahkan ini
+			DetailOrder: dto.DetailOrderResponse{
+				Id:          order.DetailOrder.Id.String(),
+				AkadDate:    order.DetailOrder.AkadDate,
+				ShowDate:    order.DetailOrder.ShowDate,
+				Location:    order.DetailOrder.Location,
+				AkadTime:    order.DetailOrder.AkadTime,
+				GuestCount:  order.DetailOrder.GuestCount,
+				TechMeeting: order.DetailOrder.TechMeeting,
+			},
+			CustomerDetail: dto.CustomerDetailResponse{
+				Id:             order.CustomerDetail.Id.String(),
+				GroomFullName:  order.CustomerDetail.GroomFullName,
+				BrideFullName:  order.CustomerDetail.BrideFullName,
+				GroomAddress:   order.CustomerDetail.GroomAddress,
+				BrideAddress:   order.CustomerDetail.BrideAddress,
+				GroomEmail:     order.CustomerDetail.GroomEmail,
+				BrideEmail:     order.CustomerDetail.BrideEmail,
+				GroomInstagram: order.CustomerDetail.GroomInstagram,
+				BrideInstagram: order.CustomerDetail.BrideInstagram,
+			},
+			DocumentOrders: documentOrders,
 		})
 	}
 

@@ -72,6 +72,7 @@ func (rp *orderPGRepository) FindOrdersData(ctx context.Context, offset, limit i
 			product_id::text ILIKE ?`,
 			searchPattern, searchPattern, searchPattern)
 	}
+
 	if err := DB.Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
@@ -82,6 +83,18 @@ func (rp *orderPGRepository) FindOrdersData(ctx context.Context, offset, limit i
 		Preload("DocumentOrders").
 		Find(&orders).Error; err != nil {
 		return nil, 0, err
+	}
+
+	for _, o := range orders {
+		var detail model.DetailOrder
+		if err := rp.db.WithContext(ctx).Where("order_id = ?", o.Id).First(&detail).Error; err == nil {
+			o.DetailOrder = detail
+		}
+
+		var customer model.CustomerDetail
+		if err := rp.db.WithContext(ctx).Where("order_id = ?", o.Id).First(&customer).Error; err == nil {
+			o.CustomerDetail = customer
+		}
 	}
 
 	return orders, total, nil
