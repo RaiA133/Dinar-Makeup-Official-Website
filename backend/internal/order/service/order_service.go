@@ -341,12 +341,76 @@ func isValidPaymentMethod(method string) bool {
 	return validPaymentMethods[method]
 }
 
-func (or *orderService) GetOrder(ctx context.Context, orderId string) (model.Order, error) {
+func (or *orderService) GetOrder(ctx context.Context, orderId string) (dto.GetOrdersResponse, error) {
 	data, err := or.pgRepo.GetOrderByID(ctx, orderId)
 	if err != nil {
-		return model.Order{}, errors.New("failed to fetch order data")
+		return dto.GetOrdersResponse{}, errors.New("failed to fetch order data")
 	}
-	return *data, nil
+
+	res := dto.GetOrdersResponse{
+		Id:                data.Id.String(),
+		OrderId:           data.IdOrder,
+		InstallmentAmount: data.InstallmentAmount,
+		Outstanding:       data.Outstanding,
+		InstallmentStatus: data.InstallmentStatus,
+		WeddingDate:       data.WeddingDate,
+		Notes:             data.Notes,
+		User: dto.UserInformation{
+			Id:      data.User.Id.String(),
+			Name:    data.User.Name,
+			Email:   data.User.Email,
+			Phone:   data.User.PhoneNumber,
+			NIK:     data.User.NIK,
+			Address: data.User.Address,
+		},
+		Product: dto.ProductInformation{
+			Id:    data.Product.Id.String(),
+			Name:  data.Product.Name,
+			Price: strconv.FormatInt(data.Product.Price, 10),
+		},
+		Transaction: dto.TransactionInformation{
+			VaNumber:        data.VaNumber,
+			OrderStatus:     data.OrderStatus,
+			PaymentStatus:   data.PaymentStatus,
+			PaymentMethod:   data.PaymentMethod,
+			TransactionTime: data.TransactionTime,
+			ExpiredVa:       data.ExpiredVa,
+		},
+		DocumentOrders: func() []dto.DocumentOrderResponse {
+			var docs []dto.DocumentOrderResponse
+			for _, doc := range data.DocumentOrders {
+				docs = append(docs, dto.DocumentOrderResponse{
+					Id:       doc.Id.String(),
+					OrderID:  doc.OrderID.String(),
+					URL:      doc.URL,
+					FileName: doc.FileName,
+				})
+			}
+			return docs
+		}(),
+		DetailOrder: dto.DetailOrderResponse{
+			Id:          data.DetailOrder.Id.String(),
+			AkadDate:    data.DetailOrder.AkadDate,
+			ShowDate:    data.DetailOrder.ShowDate,
+			Location:    data.DetailOrder.Location,
+			AkadTime:    data.DetailOrder.AkadTime,
+			GuestCount:  data.DetailOrder.GuestCount,
+			TechMeeting: data.DetailOrder.TechMeeting,
+		},
+		CustomerDetail: dto.CustomerDetailResponse{
+			Id:             data.CustomerDetail.Id.String(),
+			GroomFullName:  data.CustomerDetail.GroomFullName,
+			BrideFullName:  data.CustomerDetail.BrideFullName,
+			GroomAddress:   data.CustomerDetail.GroomAddress,
+			BrideAddress:   data.CustomerDetail.BrideAddress,
+			GroomEmail:     data.CustomerDetail.GroomEmail,
+			BrideEmail:     data.CustomerDetail.BrideEmail,
+			GroomInstagram: data.CustomerDetail.GroomInstagram,
+			BrideInstagram: data.CustomerDetail.BrideInstagram,
+		},
+	}
+
+	return res, nil
 }
 
 func (or *orderService) RegisterDocument(ctx context.Context, orderId string, file multipart.File, fileName string) error {
