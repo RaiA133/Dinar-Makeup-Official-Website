@@ -59,7 +59,7 @@ export const AdminContextProvider = ({ children }) => {
         let page = parseInt(searchParams.get("page"));
         let limit = parseInt(searchParams.get("limit")); 
         // limit = 1 // custom limit
-        const response = await getAllTrasaction({page, limit}); // Fetch data
+        const response = await getAllTrasaction({page, limit: 10}); // Fetch data
         if (response.status === 200) setTranscactionState(response.data); // Set state if the response is successful
       } catch (error) {
         console.error("Error : ", error);

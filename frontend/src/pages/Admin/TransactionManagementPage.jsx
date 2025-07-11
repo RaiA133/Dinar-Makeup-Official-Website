@@ -15,8 +15,6 @@ function TransactionManagementPage() {
   const navigate = useNavigate();
   const { transcactionState, refreshCallback } = useContext(AdminContext)
 
-  console.log(transcactionState);
-
   const totalPages = transcactionState?.metadata?.total_pages || 0;
   const currentPage = transcactionState?.metadata?.current_page || 1;
 
