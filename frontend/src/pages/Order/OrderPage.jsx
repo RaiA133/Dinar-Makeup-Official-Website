@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { ProductsContext } from "../../contexts/ProductsContext";
 import { UserContext } from "../../contexts/UserContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { createOrder, getProductByID } from "../../modules/fetch";
+import { createOrder, getProductByID, uploadDocumentOrder } from "../../modules/fetch";
 
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
@@ -28,7 +28,6 @@ function OrderPage() {
         console.error("Error : ", error);
       }
     };
-
     if (id) fetchOrderData();
   }, [id]);
 
@@ -38,6 +37,7 @@ function OrderPage() {
   const [tgl_tech_meeting, set_tgl_tech_meeting] = useState("")
   const [rangeDP, setRangeDP] = useState(100);
   const [paymentMethod, setPaymentMethod] = useState("bca");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const bookedDate = [] // ['2025-06-1', '2025-06-2', '2025-06-3', '2025-06-4']; // need api for this, couse currect API is for admin
   let notAvailableDate = [
@@ -47,125 +47,160 @@ function OrderPage() {
     ...bookedDate]
   let amount = (productsByIDState?.price * rangeDP) / 100;
 
-  const handleValidationData = (e) => {
-    e.preventDefault();
+  const handleValidationData = (e = null) => {
+    if (e) e.preventDefault(); // akan null jika handleValidationData bukan dari form form-data-order
+
+    const formEl = document.querySelector("#form-data-order");
+    if (!formEl) return;
 
     const data = {
       product_id: productsByIDState.id,
-      amount: amount,
+      amount,
       booking_date: moment(new Date()).format("YYYY-MM-DD"),
       payment_method: paymentMethod,
-      notes: e.target.notes.value.trim(),
       customer_detail: {
-        groom_full_name: e.target.nama_pria.value.trim(),
-        groom_address: e.target.alamat_pria.value.trim(),
-        groom_email: e.target.email_pria.value.trim(),
-        groom_instagram: e.target.ig_pria.value.trim(),
-  
-        bride_full_name: e.target.nama_wanita.value.trim(),
-        bride_address: e.target.alamat_wanita.value.trim(),
-        bride_email: e.target.email_wanita.value.trim(),
-        bride_instagram: e.target.ig_wanita.value.trim(),
+        groom_full_name: formEl.nama_pria.value.trim(),
+        groom_address: formEl.alamat_pria.value.trim(),
+        groom_email: formEl.email_pria.value.trim(),
+        groom_instagram: formEl.ig_pria.value.trim(),
+        bride_full_name: formEl.nama_wanita.value.trim(),
+        bride_address: formEl.alamat_wanita.value.trim(),
+        bride_email: formEl.email_wanita.value.trim(),
+        bride_instagram: formEl.ig_wanita.value.trim(),
       },
       detail_order: {
         akad_date: tgl_akad ? moment(new Date(tgl_akad)).format("YYYY-MM-DD") : "",
-        location: e.target.lokasi_pernikahan.value.trim(),
+        location: formEl.lokasi_pernikahan.value.trim(),
         show_date: tgl_acara ? moment(new Date(tgl_acara)).format("YYYY-MM-DD") : "",
-        akad_time: e.target.jam_akad.value.trim(),
-        guest_count: e.target.jumlah_tamu.value.trim(),
+        akad_time: formEl.jam_akad.value.trim(),
+        guest_count: parseInt(formEl.jumlah_tamu.value),
         tech_meeting: tgl_tech_meeting ? moment(new Date(tgl_tech_meeting)).format("YYYY-MM-DD") : "",
       },
-
-      term_1: e.target.term_1.checked,
-      term_2: e.target.term_2.checked,
-
-      documents: e.target.documents,
+      term_1: formEl.term_1.checked,
+      term_2: formEl.term_2.checked,
+      notes: formEl.notes.value.trim(),
+      documents: formEl.documents.files,
     };
-    console.log(data);
-    return
 
-    // === Validasi Wajib ===
+    // Validasi wajib (opsional bisa ditambah lagi)
     const missingFields = [];
-
     for (const [key, value] of Object.entries(data)) {
-      if ((typeof value === "string" && value === "") || (typeof value === "boolean" && value === false)) {
+      if (["notes", "documents"].includes(key)) continue;
+      if ((typeof value === "string" && value.trim() === "") ||
+        (typeof value === "boolean" && value === false) ||
+        (typeof value === "number" && isNaN(value))) {
         missingFields.push(key);
       }
     }
 
     if (missingFields.length > 0) {
-      toast.error("Mohon lengkapi semua data dan setujui syarat & ketentuan.", {
-        duration: 3000,
-      });
+      if (e == null) {
+        toast("Lengkapi semua data untuk membuat AI lebih baik", {
+          icon: 'ℹ️',
+          duration: 3000,
+        });
+      } else {
+        toast.error("Mohon lengkapi semua data dan setujui syarat & ketentuan.", {
+          duration: 3000,
+        });
+      }
       return;
     }
 
-    // === Valid Email (opsional tambahan) ===
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data.groom_email) || !emailRegex.test(data.bride_email)) {
-      toast.error("Format email tidak valid.", { duration: 3000 });
-      return;
-    }
+    // // === Valid Email (opsional tambahan) ===
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // if (!emailRegex.test(data.groom_email) || !emailRegex.test(data.bride_email)) {
+    //   toast.error("Format email tidak valid.", { duration: 3000 });
+    //   return;
+    // }
 
     setFormData(data);
-    document.getElementById("checkout_confirm_modal").checked = true;
+    if (e) document.getElementById("checkout_confirm_modal").checked = true;
   };
 
 
   const handleSubmit = async () => {
-    console.log(formData)
-    const paymentPass = {
-      "transaction_id": "f3056c3c-9875-4440-86b3-f9d1cec2bab1",
-      "order_id": "DNRWO-130625-nPj3s",
-      "gross_amount": "19500000.00",
-      "payment_type": "bank_transfer",
-      "transaction_time": "2025-06-13 10:13:24",
-      "transaction_status": "pending",
-      "fraud_status": "accept",
-      "status_code": "",
-      "bank_name": "bca",
-      "va": "88272172134443448645477",
-      "status_message": "Success, Bank Transfer transaction is created",
-      "currency": "IDR",
-      "expiry_time": moment().utcOffset(7).add(1, 'day').format('YYYY-MM-DD HH:mm:ss'),
-    }
-    sessionStorage.setItem('paymentData', JSON.stringify(paymentPass));
-    toast.success('ini mut dah bisa kan liat payment :) ?', {
-      duration: 6000,
-    });
-    navigate("/payment")
-    return
+    setIsSubmitting(true);
+
     try {
-      const response = await createOrder(data);
-      console.log(response);
+      // 1. Buat order
+      const response = await createOrder(formData);
       if (response.status === 200) {
-        const successMessage = response.message;
-        sessionStorage.setItem('paymentData', JSON.stringify(response.data)); // riwayat payment masih
-        toast.success(successMessage, {
-          duration: 6000,
+        const transactionId = response.data.transaction_id;
+
+        // 2. Upload dokumen (jika ada)
+        if (formData.documents?.length > 0) {
+          const imageFormData = new FormData();
+          imageFormData.append("order_id", transactionId);
+          imageFormData.append("file", formData.documents[0]);
+
+          try {
+            const uploadResponse = await uploadDocumentOrder(imageFormData);
+            toast.success(uploadResponse.message || "Dokumen berhasil diunggah", {
+              duration: 3000,
+            });
+          } catch (uploadErr) {
+            const err = uploadErr?.response?.data;
+
+            if (err?.status === 400) {
+              toast.error("Upload dokumen gagal: " + err.message, {
+                duration: 4000,
+              });
+            } else {
+              toast.error("Gagal upload dokumen. Coba lagi nanti.", {
+                duration: 4000,
+              });
+            }
+          }
+        }
+
+        // 3. Simpan dan redirect
+        sessionStorage.setItem("paymentData", JSON.stringify(response.data));
+        toast.success(response.message || "Pemesanan berhasil!", {
+          duration: 5000,
         });
-        navigate("/payment")
+        navigate("/payment");
+
       }
     } catch (error) {
-      if (error.response.data.status === 400) { // error validation
-        const rawError = error.response.data.message;
-        const errorMessages = formatMixedErrors(rawError);
-        errorMessages.forEach(message => {
-          toast.error(message, {
-            duration: 2500,
-          });
+      const err = error?.response?.data;
+
+      if (err?.status === 400) {
+        const rawError = err.message;
+        // Optional: jika `formatMixedErrors` undefined, gunakan fallback
+        if (typeof formatMixedErrors === "function") {
+          const errorMessages = formatMixedErrors(rawError);
+          errorMessages.forEach((message) =>
+            toast.error(message, { duration: 2500 })
+          );
+        } else {
+          toast.error(rawError, { duration: 3000 });
+        }
+      } else if (err?.status === 500) {
+        toast.error(err.message || "Terjadi kesalahan server", {
+          duration: 6000,
         });
-      } else if (error.response.data.status === 500) {
-        toast.error(error.response.data.message, {
+      } else {
+        toast.error(err.message, {
           duration: 6000,
         });
       }
-      return;
+    } finally {
+      setIsSubmitting(false);
     }
+
   }
 
-
-
+  const dataBank = [
+    { name: "bca", logo: "/img/banks/bca.png" },
+    { name: "bri", logo: "/img/banks/bri.png" },
+    { name: "bni", logo: "/img/banks/bni.png" },
+    { name: "cimb", logo: "/img/banks/cimb.png" },
+    { name: "mandiri", logo: "/img/banks/mandiri.png" },
+    { name: "maybank", logo: "/img/banks/maybank.png" },
+    { name: "permata", logo: "/img/banks/permata.png" },
+    { name: "mega", logo: "/img/banks/mega.png" },
+  ];
 
   return (
     <div
@@ -189,7 +224,7 @@ function OrderPage() {
 
         {Object.keys(productsByIDState).length > 0 ? (
 
-          <form className="grid grid-cols-1 md:grid-cols-12 gap-5 pb-20" onSubmit={handleValidationData}>
+          <form id="form-data-order" className="grid grid-cols-1 md:grid-cols-12 gap-5 pb-20" onSubmit={handleValidationData}>
 
             <div className="md:col-span-7 xl:col-span-8 join join-vertical">
               <div className="join join-vertical gap-5">
@@ -344,7 +379,7 @@ function OrderPage() {
                   {/* Header */}
                   <div className="collapse-title font-semibold">
                     <div className="flex items-center gap-5 text-error">
-                    <FaCreditCard size={40} />
+                      <FaCreditCard size={40} />
                       <div className="text-base-content">
                         <div className="text-md sm:text-xl">Pengisian Form Booking</div>
                       </div>
@@ -420,7 +455,7 @@ function OrderPage() {
                             </button>
                             <div popover="auto" id="tgl_akad" className="dropdown" style={{ positionAnchor: "--tgl_akad" }}>
                               <DayPicker
-                              required
+                                required
                                 className="react-day-picker"
                                 mode="single"
                                 captionLayout="dropdown"
@@ -504,7 +539,8 @@ function OrderPage() {
                         </div>
                       </fieldset>
 
-                      <ExtraForm />
+                      {/* Data Optional */}
+                      <ExtraForm formData={formData} handleValidationData={handleValidationData} />
 
                     </div>
 
@@ -515,9 +551,8 @@ function OrderPage() {
               </div>
             </div>
 
+            {/* Checkout */}
             <div className="md:col-span-5 xl:col-span-4">
-
-              {/* Checkout */}
               <div className="bg-base-100 border-base-300 border rounded-md p-5">
 
                 <div className="flex items-center gap-3 mb-10">
@@ -575,44 +610,27 @@ function OrderPage() {
                 <div className="w-full p-4">
                   <h2 className="text-lg font-semibold mb-4">Select Payment Method</h2>
 
-                  <div className="flex flex-col gap-3">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="bca"
-                        checked={paymentMethod === "bca"}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                        className="radio radio-error"
-                      />
-                      <span>BCA Virtual Account</span>
-                    </label>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="mandiri"
-                        checked={paymentMethod === "mandiri"}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                        className="radio radio-error"
-                      />
-                      <span>Mandiri Virtual Account</span>
-                    </label>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="danamon"
-                        checked={paymentMethod === "danamon"}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                        className="radio radio-error"
-                      />
-                      <span>Danamon Virtual Account</span>
-                    </label>
+                  <div className="grid grid-cols-1 gap-3">
+                    {dataBank.map((bank, index) => (
+                      <label key={index}
+                        className={`flex items-center gap-3 border-2 rounded-xl p-1 px-3 cursor-pointer transition
+                          ${paymentMethod === bank.name
+                            ? "border-error bg-error/10"
+                            : "border-base-200 hover:border-error/40"}`}
+                      >
+                        <input
+                          type="radio"
+                          name="payment"
+                          value={bank.name}
+                          checked={paymentMethod === bank.name}
+                          onChange={(e) => setPaymentMethod(e.target.value)}
+                          className="hidden"
+                        />
+                        <img src={bank.logo} alt={bank.name} className="w-10 h-10 object-contain" />
+                        <span className="text-sm font-medium uppercase">{bank.name} <span className="normal-case">VA</span></span>
+                      </label>
+                    ))}
                   </div>
-
 
                 </div>
 
@@ -625,105 +643,208 @@ function OrderPage() {
 
                 <input type="checkbox" id="checkout_confirm_modal" className="modal-toggle" />
                 <div className="modal modal-bottom sm:modal-middle">
-                  <div className="modal-box sm:min-w-2xl">
-                    <h3 className="ont-bold text-lg mb-4 text-error">Order Details</h3>
+                  <div className="modal-box sm:min-w-4xl">
+                    <h3 className="font-bold text-lg mb-4 text-error">Detail Pesanan</h3>
 
-                    <div className="space-y-6">
+                    <div className="space-y-6 bg-base-200 p-5">
+
                       {/* === Informasi Pasangan & Acara === */}
                       <section>
-                        <h4 className="font-semibold text-accent mb-2">Order Information</h4>
+                        <h4 className="font-semibold text-accent mb-2">Informasi Pernikahan</h4>
                         <div className="divider m-0 mb-4"></div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                           <div className="space-y-1">
-                            <p><span className="font-medium">Nama Pria:</span> {formData?.nama_pria}</p>
-                            <p><span className="font-medium">Alamat Pria:</span> {formData?.alamat_pria}</p>
-                            <p><span className="font-medium">Email Pria:</span> {formData?.email_pria}</p>
-                            <p><span className="font-medium">Instagram Pria:</span> {formData?.ig_pria}</p>
+                            <p><span className="font-medium">Nama Pria :</span> {formData?.customer_detail?.groom_full_name}</p>
+                            <p><span className="font-medium">Alamat Pria :</span> {formData?.customer_detail?.groom_address}</p>
+                            <p><span className="font-medium">Email Pria :</span> {formData?.customer_detail?.groom_email}</p>
+                            <p><span className="font-medium">Instagram Pria :</span> {formData?.customer_detail?.groom_instagram}</p>
                           </div>
                           <div className="space-y-1">
-                            <p><span className="font-medium">Nama Wanita:</span> {formData?.nama_wanita}</p>
-                            <p><span className="font-medium">Alamat Wanita:</span> {formData?.alamat_wanita}</p>
-                            <p><span className="font-medium">Email Wanita:</span> {formData?.email_wanita}</p>
-                            <p><span className="font-medium">Instagram Wanita:</span> {formData?.ig_wanita}</p>
+                            <p><span className="font-medium">Nama Wanita :</span> {formData?.customer_detail?.bride_full_name}</p>
+                            <p><span className="font-medium">Alamat Wanita :</span> {formData?.customer_detail?.bride_address}</p>
+                            <p><span className="font-medium">Email Wanita :</span> {formData?.customer_detail?.bride_email}</p>
+                            <p><span className="font-medium">Instagram Wanita :</span> {formData?.customer_detail?.bride_instagram}</p>
                           </div>
                           <div className="space-y-1">
-                            <p><span className="font-medium">Tanggal Akad:</span> {formData?.tgl_akad}</p>
-                            <p><span className="font-medium">Jam Akad:</span> {formData?.jam_akad}</p>
-                            <p><span className="font-medium">Tanggal Acara:</span> {formData?.tgl_acara}</p>
+                            <p><span className="font-medium">Tanggal Akad :</span> {formData?.detail_order?.akad_date}</p>
+                            <p><span className="font-medium">Jam Akad :</span> {formData?.detail_order?.akad_time}</p>
+                            <p><span className="font-medium">Tanggal Resepsi :</span> {formData?.detail_order?.show_date}</p>
                           </div>
                           <div className="space-y-1">
-                            <p><span className="font-medium">Jumlah Tamu:</span> {formData?.jumlah_tamu}</p>
-                            <p><span className="font-medium">Tanggal Tech Meeting:</span> {formData?.tgl_tech_meeting}</p>
-                            <p><span className="font-medium">Lokasi Pernikahan:</span> {formData?.lokasi_pernikahan}</p>
+                            <p><span className="font-medium">Jumlah Tamu :</span> {formData?.detail_order?.guest_count}</p>
+                            <p><span className="font-medium">Tanggal Tech Meeting :</span> {formData?.detail_order?.tech_meeting}</p>
+                            <p><span className="font-medium">Lokasi Pernikahan :</span> {formData?.detail_order?.location}</p>
                           </div>
                         </div>
                       </section>
 
                       {/* === Informasi Produk === */}
-                      <section>
-                        <h4 className="font-semibold text-accent mb-2">Product Information</h4>
-                        <div className="divider m-0 mb-4"></div>
-                        <div className="space-y-1 text-sm">
-                          <p><span className="font-medium">Package:</span> {productsByIDState?.name}</p>
-                          <p>
-                            <span className="font-medium">Price:</span>{" "}
-                            {new Intl.NumberFormat("id-ID", {
-                              style: "currency",
-                              currency: productsByIDState?.currency || "IDR",
-                              minimumFractionDigits: 0,
-                            }).format(productsByIDState?.price || 0)}
-                          </p>
-                        </div>
-                      </section>
-
                       <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        {/* === Informasi Pembayaran === */}
+
                         <div>
-                          <h4 className="font-semibold text-accent mb-2">Payment Details</h4>
+                          <h4 className="font-semibold text-accent mb-2">Informasi Produk</h4>
                           <div className="divider m-0 mb-4"></div>
                           <div className="space-y-1 text-sm">
+                            <p><span className="font-medium">Nama Produk :</span> {productsByIDState?.name}</p>
                             <p>
-                              <span className="font-medium">Amount:</span>{" "}
+                              <span className="font-medium">Harga :</span>{" "}
                               {new Intl.NumberFormat("id-ID", {
                                 style: "currency",
                                 currency: productsByIDState?.currency || "IDR",
                                 minimumFractionDigits: 0,
                               }).format(productsByIDState?.price || 0)}
                             </p>
-                            <p><span className="font-medium">Method:</span> {paymentMethod?.toUpperCase()} Virtual Account</p>
+                          </div>
+                        </div>
+
+                        <div className="space-y-2 text-sm">
+                          <h4 className="font-semibold text-accent">Rencana Down payment (DP)</h4>
+                          <div className="divider m-0 mb-4"></div>
+                          <p><span className="font-medium">Rencana DP : </span>
+                            {new Intl.NumberFormat("id-ID", {
+                              style: "currency",
+                              currency: productsByIDState?.currency || "IDR",
+                              minimumFractionDigits: 0,
+                            }).format(amount || 0)}
+                          </p>
+                          <p><span className="font-medium">Sisa DP : </span>
+                            {new Intl.NumberFormat("id-ID", {
+                              style: "currency",
+                              currency: productsByIDState?.currency || "IDR",
+                              minimumFractionDigits: 0,
+                            }).format(productsByIDState?.price - amount || 0)}
+                          </p>
+                        </div>
+
+                      </section>
+
+                      <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                        {/* === Informasi Pembayaran === */}
+                        <div>
+                          <h4 className="font-semibold text-accent mb-2">Detail Pembayaran</h4>
+                          <div className="divider m-0 mb-4"></div>
+                          <div className="space-y-1 text-sm">
+                            <p>
+                              <span className="font-medium">Jumlah Bayar : </span>{" "}
+                              {new Intl.NumberFormat("id-ID", {
+                                style: "currency",
+                                currency: productsByIDState?.currency || "IDR",
+                                minimumFractionDigits: 0,
+                              }).format(amount || 0)}
+                            </p>
+                            <p><span className="font-medium">Metode Pembayaran :</span> {paymentMethod?.toUpperCase()} Virtual Account</p>
                           </div>
                         </div>
 
                         {/* === Informasi Pelanggan === */}
                         <div>
-                          <h4 className="font-semibold text-accent mb-2">Customer Information</h4>
+                          <h4 className="font-semibold text-accent mb-2">Informasi Pemesan</h4>
                           <div className="divider m-0 mb-4"></div>
                           <div className="space-y-1 text-sm">
-                            <p><span className="font-medium">Name:</span> {userState?.name}</p>
-                            <p><span className="font-medium">Email:</span> {userState?.email}</p>
-                            <p><span className="font-medium">Phone:</span> {userState?.phone || '-'}</p>
+                            <p><span className="font-medium">Nama :</span> {userState?.name}</p>
+                            <p><span className="font-medium">Email :</span> {userState?.email}</p>
+                            <p><span className="font-medium">Telepon :</span> {userState?.phone || '-'}</p>
+                            <p><span className="font-medium">Alamat :</span> {userState?.address || '-'}</p>
                           </div>
                         </div>
+
+                      </section>
+
+                      <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                        {/* === Notes === */}
+                        <div>
+                          <h4 className="font-semibold text-accent mb-2">Catatan Tambahan</h4>
+                          <div className="divider m-0 mb-4"></div>
+                          {formData?.notes ? (
+                            <div className="rounded-box w-full border border-stone-400 p-4 text-sm">
+                              {formData?.notes}
+                            </div>
+                          ) : (
+                            <p className="text-sm text-gray-500">Tidak ada catatan ditambahkan.</p>
+                          )}
+                        </div>
+
+                        {/* === Dokumen === */}
+                        <div>
+                          <h4 className="font-semibold text-accent mb-2">Desain / Dokumen</h4>
+                          <div className="divider m-0 mb-4"></div>
+                          {formData?.documents && formData.documents.length > 0 ? (
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                              {Array.from(formData.documents).map((file, idx) => {
+                                const fileType = file.type;
+                                const fileURL = URL.createObjectURL(file);
+
+                                if (fileType.startsWith("image/")) {
+                                  return (
+                                    <div key={idx}>
+                                      <img
+                                        src={fileURL}
+                                        alt={`Gambar ${idx + 1}`}
+                                        className="w-full rounded border cursor-pointer"
+                                        onClick={() => document.getElementById(`image_modal_order_${idx}`).showModal()}
+                                      />
+                                      <dialog id={`image_modal_order_${idx}`} className="modal modal-bottom sm:modal-middle">
+                                        <div className="modal-box p-0">
+                                          <img
+                                            src={fileURL}
+                                            alt={`Preview Gambar ${idx + 1}`}
+                                            className="w-full max-h-full object-contain rounded-t"
+                                          />
+                                        </div>
+                                        <form method="dialog" className="modal-backdrop">
+                                          <button>close</button>
+                                        </form>
+                                      </dialog>
+                                    </div>
+                                  );
+                                }
+
+                                // Untuk file non-gambar (PDF, DOC, dll)
+                                return (
+                                  <div key={idx}>
+                                    <a
+                                      href={fileURL}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="link link-primary"
+                                    >
+                                      {file.name}
+                                    </a>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          ) : (
+                            <p className="text-sm text-gray-500">Tidak ada dokumen yang diunggah.</p>
+                          )}
+                        </div>
+
                       </section>
 
                     </div>
 
-                    {/* <div className="modal-action mt-6">
-                      <button className="btn btn-error" onClick={handleSubmit}>Checkout</button>
-                      <button className="btn" onClick={() => document.getElementById('checkout_confirm_modal').close()}>Cancel</button>
-                    </div> */}
                     <div className="modal-action mt-6">
-                      <button className="btn btn-error" onClick={handleSubmit}>Checkout</button>
-                      <label htmlFor="checkout_confirm_modal" className="btn">Cancel</label>
+                      <button
+                        className="btn btn-error"
+                        onClick={handleSubmit}
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? (
+                          <span className="loading loading-spinner"></span>
+                        ) : (
+                          "Checkout"
+                        )}
+                      </button>
+                      <label htmlFor="checkout_confirm_modal" className="btn" disabled={isSubmitting}>Batal</label>
                     </div>
                   </div>
                 </div>
 
-
-
+                {/* END MODAL CONFIRM BOOKING */}
 
               </div>
-
             </div>
 
           </form>

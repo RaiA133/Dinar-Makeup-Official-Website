@@ -160,7 +160,6 @@ function UpdateProductManagementPage() {
         notes: e.target.notes.value,
         detail_groups: detailGroups
       };
-      console.log('productData', productData);
 
       const productResponse = await updateProduct(id, productData);
 
