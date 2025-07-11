@@ -35,6 +35,30 @@ type GetOrdersResponse struct {
 	Product           ProductInformation      `json:"product_information"`
 	Transaction       TransactionInformation  `json:"transaction_information"`
 	DocumentOrders    []DocumentOrderResponse `json:"document_orders"` // ✅ ditambahkan
+	DetailOrder       DetailOrderResponse     `json:"detail_order"`
+	CustomerDetail    CustomerDetailResponse  `json:"customer_detail"`
+}
+
+type DetailOrderResponse struct {
+	Id          string `json:"id"`
+	AkadDate    string `json:"akad_date"`
+	ShowDate    string `json:"show_date"`
+	Location    string `json:"location"`
+	AkadTime    string `json:"akad_time"`
+	GuestCount  int64  `json:"guest_count"`
+	TechMeeting string `json:"tech_meeting"`
+}
+
+type CustomerDetailResponse struct {
+	Id             string `json:"id"`
+	GroomFullName  string `json:"groom_full_name"`
+	BrideFullName  string `json:"bride_full_name"`
+	GroomAddress   string `json:"groom_address"`
+	BrideAddress   string `json:"bride_address"`
+	GroomEmail     string `json:"groom_email"`
+	BrideEmail     string `json:"bride_email"`
+	GroomInstagram string `json:"groom_instagram"`
+	BrideInstagram string `json:"bride_instagram"`
 }
 
 type UserInformation struct {
