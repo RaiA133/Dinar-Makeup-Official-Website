@@ -24,19 +24,26 @@ type DocumentOrderResponse struct {
 }
 
 type GetOrdersResponse struct {
-	Id                string                  `json:"id"`
-	OrderId           string                  `json:"order_id"`
-	InstallmentAmount int64                   `json:"installment_amount"`
-	Outstanding       int64                   `json:"outstanding"`
-	InstallmentStatus string                  `json:"installment_status"`
-	WeddingDate       string                  `json:"wedding_date"`
-	Notes             string                  `json:"notes"`
-	User              UserInformation         `json:"user_information"`
-	Product           ProductInformation      `json:"product_information"`
-	Transaction       TransactionInformation  `json:"transaction_information"`
-	DocumentOrders    []DocumentOrderResponse `json:"document_orders"` // ✅ ditambahkan
-	DetailOrder       DetailOrderResponse     `json:"detail_order"`
-	CustomerDetail    CustomerDetailResponse  `json:"customer_detail"`
+	Id             string                 `json:"id"`
+	OrderId        string                 `json:"order_id"`
+	User           UserInformation        `json:"user_information"`
+	Product        ProductInformation     `json:"product_information"`
+	DownPayment    DownPaymentResponse    `json:"down_payment"`
+	Transaction    TransactionInformation `json:"transaction_information"`
+	DataForm       DataFormResponse       `json:"data_form"`
+	Notes          string                 `json:"notes"`
+	DocumentOrders []string               `json:"document_orders"` // now just array of URL
+}
+
+type DownPaymentResponse struct {
+	InstallmentAmount int64  `json:"installment_amount"`
+	Outstanding       int64  `json:"outstanding"`
+	InstallmentStatus string `json:"installment_status"`
+}
+
+type DataFormResponse struct {
+	CustomerDetail CustomerDetailResponse `json:"customer_detail"`
+	DetailOrder    DetailOrderResponse    `json:"detail_order"`
 }
 
 type DetailOrderResponse struct {

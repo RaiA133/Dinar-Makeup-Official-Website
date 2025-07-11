@@ -3,6 +3,9 @@ package service
 import (
 	"context"
 	"fmt"
+	"mime/multipart"
+	"strconv"
+
 	"github.com/RianIhsan/wedding-organizer-be/config"
 	"github.com/RianIhsan/wedding-organizer-be/internal/order"
 	"github.com/RianIhsan/wedding-organizer-be/internal/order/model"
@@ -16,8 +19,6 @@ import (
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-	"mime/multipart"
-	"strconv"
 )
 
 type ServiceConfig struct {
@@ -203,25 +204,15 @@ func (or *orderService) GetOrders(ctx context.Context, offset, limit int, search
 
 	var res []*dto.GetOrdersResponse
 	for _, order := range data {
-		// Mapping document orders
-		var documentOrders []dto.DocumentOrderResponse
+		// Flatten document orders to just URLs
+		var documentOrders []string
 		for _, doc := range order.DocumentOrders {
-			documentOrders = append(documentOrders, dto.DocumentOrderResponse{
-				Id:       doc.Id.String(),
-				OrderID:  doc.OrderID.String(),
-				URL:      doc.URL,
-				FileName: doc.FileName,
-			})
+			documentOrders = append(documentOrders, doc.URL)
 		}
 
 		res = append(res, &dto.GetOrdersResponse{
-			Id:                order.Id.String(),
-			OrderId:           order.IdOrder,
-			InstallmentAmount: order.InstallmentAmount,
-			Outstanding:       order.Outstanding,
-			InstallmentStatus: order.InstallmentStatus,
-			WeddingDate:       order.WeddingDate,
-			Notes:             order.Notes,
+			Id:      order.Id.String(),
+			OrderId: order.IdOrder,
 			User: dto.UserInformation{
 				Id:      order.User.Id.String(),
 				Name:    order.User.Name,
@@ -235,34 +226,42 @@ func (or *orderService) GetOrders(ctx context.Context, offset, limit int, search
 				Name:  order.Product.Name,
 				Price: strconv.FormatInt(order.Product.Price, 10),
 			},
+			DownPayment: dto.DownPaymentResponse{
+				InstallmentAmount: order.InstallmentAmount,
+				Outstanding:       order.Outstanding,
+				InstallmentStatus: order.InstallmentStatus,
+			},
 			Transaction: dto.TransactionInformation{
 				VaNumber:        order.VaNumber,
-				OrderStatus:     order.OrderStatus,
 				PaymentStatus:   order.PaymentStatus,
 				PaymentMethod:   order.PaymentMethod,
 				TransactionTime: order.TransactionTime,
 				ExpiredVa:       order.ExpiredVa,
+				OrderStatus:     order.OrderStatus,
 			},
-			DetailOrder: dto.DetailOrderResponse{
-				Id:          order.DetailOrder.Id.String(),
-				AkadDate:    order.DetailOrder.AkadDate,
-				ShowDate:    order.DetailOrder.ShowDate,
-				Location:    order.DetailOrder.Location,
-				AkadTime:    order.DetailOrder.AkadTime,
-				GuestCount:  order.DetailOrder.GuestCount,
-				TechMeeting: order.DetailOrder.TechMeeting,
+			DataForm: dto.DataFormResponse{
+				CustomerDetail: dto.CustomerDetailResponse{
+					Id:             order.CustomerDetail.Id.String(),
+					GroomFullName:  order.CustomerDetail.GroomFullName,
+					BrideFullName:  order.CustomerDetail.BrideFullName,
+					GroomAddress:   order.CustomerDetail.GroomAddress,
+					BrideAddress:   order.CustomerDetail.BrideAddress,
+					GroomEmail:     order.CustomerDetail.GroomEmail,
+					BrideEmail:     order.CustomerDetail.BrideEmail,
+					GroomInstagram: order.CustomerDetail.GroomInstagram,
+					BrideInstagram: order.CustomerDetail.BrideInstagram,
+				},
+				DetailOrder: dto.DetailOrderResponse{
+					Id:          order.DetailOrder.Id.String(),
+					AkadDate:    order.DetailOrder.AkadDate,
+					ShowDate:    order.DetailOrder.ShowDate,
+					Location:    order.DetailOrder.Location,
+					AkadTime:    order.DetailOrder.AkadTime,
+					GuestCount:  order.DetailOrder.GuestCount,
+					TechMeeting: order.DetailOrder.TechMeeting,
+				},
 			},
-			CustomerDetail: dto.CustomerDetailResponse{
-				Id:             order.CustomerDetail.Id.String(),
-				GroomFullName:  order.CustomerDetail.GroomFullName,
-				BrideFullName:  order.CustomerDetail.BrideFullName,
-				GroomAddress:   order.CustomerDetail.GroomAddress,
-				BrideAddress:   order.CustomerDetail.BrideAddress,
-				GroomEmail:     order.CustomerDetail.GroomEmail,
-				BrideEmail:     order.CustomerDetail.BrideEmail,
-				GroomInstagram: order.CustomerDetail.GroomInstagram,
-				BrideInstagram: order.CustomerDetail.BrideInstagram,
-			},
+			Notes:          order.Notes,
 			DocumentOrders: documentOrders,
 		})
 	}
@@ -347,14 +346,15 @@ func (or *orderService) GetOrder(ctx context.Context, orderId string) (dto.GetOr
 		return dto.GetOrdersResponse{}, errors.New("failed to fetch order data")
 	}
 
+	// Map document order URLs only
+	var documentOrders []string
+	for _, doc := range data.DocumentOrders {
+		documentOrders = append(documentOrders, doc.URL)
+	}
+
 	res := dto.GetOrdersResponse{
-		Id:                data.Id.String(),
-		OrderId:           data.IdOrder,
-		InstallmentAmount: data.InstallmentAmount,
-		Outstanding:       data.Outstanding,
-		InstallmentStatus: data.InstallmentStatus,
-		WeddingDate:       data.WeddingDate,
-		Notes:             data.Notes,
+		Id:      data.Id.String(),
+		OrderId: data.IdOrder,
 		User: dto.UserInformation{
 			Id:      data.User.Id.String(),
 			Name:    data.User.Name,
@@ -368,6 +368,11 @@ func (or *orderService) GetOrder(ctx context.Context, orderId string) (dto.GetOr
 			Name:  data.Product.Name,
 			Price: strconv.FormatInt(data.Product.Price, 10),
 		},
+		DownPayment: dto.DownPaymentResponse{
+			InstallmentAmount: data.InstallmentAmount,
+			Outstanding:       data.Outstanding,
+			InstallmentStatus: data.InstallmentStatus,
+		},
 		Transaction: dto.TransactionInformation{
 			VaNumber:        data.VaNumber,
 			OrderStatus:     data.OrderStatus,
@@ -376,38 +381,30 @@ func (or *orderService) GetOrder(ctx context.Context, orderId string) (dto.GetOr
 			TransactionTime: data.TransactionTime,
 			ExpiredVa:       data.ExpiredVa,
 		},
-		DocumentOrders: func() []dto.DocumentOrderResponse {
-			var docs []dto.DocumentOrderResponse
-			for _, doc := range data.DocumentOrders {
-				docs = append(docs, dto.DocumentOrderResponse{
-					Id:       doc.Id.String(),
-					OrderID:  doc.OrderID.String(),
-					URL:      doc.URL,
-					FileName: doc.FileName,
-				})
-			}
-			return docs
-		}(),
-		DetailOrder: dto.DetailOrderResponse{
-			Id:          data.DetailOrder.Id.String(),
-			AkadDate:    data.DetailOrder.AkadDate,
-			ShowDate:    data.DetailOrder.ShowDate,
-			Location:    data.DetailOrder.Location,
-			AkadTime:    data.DetailOrder.AkadTime,
-			GuestCount:  data.DetailOrder.GuestCount,
-			TechMeeting: data.DetailOrder.TechMeeting,
+		DataForm: dto.DataFormResponse{
+			CustomerDetail: dto.CustomerDetailResponse{
+				Id:             data.CustomerDetail.Id.String(),
+				GroomFullName:  data.CustomerDetail.GroomFullName,
+				BrideFullName:  data.CustomerDetail.BrideFullName,
+				GroomAddress:   data.CustomerDetail.GroomAddress,
+				BrideAddress:   data.CustomerDetail.BrideAddress,
+				GroomEmail:     data.CustomerDetail.GroomEmail,
+				BrideEmail:     data.CustomerDetail.BrideEmail,
+				GroomInstagram: data.CustomerDetail.GroomInstagram,
+				BrideInstagram: data.CustomerDetail.BrideInstagram,
+			},
+			DetailOrder: dto.DetailOrderResponse{
+				Id:          data.DetailOrder.Id.String(),
+				AkadDate:    data.DetailOrder.AkadDate,
+				ShowDate:    data.DetailOrder.ShowDate,
+				Location:    data.DetailOrder.Location,
+				AkadTime:    data.DetailOrder.AkadTime,
+				GuestCount:  data.DetailOrder.GuestCount,
+				TechMeeting: data.DetailOrder.TechMeeting,
+			},
 		},
-		CustomerDetail: dto.CustomerDetailResponse{
-			Id:             data.CustomerDetail.Id.String(),
-			GroomFullName:  data.CustomerDetail.GroomFullName,
-			BrideFullName:  data.CustomerDetail.BrideFullName,
-			GroomAddress:   data.CustomerDetail.GroomAddress,
-			BrideAddress:   data.CustomerDetail.BrideAddress,
-			GroomEmail:     data.CustomerDetail.GroomEmail,
-			BrideEmail:     data.CustomerDetail.BrideEmail,
-			GroomInstagram: data.CustomerDetail.GroomInstagram,
-			BrideInstagram: data.CustomerDetail.BrideInstagram,
-		},
+		Notes:          data.Notes,
+		DocumentOrders: documentOrders,
 	}
 
 	return res, nil
@@ -446,29 +443,20 @@ func (or *orderService) RegisterDocument(ctx context.Context, orderId string, fi
 func (or *orderService) GetTransactionsByUserId(ctx context.Context, userId string) ([]dto.GetOrdersResponse, error) {
 	dataTransaction, err := or.pgRepo.GetAllTransactionByUserID(ctx, userId)
 	if err != nil {
-		return []dto.GetOrdersResponse{}, errors.New("")
+		return []dto.GetOrdersResponse{}, errors.New("failed to fetch user transactions")
 	}
+
 	var res []dto.GetOrdersResponse
 	for _, order := range dataTransaction {
-		// Mapping document orders
-		var documentOrders []dto.DocumentOrderResponse
+		// Mapping document order URLs only
+		var documentOrders []string
 		for _, doc := range order.DocumentOrders {
-			documentOrders = append(documentOrders, dto.DocumentOrderResponse{
-				Id:       doc.Id.String(),
-				OrderID:  doc.OrderID.String(),
-				URL:      doc.URL,
-				FileName: doc.FileName,
-			})
+			documentOrders = append(documentOrders, doc.URL)
 		}
 
 		res = append(res, dto.GetOrdersResponse{
-			Id:                order.Id.String(),
-			OrderId:           order.IdOrder,
-			InstallmentAmount: order.InstallmentAmount,
-			Outstanding:       order.Outstanding,
-			InstallmentStatus: order.InstallmentStatus,
-			WeddingDate:       order.WeddingDate,
-			Notes:             order.Notes,
+			Id:      order.Id.String(),
+			OrderId: order.IdOrder,
 			User: dto.UserInformation{
 				Id:      order.User.Id.String(),
 				Name:    order.User.Name,
@@ -482,6 +470,11 @@ func (or *orderService) GetTransactionsByUserId(ctx context.Context, userId stri
 				Name:  order.Product.Name,
 				Price: strconv.FormatInt(order.Product.Price, 10),
 			},
+			DownPayment: dto.DownPaymentResponse{
+				InstallmentAmount: order.InstallmentAmount,
+				Outstanding:       order.Outstanding,
+				InstallmentStatus: order.InstallmentStatus,
+			},
 			Transaction: dto.TransactionInformation{
 				VaNumber:        order.VaNumber,
 				OrderStatus:     order.OrderStatus,
@@ -490,6 +483,29 @@ func (or *orderService) GetTransactionsByUserId(ctx context.Context, userId stri
 				TransactionTime: order.TransactionTime,
 				ExpiredVa:       order.ExpiredVa,
 			},
+			DataForm: dto.DataFormResponse{
+				CustomerDetail: dto.CustomerDetailResponse{
+					Id:             order.CustomerDetail.Id.String(),
+					GroomFullName:  order.CustomerDetail.GroomFullName,
+					BrideFullName:  order.CustomerDetail.BrideFullName,
+					GroomAddress:   order.CustomerDetail.GroomAddress,
+					BrideAddress:   order.CustomerDetail.BrideAddress,
+					GroomEmail:     order.CustomerDetail.GroomEmail,
+					BrideEmail:     order.CustomerDetail.BrideEmail,
+					GroomInstagram: order.CustomerDetail.GroomInstagram,
+					BrideInstagram: order.CustomerDetail.BrideInstagram,
+				},
+				DetailOrder: dto.DetailOrderResponse{
+					Id:          order.DetailOrder.Id.String(),
+					AkadDate:    order.DetailOrder.AkadDate,
+					ShowDate:    order.DetailOrder.ShowDate,
+					Location:    order.DetailOrder.Location,
+					AkadTime:    order.DetailOrder.AkadTime,
+					GuestCount:  order.DetailOrder.GuestCount,
+					TechMeeting: order.DetailOrder.TechMeeting,
+				},
+			},
+			Notes:          order.Notes,
 			DocumentOrders: documentOrders,
 		})
 	}
