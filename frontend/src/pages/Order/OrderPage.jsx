@@ -196,10 +196,10 @@ function OrderPage() {
     { name: "bri", logo: "/img/banks/bri.png" },
     { name: "bni", logo: "/img/banks/bni.png" },
     { name: "cimb", logo: "/img/banks/cimb.png" },
-    { name: "mandiri", logo: "/img/banks/mandiri.png" },
-    { name: "maybank", logo: "/img/banks/maybank.png" },
-    { name: "permata", logo: "/img/banks/permata.png" },
-    { name: "mega", logo: "/img/banks/mega.png" },
+    // { name: "mandiri", logo: "/img/banks/mandiri.png" }, // belum ada VA
+    // { name: "maybank", logo: "/img/banks/maybank.png" }, // belum ada VA
+    // { name: "permata", logo: "/img/banks/permata.png" }, // belum ada VA
+    // { name: "mega", logo: "/img/banks/mega.png" },       // belum ada VA
   ];
 
   return (
