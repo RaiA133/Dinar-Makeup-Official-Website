@@ -1,13 +1,12 @@
 import { useContext } from "react";
 import { AdminContext } from "../../contexts/AdminContext";
-import { deleteUserByID, getAllUsers } from "../../modules/fetch";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 
 function TransactionManagementPage() {
   let location = useLocation();
   const navigate = useNavigate();
-  const { transcactionState, setTranscactionState, refreshCallback } = useContext(AdminContext)
+  const { transcactionState, refreshCallback } = useContext(AdminContext)
 
   const totalPages = transcactionState?.metadata?.total_pages || 0;
   const currentPage = transcactionState?.metadata?.current_page || 1;
