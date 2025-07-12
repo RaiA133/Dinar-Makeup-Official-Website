@@ -163,7 +163,7 @@ function dataFormBooking({ trx }) {
             <fieldset className="fieldset h-full">
               <legend className="fieldset-legend">Notes <span>(opsional)</span></legend>
               {trx.notes ? (
-                <div className="rounded-box w-full p-4 bg-base-100 text-base-600 border border-base-300">
+                <div className="rounded-box w-full p-4 bg-transparent text-base-600 border border-base-300">
                   <MarkdownRenderer>{trx.notes}</MarkdownRenderer>
                 </div>
               ) : (
