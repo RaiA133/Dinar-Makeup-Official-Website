@@ -394,7 +394,7 @@ function OrderPage() {
                     <div className="mx-0 lg:mx-5 xl:mx-20">
 
                       {/* Header */}
-                      <div className="text-md sm:text-xl flex font-bold justify-center w-full my-5">Data Diri Pengantin</div>
+                      <div className="text-md sm:text-xl flex font-bold justify-center w-full my-10">Data Diri Pengantin</div>
 
                       {/* Form Data Diri Pengantin*/}
                       <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
@@ -442,7 +442,7 @@ function OrderPage() {
                       </div>
 
                       {/* Header */}
-                      <div className="text-md sm:text-xl flex font-bold justify-center w-full my-5">Detail Acara</div>
+                      <div className="text-md sm:text-xl flex font-bold justify-center w-full my-10">Detail Acara</div>
 
                       {/* Form Detail Acara*/}
                       <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">

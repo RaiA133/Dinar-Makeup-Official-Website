@@ -9,7 +9,7 @@ function ExtraForm({ formData, handleValidationData }) {
   return (
     <div className="md:mb-10">
       {/* Header */}
-      <div className="text-md sm:text-xl flex font-bold justify-center w-full my-5">Data Opsional</div>
+      <div className="text-md sm:text-xl flex font-bold justify-center w-full my-10">Data Opsional</div>
 
       {/* Notes (Opsional) */}
       <fieldset className="fieldset h-full">
