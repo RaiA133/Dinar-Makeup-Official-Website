@@ -12,19 +12,36 @@ function ExtraFormText({ formData, handleValidationData, resultAIText, setResult
   const [isLoading, setIsLoading] = useState(false);
   const [dropDownOpen, setDropdownOpen] = useState(false);
 
-  const formDataText = formData ? `\nData Pelanggan: ${JSON.stringify(formData, null, 2)}` : "";
-  const productDataText = productsByIDState ? `\nData Paket: ${JSON.stringify(productsByIDState, null, 2)}` : "";
+  const formDataText = formData ? `${JSON.stringify(formData, null, 2)}` : "";
+  const productDataText = productsByIDState ? `{JSON.stringify(productsByIDState, null, 2)}` : "";
 
-  const contents = `Beri saya isi notes tambahan di form pengisian data ketika order wedding organizer Dinar Makeup, dengan kebutuhan "${inputValue}". 
-  ${formDataText}
-  ${productDataText}
-  Notes merupakan deskripsi text yang singkat, jelas, dan langsung ke poin — tidak perlu terlalu panjang.`;
+  const generatePromptText = (inputValue, formData, productData) => {
+    const budget = productData?.price || 0;
+    const lokasi = formData?.detail_order?.location || "Gedung / jalanan";
+    const tema = inputValue || "Wedding khas indonesia";
+
+    return `Buatkan isi catatan tambahan untuk kebutuhan berikut: \n\n
+
+Tema: ${tema} \n
+Lokasi Acara: ${lokasi} \n
+Budget: Rp ${budget.toLocaleString('id-ID')} \n
+
+Data Tambahan Lain : \n\n
+Data form pribadi : ${formDataText} \n\n
+Data produk yang dibeli: ${productDataText} \n\n
+
+Berikan langsung dalam bentuk daftar poin dan alasan singkat disetiap point. Tidak perlu menyapa, atau menambahkan kalimat pembuka — cukup tampilkan hasil catatannya secara langsung, singkat, dan to the point.\n\n
+Buat isi catatan singkat dan padat.
+  `;
+  };
 
   // ====================================================================================================================================
 
-  const handleGenerateAIWithPrompt = async (e) => {
+  const handleGenerateAIWithPrompt = async (textInput) => {
     setIsLoading(true);
     setResultAIText("");
+    const contents = generatePromptText(textInput, formData, productsByIDState);
+
     try {
       const stream = await ai.models.generateContentStream({
         model: "gemini-2.5-flash",
@@ -81,26 +98,27 @@ function ExtraFormText({ formData, handleValidationData, resultAIText, setResult
               )}
 
               <div className="divider my-0">Template</div>
+
               <div className="grid gap-2">
-                {templateNotes.map((templateNote, index) => {
+                {templateNotes.map((template, index) => {
                   return (
-                    <button className="btn btn-sm"
+                    <button className="btn btn-sm py-5"
                       key={index}
                       disabled={isLoading}
                       onClick={async (e) => {
                         e.preventDefault();
                         handleValidationData()
-                        setInputValue(templateNote);
-                        await handleGenerateAIWithPrompt();
+                        await handleGenerateAIWithPrompt(template);
                       }}
                     >
-                      {templateNote}
+                      {template}
                     </button>
                   );
                 })}
               </div>
 
               <div className="divider my-0">Atau</div>
+
               <div className="join w-full">
                 <label className="input join-item w-full">
                   <input
@@ -117,7 +135,7 @@ function ExtraFormText({ formData, handleValidationData, resultAIText, setResult
                   onClick={async (e) => {
                     e.preventDefault();
                     handleValidationData()
-                    await handleGenerateAIWithPrompt();
+                    await handleGenerateAIWithPrompt(inputValue);
                   }}
                 >
                   <PaperAirplaneIcon className="h-5 w-5" />

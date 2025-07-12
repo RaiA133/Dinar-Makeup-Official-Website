@@ -4,7 +4,7 @@ import ExtraFormImage from "../Ai/OrderPage/ExtraFormImage"
 
 function ExtraForm({ formData, handleValidationData }) {
   const [resultAIText, setResultAIText] = useState('');
-  const [resultImage, setResultImage] = useState(null);
+  const [resultImage, setResultImage] = useState('');
 
   return (
     <div className="md:mb-10">

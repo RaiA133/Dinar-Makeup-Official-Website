@@ -10,6 +10,7 @@ import {
 } from 'react-icons/fa';
 import toast, { Toaster } from "react-hot-toast";
 import moment from "moment";
+import MarkdownRenderer from "../components/Ai/Chabot/MarkdownRenderer";
 
 function TransactionsPage() {
   const [copied, setCopied] = useState(false);
@@ -131,8 +132,10 @@ function TransactionsPage() {
 
                 {trx.notes && (
                   <div className="mt-3 text-sm">
-                    <div className="rounded-xl w-full border border-stone-300 p-4 text-sm">
-                      {trx.notes}
+                    <div className="rounded-xl w-full border border-stone-300 p-4 text-sm truncate">
+                      <MarkdownRenderer>
+                        {trx.notes}
+                      </MarkdownRenderer>
                     </div>
                   </div>
                 )}
@@ -398,7 +401,9 @@ function TransactionsPage() {
                                   </div>
                                   {trx.notes ? (
                                     <div className="rounded-box w-full p-4 bg-base-200 text-base-600 border border-base-300">
-                                      {trx.notes}
+                                      <MarkdownRenderer>
+                                        {trx.notes}
+                                      </MarkdownRenderer>
                                     </div>
                                   ) : (
                                     <p className="text-base-600">-</p>
