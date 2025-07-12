@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { ArrowPathIcon, PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import { GoogleGenAI } from "@google/genai";
-import MarkdownRenderer from './MarkdownRenderer';
+import MarkdownRenderer from '../../MarkdownRenderer';
 import introJs from 'intro.js';
 import 'intro.js/introjs.css';
 import { useNavigate } from 'react-router-dom';

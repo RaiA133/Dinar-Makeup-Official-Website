@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { PaperAirplaneIcon, SparklesIcon } from '@heroicons/react/24/solid';
 import { ProductsContext } from '../../../contexts/ProductsContext';
 import { GoogleGenAI } from "@google/genai";
-import MarkdownRenderer from '../Chabot/MarkdownRenderer';
+import MarkdownRenderer from '../../MarkdownRenderer';
 
 function ExtraFormText({ formData, handleValidationData, resultAIText, setResultAIText }) {
   const { productsByIDState } = useContext(ProductsContext);

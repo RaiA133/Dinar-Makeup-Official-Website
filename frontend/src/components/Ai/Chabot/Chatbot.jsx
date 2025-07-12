@@ -3,7 +3,7 @@ import { PaperAirplaneIcon, SparklesIcon } from '@heroicons/react/24/solid';
 import { chatBot, guideBot } from "../modules/fetch/ai";
 import { GoogleGenAI } from "@google/genai";
 import { useNavigate } from 'react-router-dom';
-import MarkdownRenderer from './MarkdownRenderer';
+import MarkdownRenderer from '../../../components/MarkdownRenderer';
 import introJs from 'intro.js';
 import 'intro.js/introjs.css';
 import 'intro.js/themes/introjs-modern.css';

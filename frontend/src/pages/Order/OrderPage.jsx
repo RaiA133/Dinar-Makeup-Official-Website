@@ -12,7 +12,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { FaCheck, FaShoppingCart, FaRegFileAlt, FaBox, FaCreditCard } from "react-icons/fa";
 import ExtraForm from "../../components/OrderPage/ExtraForm";
-import MarkdownRenderer from "../../components/Ai/Chabot/MarkdownRenderer";
+import MarkdownRenderer from "../../components/MarkdownRenderer";
 
 function OrderPage() {
   const { id } = useParams();
