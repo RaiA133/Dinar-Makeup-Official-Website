@@ -25,19 +25,19 @@ function dataFormBooking({ trx }) {
             <div>
               <fieldset className="fieldset">
                 <legend className="fieldset-legend ms-1">Nama Lengkap Mempelai Pria</legend>
-                <input type="text" className="input w-full bg-transparent" placeholder="Type here" name="nama_pria" value={trx.data_form.customer_detail.groom_full_name} />
+                <input type="text" className="input w-full bg-transparent" placeholder="Type here" name="nama_pria" defaultValue={trx.data_form.customer_detail.groom_full_name} />
               </fieldset>
               <fieldset className="fieldset">
                 <legend className="fieldset-legend ms-1">Alamat Mempelai Pria</legend>
-                <textarea className="textarea h-24 w-full bg-transparent" placeholder="Masukan Alamat" name="alamat_pria" value={trx.data_form.customer_detail.groom_address}></textarea>
+                <textarea className="textarea h-24 w-full bg-transparent" placeholder="Masukan Alamat" name="alamat_pria" defaultValue={trx.data_form.customer_detail.groom_address}></textarea>
               </fieldset>
               <fieldset className="fieldset">
                 <legend className="fieldset-legend ms-1">Email</legend>
-                <input type="email" className="input w-full bg-transparent" placeholder="dinar.dumilah@gmail.com" name="email_pria" value={trx.data_form.customer_detail.groom_email} />
+                <input type="email" className="input w-full bg-transparent" placeholder="dinar.dumilah@gmail.com" name="email_pria" defaultValue={trx.data_form.customer_detail.groom_email} />
               </fieldset>
               <fieldset className="fieldset">
                 <legend className="fieldset-legend ms-1">Instagram</legend>
-                <input type="text" className="input w-full bg-transparent" placeholder="Masukan Nama Instagram Mempelai Pria" name="ig_pria" value={trx.data_form.customer_detail.groom_instagram} />
+                <input type="text" className="input w-full bg-transparent" placeholder="Masukan Nama Instagram Mempelai Pria" name="ig_pria" defaultValue={trx.data_form.customer_detail.groom_instagram} />
               </fieldset>
             </div>
 
@@ -45,19 +45,19 @@ function dataFormBooking({ trx }) {
             <div>
               <fieldset className="fieldset">
                 <legend className="fieldset-legend ms-1">Nama Lengkap Mempelai Wanita</legend>
-                <input type="text" className="input w-full bg-transparent" placeholder="Type here" name="nama_wanita" value={trx.data_form.customer_detail.bride_full_name} />
+                <input type="text" className="input w-full bg-transparent" placeholder="Type here" name="nama_wanita" defaultValue={trx.data_form.customer_detail.bride_full_name} />
               </fieldset>
               <fieldset className="fieldset">
                 <legend className="fieldset-legend ms-1">Alamat Mempelai Wanita</legend>
-                <textarea className="textarea h-24 w-full bg-transparent" placeholder="Masukan Alamat" name="alamat_wanita" value={trx.data_form.customer_detail.bride_address}></textarea>
+                <textarea className="textarea h-24 w-full bg-transparent" placeholder="Masukan Alamat" name="alamat_wanita" defaultValue={trx.data_form.customer_detail.bride_address}></textarea>
               </fieldset>
               <fieldset className="fieldset">
                 <legend className="fieldset-legend ms-1">Email</legend>
-                <input type="email" className="input w-full bg-transparent" placeholder="dinar.dumilah@gmail.com" name="email_wanita" value={trx.data_form.customer_detail.bride_email} />
+                <input type="email" className="input w-full bg-transparent" placeholder="dinar.dumilah@gmail.com" name="email_wanita" defaultValue={trx.data_form.customer_detail.bride_email} />
               </fieldset>
               <fieldset className="fieldset">
                 <legend className="fieldset-legend ms-1">Instagram</legend>
-                <input type="text" className="input w-full bg-transparent" placeholder="Masukan Nama Instagram Mempelai Wanita" name="ig_wanita" value={trx.data_form.customer_detail.bride_instagram} />
+                <input type="text" className="input w-full bg-transparent" placeholder="Masukan Nama Instagram Mempelai Wanita" name="ig_wanita" defaultValue={trx.data_form.customer_detail.bride_instagram} />
               </fieldset>
             </div>
 
@@ -82,7 +82,11 @@ function dataFormBooking({ trx }) {
                     className="react-day-picker"
                     mode="single"
                     captionLayout="dropdown"
-                    defaultMonth={moment(trx.data_form.detail_order.akad_date).format("YYYY MMM")}
+                    defaultMonth={
+                      moment(trx.data_form.detail_order.akad_date).isValid()
+                        ? moment(trx.data_form.detail_order.akad_date).toDate()
+                        : new Date()
+                    }   
                     startMonth={new Date(2024, 6)}
                     endMonth={new Date(2050, 9)}
                     selected={trx.data_form.detail_order.akad_date} />
@@ -90,7 +94,7 @@ function dataFormBooking({ trx }) {
               </div>
               <fieldset className="fieldset h-full">
                 <legend className="fieldset-legend ms-1">Lokasi Pernikahan</legend>
-                <textarea className="textarea h-48 w-full bg-transparent" placeholder="Masukan Lokasi Pernikahan" name="lokasi_pernikahan" value={trx.data_form.detail_order.location}></textarea>
+                <textarea className="textarea h-48 w-full bg-transparent" placeholder="Masukan Lokasi Pernikahan" name="lokasi_pernikahan" defaultValue={trx.data_form.detail_order.location}></textarea>
               </fieldset>
             </div>
 
@@ -109,7 +113,11 @@ function dataFormBooking({ trx }) {
                     className="react-day-picker"
                     mode="single"
                     captionLayout="dropdown"
-                    defaultMonth={moment(trx.data_form.detail_order.show_date).format("YYYY MMM")}
+                    defaultMonth={
+                      moment(trx.data_form.detail_order.show_date).isValid()
+                        ? moment(trx.data_form.detail_order.show_date).toDate()
+                        : new Date()
+                    }                    
                     startMonth={new Date(2024, 6)}
                     endMonth={new Date(2050, 9)}
                     selected={trx.data_form.detail_order.show_date} />
@@ -117,11 +125,11 @@ function dataFormBooking({ trx }) {
               </div>
               <fieldset className="fieldset">
                 <legend className="fieldset-legend ms-1">Jam akad</legend>
-                <input type="time" className="input w-full bg-transparent" name="jam_akad" value={trx.data_form.detail_order.akad_time} />
+                <input type="time" className="input w-full bg-transparent" name="jam_akad" defaultValue={trx.data_form.detail_order.akad_time} />
               </fieldset>
               <fieldset className="fieldset">
                 <legend className="fieldset-legend ms-1">Jumlah Tamu</legend>
-                <input type="number" className="input w-full bg-transparent" placeholder="dinar.dumilah@gmail.com" name="jumlah_tamu" value={trx.data_form.detail_order.guest_count} />
+                <input type="number" className="input w-full bg-transparent" placeholder="dinar.dumilah@gmail.com" name="jumlah_tamu" defaultValue={trx.data_form.detail_order.guest_count} />
               </fieldset>
               <div className="fieldset">
                 <legend className="fieldset-legend ms-1">Tanggal Tech Meeting</legend>
@@ -133,7 +141,11 @@ function dataFormBooking({ trx }) {
                     className="react-day-picker"
                     mode="single"
                     captionLayout="dropdown"
-                    defaultMonth={moment(trx.data_form.detail_order.tech_meeting).format("YYYY MMM")}
+                    defaultMonth={
+                      moment(trx.data_form.detail_order.tech_meeting).isValid()
+                        ? moment(trx.data_form.detail_order.tech_meeting).toDate()
+                        : new Date()
+                    }                    
                     startMonth={new Date(2024, 6)}
                     endMonth={new Date(2050, 9)}
                     selected={trx.data_form.detail_order.tech_meeting} />
