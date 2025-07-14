@@ -4,7 +4,6 @@ import MarkdownRenderer from "../MarkdownRenderer";
 import moment from "moment";
 
 function dataFormBooking({ trx }) {
-  console.log(trx);
   return (
     <section>
 

@@ -10,8 +10,6 @@ function TransactionsPage() {
   const { allMyTransaction } = useContext(UserContext);
   const [paymentData, setPaymentData] = useState([])
 
-  console.log("allMyTransaction", allMyTransaction);
-
   const dataBank = [
     { name: "bca", logo: "/img/banks/bca.png" },
     { name: "bri", logo: "/img/banks/bri.png" },
