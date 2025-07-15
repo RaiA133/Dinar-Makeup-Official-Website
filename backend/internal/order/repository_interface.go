@@ -15,4 +15,6 @@ type RepositoryInterface interface {
 	UploadFileToCloud(ctx context.Context, file multipart.File, fileName, baseURL, secretID, secretKey string) (string, error)
 	InsertDocument(ctx context.Context, entity *model.DocumentOrder) (*model.DocumentOrder, error)
 	GetAllTransactionByUserID(ctx context.Context, userID string) ([]*model.Order, error)
+	GetAllAkadDateWherePaymentSuccess(ctx context.Context) ([]string, error)
+	GetOrderByIdOrder(ctx context.Context, idOrder string) (*model.Order, error)
 }

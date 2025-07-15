@@ -279,7 +279,7 @@ func (or *orderService) Callback(ctx context.Context, notifPayload map[string]in
 		return errors.New("failed to check transaction")
 	}
 
-	dataOrder, err := or.pgRepo.GetOrderByID(ctx, orderID)
+	dataOrder, err := or.pgRepo.GetOrderByIdOrder(ctx, orderID)
 	if err != nil {
 		return errors.New("failed to fetch order data")
 	}

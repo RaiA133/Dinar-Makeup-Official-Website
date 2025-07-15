@@ -234,3 +234,36 @@ func (rp *orderPGRepository) GetAllTransactionByUserID(ctx context.Context, user
 
 	return orders, nil
 }
+
+func (r *orderPGRepository) GetAllAkadDateWherePaymentSuccess(ctx context.Context) ([]string, error) {
+	var akadDates []string
+
+	err := r.db.WithContext(ctx).
+		Table("detail_orders").
+		Select("detail_orders.akad_date").
+		Joins("JOIN orders ON orders.id = detail_orders.order_id").
+		Where("orders.payment_status = ?", "SUKSES").
+		Scan(&akadDates).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return akadDates, nil
+}
+
+func (rp *orderPGRepository) GetOrderByIdOrder(ctx context.Context, idOrder string) (*model.Order, error) {
+	var order model.Order
+
+	// Query order utama beserta user dan product
+	err := rp.db.WithContext(ctx).
+		Preload("User").
+		Preload("Product").
+		Where("id_order = ?", idOrder).
+		First(&order).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &order, nil
+}
