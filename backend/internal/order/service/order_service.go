@@ -296,7 +296,7 @@ func (or *orderService) Callback(ctx context.Context, notifPayload map[string]in
 }
 
 func (or *orderService) ConfirmPayment(ctx context.Context, orderID string) error {
-	data, err := or.pgRepo.GetOrderByID(ctx, orderID)
+	data, err := or.pgRepo.GetOrderByIdOrder(ctx, orderID)
 	if err != nil {
 		return errors.New("failed to fetch order data")
 	}
@@ -308,7 +308,7 @@ func (or *orderService) ConfirmPayment(ctx context.Context, orderID string) erro
 }
 
 func (or *orderService) CancelPayment(ctx context.Context, orderID string) error {
-	data, err := or.pgRepo.GetOrderByID(ctx, orderID)
+	data, err := or.pgRepo.GetOrderByIdOrder(ctx, orderID)
 
 	if err != nil {
 		return errors.New("failed to fetch order data")
