@@ -9,6 +9,7 @@ import (
 	"github.com/RianIhsan/wedding-organizer-be/pkg/pagination"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"net/http"
@@ -190,5 +191,67 @@ func (oc *orderController) GetOrdersByUserId() gin.HandlerFunc {
 		}
 
 		response.SendSuccesResponse(context, 200, "success", data)
+	}
+}
+
+func (oc *orderController) UpdateOrder() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		auth := middleware.GetAuth(ctx)
+		if auth.Role != "admin" {
+			utils.LogErrorResponse(ctx, oc.logger, errors.New("access denied"))
+			response.SendErrorResponse(ctx, http.StatusForbidden, "access denied")
+			return
+		}
+		idTransaction := ctx.Param("id")
+		resultIdTransaction, err := uuid.Parse(idTransaction)
+		if err != nil {
+			utils.LogErrorResponse(ctx, oc.logger, errors.New("error parsing uuid"))
+			response.SendErrorResponse(ctx, http.StatusInternalServerError, "error parsing uuid")
+			return
+		}
+
+		request := new(dto.UpdateBookingWeddingRequest)
+		if err := ctx.ShouldBindJSON(request); err != nil {
+			utils.LogErrorResponse(ctx, oc.logger, err)
+			response.SendErrorResponse(ctx, http.StatusBadRequest, "Invalid payload")
+			return
+		}
+
+		err = oc.service.UpdateTransactionById(ctx, resultIdTransaction, *request)
+		if err != nil {
+			utils.LogErrorResponse(ctx, oc.logger, errors.New("failed update transaction"))
+			response.SendErrorResponse(ctx, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		response.SendSuccesResponse(ctx, http.StatusOK, "update transaction success", nil)
+	}
+}
+
+func (oc *orderController) DeleteOrder() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		auth := middleware.GetAuth(context)
+		if auth.Role != "admin" {
+			utils.LogErrorResponse(context, oc.logger, errors.New("access denied"))
+			response.SendErrorResponse(context, http.StatusForbidden, "access denied")
+			return
+		}
+
+		id := context.Param("id")
+		UuidConvert, err := uuid.Parse(id)
+		if err != nil {
+			utils.LogErrorResponse(context, oc.logger, errors.New("error parsing uuid"))
+			response.SendErrorResponse(context, http.StatusInternalServerError, "error parsing uuid")
+			return
+		}
+
+		err = oc.service.DeleteITransaction(context, UuidConvert)
+		if err != nil {
+			utils.LogErrorResponse(context, oc.logger, errors.New("failed delete transaction data"))
+			response.SendErrorResponse(context, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		response.SendSuccesResponse(context, http.StatusOK, "success delete transaction data", nil)
 	}
 }

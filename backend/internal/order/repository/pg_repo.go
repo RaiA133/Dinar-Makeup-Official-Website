@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"github.com/RianIhsan/wedding-organizer-be/internal/order"
 	"github.com/RianIhsan/wedding-organizer-be/internal/order/model"
+	"github.com/RianIhsan/wedding-organizer-be/internal/order/model/dto"
 	"github.com/RianIhsan/wedding-organizer-be/pkg/payment"
+	"github.com/google/uuid"
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/pkg/errors"
 	"github.com/tencentyun/cos-go-sdk-v5"
@@ -16,6 +18,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 type orderPGRepository struct {
@@ -62,14 +65,15 @@ func (rp *orderPGRepository) FindOrdersData(ctx context.Context, offset, limit i
 	var orders []*model.Order
 	var total int64
 
-	DB := rp.db.WithContext(ctx).Model(&model.Order{})
+	DB := rp.db.WithContext(ctx).Model(&model.Order{}).
+		Where("deleted_at IS NULL")
 
 	if search != "" {
 		searchPattern := "%" + search + "%"
 		DB = DB.Where(`
-			id_order text ILIKE ? OR 
+			(id_order ILIKE ? OR 
 			user_id::text ILIKE ? OR 
-			product_id::text ILIKE ?`,
+			product_id::text ILIKE ?)`,
 			searchPattern, searchPattern, searchPattern)
 	}
 
@@ -87,12 +91,16 @@ func (rp *orderPGRepository) FindOrdersData(ctx context.Context, offset, limit i
 
 	for _, o := range orders {
 		var detail model.DetailOrder
-		if err := rp.db.WithContext(ctx).Where("order_id = ?", o.Id).First(&detail).Error; err == nil {
+		if err := rp.db.WithContext(ctx).
+			Where("order_id = ?", o.Id).
+			First(&detail).Error; err == nil {
 			o.DetailOrder = detail
 		}
 
 		var customer model.CustomerDetail
-		if err := rp.db.WithContext(ctx).Where("order_id = ?", o.Id).First(&customer).Error; err == nil {
+		if err := rp.db.WithContext(ctx).
+			Where("order_id = ?", o.Id).
+			First(&customer).Error; err == nil {
 			o.CustomerDetail = customer
 		}
 	}
@@ -105,11 +113,9 @@ func (rp *orderPGRepository) CheckTransaction(ctx context.Context, orderId strin
 
 	transactionStatus, err := rp.coreClient.CheckTransaction(orderId)
 	if err != nil {
-		fmt.Println("GACOR 1")
 		return "", err
 	} else {
 		if transactionStatus != nil {
-			fmt.Println("GACOR 2")
 			paymentStatus = payment.TransactionStatus(transactionStatus)
 			return paymentStatus, nil
 		}
@@ -212,7 +218,7 @@ func (rp *orderPGRepository) GetAllTransactionByUserID(ctx context.Context, user
 		Preload("User").
 		Preload("Product").
 		Preload("DocumentOrders").
-		Where("user_id = ?", userID).
+		Where("user_id = ? AND deleted_at IS NULL", userID).
 		Order("created_at DESC").
 		Find(&orders).Error
 
@@ -266,4 +272,68 @@ func (rp *orderPGRepository) GetOrderByIdOrder(ctx context.Context, idOrder stri
 	}
 
 	return &order, nil
+}
+
+func (r *orderPGRepository) UpdateBookingWedding(ctx context.Context, orderId uuid.UUID, req dto.UpdateBookingWeddingRequest) error {
+	// Update Order
+	err := r.db.WithContext(ctx).
+		Model(&model.Order{}).
+		Where("id = ?", orderId).
+		Updates(map[string]interface{}{
+			"notes":          req.Notes,
+			"payment_status": req.PaymentStatus,
+		}).Error
+	if err != nil {
+		return fmt.Errorf("failed to update order: %w", err)
+	}
+
+	// Update Detail Order
+	err = r.db.WithContext(ctx).
+		Model(&model.DetailOrder{}).
+		Where("order_id = ?", orderId).
+		Updates(map[string]interface{}{
+			"akad_date":    req.DetailOrder.AkadDate,
+			"show_date":    req.DetailOrder.ShowDate,
+			"location":     req.DetailOrder.Location,
+			"akad_time":    req.DetailOrder.AkadTime,
+			"guest_count":  req.DetailOrder.GuestCount,
+			"tech_meeting": req.DetailOrder.TechMeeting,
+		}).Error
+	if err != nil {
+		return fmt.Errorf("failed to update detail order: %w", err)
+	}
+
+	// Update Customer Detail
+	err = r.db.WithContext(ctx).
+		Model(&model.CustomerDetail{}).
+		Where("order_id = ?", orderId).
+		Updates(map[string]interface{}{
+			"groom_full_name": req.CustomerDetail.GroomFullName,
+			"bride_full_name": req.CustomerDetail.BrideFullName,
+			"groom_address":   req.CustomerDetail.GroomAddress,
+			"bride_address":   req.CustomerDetail.BrideAddress,
+			"groom_email":     req.CustomerDetail.GroomEmail,
+			"bride_email":     req.CustomerDetail.BrideEmail,
+			"groom_instagram": req.CustomerDetail.GroomInstagram,
+			"bride_instagram": req.CustomerDetail.BrideInstagram,
+		}).Error
+	if err != nil {
+		return fmt.Errorf("failed to update customer detail: %w", err)
+	}
+
+	return nil
+}
+
+func (r *orderPGRepository) SoftDeleteOrderManual(ctx context.Context, orderId uuid.UUID) error {
+	now := time.Now().UnixMilli()
+	err := r.db.WithContext(ctx).
+		Model(&model.Order{}).
+		Where("id = ?", orderId).
+		Update("deleted_at", now).Error
+
+	if err != nil {
+		return fmt.Errorf("failed to manually soft delete: %w", err)
+	}
+
+	return nil
 }

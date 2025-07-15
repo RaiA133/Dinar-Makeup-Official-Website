@@ -9,4 +9,6 @@ type ControllerInterface interface {
 	GetOrder() gin.HandlerFunc
 	RegisterDocument() gin.HandlerFunc
 	GetOrdersByUserId() gin.HandlerFunc
+	UpdateOrder() gin.HandlerFunc
+	DeleteOrder() gin.HandlerFunc
 }

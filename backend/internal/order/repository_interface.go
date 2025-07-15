@@ -3,6 +3,8 @@ package order
 import (
 	"context"
 	"github.com/RianIhsan/wedding-organizer-be/internal/order/model"
+	"github.com/RianIhsan/wedding-organizer-be/internal/order/model/dto"
+	"github.com/google/uuid"
 	"mime/multipart"
 )
 
@@ -17,4 +19,6 @@ type RepositoryInterface interface {
 	GetAllTransactionByUserID(ctx context.Context, userID string) ([]*model.Order, error)
 	GetAllAkadDateWherePaymentSuccess(ctx context.Context) ([]string, error)
 	GetOrderByIdOrder(ctx context.Context, idOrder string) (*model.Order, error)
+	UpdateBookingWedding(ctx context.Context, orderId uuid.UUID, req dto.UpdateBookingWeddingRequest) error
+	SoftDeleteOrderManual(ctx context.Context, orderId uuid.UUID) error
 }
