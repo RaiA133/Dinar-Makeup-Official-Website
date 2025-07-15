@@ -393,7 +393,7 @@ function OrderPage() {
                     <div className="mx-0 lg:mx-5 xl:mx-20">
 
                       {/* Header */}
-                      <div className="text-md sm:text-xl flex font-bold justify-center w-full my-5">Data Diri Pengantin</div>
+                      <div className="text-md sm:text-xl flex font-bold justify-center w-full my-10">Data Diri Pengantin</div>
 
                       {/* Form Data Diri Pengantin*/}
                       <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
@@ -441,7 +441,7 @@ function OrderPage() {
                       </div>
 
                       {/* Header */}
-                      <div className="text-md sm:text-xl flex font-bold justify-center w-full my-5">Detail Acara</div>
+                      <div className="text-md sm:text-xl flex font-bold justify-center w-full my-10">Detail Acara</div>
 
                       {/* Form Detail Acara*/}
                       <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
@@ -502,7 +502,7 @@ function OrderPage() {
                           </fieldset>
                           <fieldset className="fieldset">
                             <legend className="fieldset-legend ms-1">Jumlah Tamu</legend>
-                            <input type="number" className="input w-full" placeholder="dinar.dumilah@gmail.com" name="jumlah_tamu" />
+                            <input type="number" className="input w-full" placeholder="100" name="jumlah_tamu" />
                           </fieldset>
                           <div className="fieldset">
                             <legend className="fieldset-legend ms-1">Tanggal Tech Meeting</legend>

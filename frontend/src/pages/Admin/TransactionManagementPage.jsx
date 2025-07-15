@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { AdminContext } from "../../contexts/AdminContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
+import DataFormBooking from "../../components/TransactionsPage/DataFormBooking";
 
 function TransactionManagementPage() {
   let location = useLocation();
@@ -96,155 +97,95 @@ function TransactionManagementPage() {
 
               {/* Transaction Detail Modals */}
               {transcactionState?.data?.map((trx) => (
-                <dialog key={`detail_${trx.id}`} id={`transaction_modal_${trx.id}`} className="modal">
-                  <div className="modal-box max-w-4xl">
-                    <h3 className="font-bold text-lg mb-4 text-primary">Detail Transaksi</h3>
-
-                    <div className=" gap-4 bg-base-200 p-5">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-
-                        <div className="space-y-2">
-                          <h4 className="font-semibold text-accent">Informasi Order</h4>
-                          <div className="divider m-0"></div>
-                          <p><span className="font-medium">Order ID :</span> {trx.order_id}</p>
-                          <p><span className="font-medium">Waktu Transaksi :</span> {trx.transaction_information.transaction_time}</p>
-                          <p><span className="font-medium">Wedding Date :</span> {trx.wedding_date}</p>
-                        </div>
-
-                        <div className="space-y-2">
-                          <h4 className="font-semibold text-accent">Informasi Pelanggan</h4>
-                          <div className="divider m-0"></div>
-                          <p><span className="font-medium">Nama :</span> {trx.user_information.name}</p>
-                          <p><span className="font-medium">Email :</span> {trx.user_information.email}</p>
-                          <p><span className="font-medium">Telepon :</span> {trx.user_information.phone || '-'}</p>
-                          <p><span className="font-medium">NIK :</span> {trx.user_information.nik}</p>
-                          <p><span className="font-medium">Alamat :</span> {trx.user_information.address}</p>
-                        </div>
-
-                        <div className="space-y-2">
-                          <h4 className="font-semibold text-accent">Detail Pembayaran</h4>
-                          <div className="divider m-0"></div>
-
-                          <p><span className="font-medium">Metode Pembayaran :</span> {trx.transaction_information.payment_method.toUpperCase()} Virtual Account</p>
-                          <p><span className="font-medium">VA Number :</span> {trx.transaction_information.va_number}</p>
-                          <p><span className="font-medium">Status Pembayaran :</span>
-                            <span className={`badge ml-2 ${trx.transaction_information.payment_status === 'pending'
-                              ? 'badge-warning'
-                              : trx.transaction_information.payment_status === 'success'
-                                ? 'badge-success'
-                                : 'badge-error'
-                              }`}>
-                              {trx.transaction_information.payment_status.toUpperCase()}
-                            </span>
-                          </p>
-                        </div>
-
-                        <div className="space-y-2">
-                          <h4 className="font-semibold text-accent">Rencana Down payment (DP)</h4>
-                          <div className="divider m-0"></div>
-                          <p><span className="font-medium">Rencana DP : </span>
-                            {new Intl.NumberFormat("id-ID", {
-                              style: "currency",
-                              currency: trx?.currency || "IDR",
-                              minimumFractionDigits: 0,
-                            }).format(trx.installment_amount || 0)}
-                          </p>
-                          <p><span className="font-medium">Sisa DP : </span>
-                            {new Intl.NumberFormat("id-ID", {
-                              style: "currency",
-                              currency: trx?.currency || "IDR",
-                              minimumFractionDigits: 0,
-                            }).format(trx?.outstanding || 0)}
-                          </p>
-                          <p><span className="font-medium">Status DP :</span>
-                            <span className={`badge ml-2 ${trx.installment_status === 'OUTSTANDING' ? 'badge-warning' : 'badge-success'}`}>
-                              {trx.installment_status}
-                            </span>
-                          </p>
-                        </div>
-
-                        <div className="space-y-2">
-                          <h4 className="font-semibold text-accent">Data Tambahan</h4>
-                          <div className="divider m-0"></div>
-                          <p><span className="font-medium">Notes :</span></p>
-                          {trx.notes ? (<div className="rounded-box w-full border border-stone-400 p-4">{trx.notes}</div>) : '-'}
-                          <div className="space-y-2">
-                            <p className="font-medium">Dokumen / Desain : </p>
-                            {trx.document_orders ? (
-                              <div className="space-y-3">
-                                {Array.isArray(trx.document_orders) ? trx.document_orders.map((doc, idx) => {
-                                  const fileUrl = doc; // Ganti jika object: doc.url atau doc.path
-                                  const fileExt = fileUrl.file_name.split('.').pop().toLowerCase();
-                                  if (fileExt === 'pdf') {
-                                    return (
-                                      <iframe
-                                        key={idx}
-                                        src={`https://docs.google.com/gview?url=${encodeURIComponent(fileUrl.url)}&embedded=true`}
-                                        className="w-full h-64 border rounded"
-                                        title={`Dokumen ${idx + 1}`}
-                                      />
-                                    );
-                                  }
-                                  if (['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(fileExt)) {
-                                    return (
-                                      <div key={idx}>
-                                        <img
-                                          src={fileUrl.url}
-                                          alt={`Gambar ${idx + 1}`}
-                                          className="max-w-full rounded border cursor-pointer"
-                                          onClick={() => document.getElementById(`image_modal_${idx}`).showModal()}
-                                        />
-                                        <dialog id={`image_modal_${idx}`} className="modal modal-top sm:modal-middle">
-                                          <div className="modal-box p-0">
-                                            <img src={fileUrl.url} alt={`Preview Gambar ${idx + 1}`} className="w-full max-h-full object-contain rounded-t" />
-                                          </div>
-                                          <form method="dialog" className="modal-backdrop">
-                                            <button>close</button>
-                                          </form>
-                                        </dialog>
-                                      </div>
-                                    );
-                                  } else {
-                                    return (
-                                      <div key={idx}>
-                                        <a href={fileUrl.url} target="_blank" rel="noopener noreferrer" className="link link-primary">
-                                          {fileUrl.file_name}
-                                        </a>
-                                      </div>
-                                    );
-                                  }
-                                }) : (
-                                  <p>Tipe dokumen tidak valid</p>
-                                )}
-                              </div>
-                            ) : (
-                              <p>-</p>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <h4 className="font-semibold text-accent">Informasi Produk</h4>
-                          <div className="divider m-0"></div>
-                          <p><span className="font-medium">Paket : </span>{trx.product_information.name}</p>
-                          <p><span className="font-medium">Harga : </span>
-                            {new Intl.NumberFormat("id-ID", {
-                              style: "currency",
-                              currency: trx?.currency || "IDR",
-                              minimumFractionDigits: 0,
-                            }).format(parseInt(trx.product_information.price) || 0)}
-                          </p>
-                        </div>
-
+                <dialog key={`detail_${trx.id}`} id={`transaction_modal_${trx.id}`} className="modal modal-bottom sm:pb-10 flex justify-center">
+                <div className="modal-box max-w-5xl sm:rounded-b-2xl">
+  
+                  {/* Tombol X */}
+                  <div className="sticky top-0 z-50 flex justify-end">
+                    <form method="dialog" className="ml-auto">
+                      <button className="btn btn-sm btn-circle btn-error">✕</button>
+                    </form>
+                  </div>
+  
+                  <h3 className="font-bold mb-4 text-neutral text-center text-2xl">Detail Transaksi</h3>
+                  <div className="divider"></div>
+  
+                  <div className="bg-gradient-to-r from-primary/5 to-secondary/5 p-6 rounded-2xl border border-base-300 gap-4 mb-12">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+  
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-accent">Informasi Order</h4>
+                        <div className="divider m-0"></div>
+                        <p><span className="font-medium">Order ID :</span> <span className="badge badge-outline badge-primary">{trx.order_id}</span></p>
+                        <p><span className="font-medium">Waktu Transaksi :</span> {trx.transaction_information.transaction_time}</p>
+                        <p><span className="font-medium">Tanggal Acara :</span> {trx.data_form.detail_order.show_date}</p>
+                        <p><span className="font-medium">Paket :</span> {trx.product_information.name}</p>
+                        <p><span className="font-medium">Harga : </span>
+                          {new Intl.NumberFormat("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                            minimumFractionDigits: 0,
+                          }).format(parseInt(trx.product_information.price) || 0)}
+                        </p>
                       </div>
-                    </div>
-
-                    <div className="modal-action">
-                      <form method="dialog">
-                        <button className="btn">Close</button>
-                      </form>
+  
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-accent">Informasi Pelanggan</h4>
+                        <div className="divider m-0"></div>
+                        <p><span className="font-medium">Nama :</span> {trx.user_information.name}</p>
+                        <p><span className="font-medium">Email :</span> {trx.user_information.email}</p>
+                        <p><span className="font-medium">Telepon :</span> {trx.user_information.phone}</p>
+                        <p><span className="font-medium">NIK :</span> {trx.user_information.nik}</p>
+                        <p><span className="font-medium">Alamat :</span> {trx.user_information.address}</p>
+                      </div>
+  
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-accent">Detail Pembayaran</h4>
+                        <div className="divider m-0"></div>
+                        <p><span className="font-medium">Metode Pembayaran :</span> {trx.transaction_information.payment_method.toUpperCase()} Virtual Account</p>
+                        <p><span className="font-medium">VA Number :</span> {trx.transaction_information.va_number}</p>
+                        <p><span className="font-medium">Status Pembayaran :</span>
+                          <span className={`badge ml-2 ${trx.transaction_information.payment_status === 'pending'
+                            ? 'badge-warning'
+                            : trx.transaction_information.payment_status === 'success'
+                              ? 'badge-success'
+                              : 'badge-error'
+                            }`}>
+                            {trx.transaction_information.payment_status.toUpperCase()}
+                          </span>
+                        </p>
+                      </div>
+  
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-accent">Rencana Down payment (DP)</h4>
+                        <div className="divider m-0"></div>
+                        <p><span className="font-medium">Rencana DP : </span>
+                          {new Intl.NumberFormat("id-ID", {
+                            style: "currency",
+                            currency: trx?.currency || "IDR",
+                            minimumFractionDigits: 0,
+                          }).format(trx.down_payment.installment_amount || 0)}
+                        </p>
+                        <p><span className="font-medium">Sisa DP : </span>
+                          {new Intl.NumberFormat("id-ID", {
+                            style: "currency",
+                            currency: trx?.currency || "IDR",
+                            minimumFractionDigits: 0,
+                          }).format(trx.down_payment.outstanding || 0)}
+                        </p>
+                        <p><span className="font-medium">Status DP :</span>
+                          <span className={`badge ml-2 ${trx.down_payment.installment_status === 'OUTSTANDING' ? 'badge-warning' : 'badge-success'}`}>
+                            {trx.down_payment.installment_status}
+                          </span>
+                        </p>
+                      </div>
+  
                     </div>
                   </div>
+  
+                  <DataFormBooking trx={trx}/>
+  
+                </div>
                 </dialog>
               ))}
 
