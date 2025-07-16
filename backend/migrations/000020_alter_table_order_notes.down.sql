@@ -1,0 +1,2 @@
+ALTER TABLE orders
+    ALTER COLUMN notes TYPE VARCHAR(255);

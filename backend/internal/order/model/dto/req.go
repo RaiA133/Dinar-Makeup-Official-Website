@@ -11,6 +11,14 @@ type CreateBookingWeddingRequest struct {
 	DetailOrder    DetailOrderRequest    `json:"detail_order"`
 }
 
+type UpdateBookingWeddingRequest struct {
+	Notes         string `json:"notes"`
+	PaymentStatus string `json:"payment_status"`
+
+	CustomerDetail CustomerDetailRequest `json:"customer_detail"`
+	DetailOrder    DetailOrderRequest    `json:"detail_order"`
+}
+
 type CustomerDetailRequest struct {
 	GroomFullName  string `json:"groom_full_name"`
 	BrideFullName  string `json:"bride_full_name"`

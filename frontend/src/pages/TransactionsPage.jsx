@@ -11,8 +11,6 @@ function TransactionsPage() {
   const { allMyTransaction } = useContext(UserContext);
   const [paymentData, setPaymentData] = useState([])
 
-  console.log("allMyTransaction", allMyTransaction);
-
   const dataBank = [
     { name: "bca", logo: "/img/banks/bca.png" },
     { name: "bri", logo: "/img/banks/bri.png" },
@@ -88,10 +86,10 @@ function TransactionsPage() {
                     </span>
                   </div>
 
-                  <p className="mx-5 text-base-500 mb-2 flex items-center justify-between gap-5">
+                  <div className="mx-5 text-base-500 mb-2 flex items-center justify-between gap-5">
                     <div className="text-xs md:text-sm">Waktu Transaksi: {moment(trx.transaction_information.transaction_time).format("DD MMM YYYY HH:mm")}</div>
                     <div className="badge badge-error badge-sm sm:badge-md py-6 sm:py-0 text-center">Batas Pembayaran : {moment(trx.transaction_information.expired_va).format("DD MMM YYYY HH:mm")}</div>
-                  </p>
+                  </div>
 
                   <div className="divider my-1"></div>
 

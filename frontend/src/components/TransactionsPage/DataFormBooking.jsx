@@ -4,7 +4,6 @@ import MarkdownRenderer from "../MarkdownRenderer";
 import moment from "moment";
 
 function dataFormBooking({ trx }) {
-  console.log(trx);
   return (
     <section>
 
@@ -82,7 +81,11 @@ function dataFormBooking({ trx }) {
                     className="react-day-picker"
                     mode="single"
                     captionLayout="dropdown"
-                    defaultMonth={moment(trx.data_form.detail_order.akad_date).format("YYYY MMM")}
+                    defaultMonth={
+                      moment(trx.data_form.detail_order.akad_date).isValid()
+                        ? moment(trx.data_form.detail_order.akad_date).toDate()
+                        : new Date()
+                    }   
                     startMonth={new Date(2024, 6)}
                     endMonth={new Date(2050, 9)}
                     selected={trx.data_form.detail_order.akad_date} />
@@ -109,7 +112,11 @@ function dataFormBooking({ trx }) {
                     className="react-day-picker"
                     mode="single"
                     captionLayout="dropdown"
-                    defaultMonth={moment(trx.data_form.detail_order.show_date).format("YYYY MMM")}
+                    defaultMonth={
+                      moment(trx.data_form.detail_order.show_date).isValid()
+                        ? moment(trx.data_form.detail_order.show_date).toDate()
+                        : new Date()
+                    }                    
                     startMonth={new Date(2024, 6)}
                     endMonth={new Date(2050, 9)}
                     selected={trx.data_form.detail_order.show_date} />
@@ -133,7 +140,11 @@ function dataFormBooking({ trx }) {
                     className="react-day-picker"
                     mode="single"
                     captionLayout="dropdown"
-                    defaultMonth={moment(trx.data_form.detail_order.tech_meeting).format("YYYY MMM")}
+                    defaultMonth={
+                      moment(trx.data_form.detail_order.tech_meeting).isValid()
+                        ? moment(trx.data_form.detail_order.tech_meeting).toDate()
+                        : new Date()
+                    }                    
                     startMonth={new Date(2024, 6)}
                     endMonth={new Date(2050, 9)}
                     selected={trx.data_form.detail_order.tech_meeting} />

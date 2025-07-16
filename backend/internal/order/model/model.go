@@ -19,7 +19,7 @@ type Order struct {
 	OrderStatus       string    `gorm:"column:order_status;type:VARCHAR(255)" json:"order_status"`
 	PaymentStatus     string    `gorm:"column:payment_status;type:VARCHAR(255)" json:"payment_status"`
 	PaymentMethod     string    `gorm:"column:payment_method;type:VARCHAR(255)" json:"payment_method"`
-	Notes             string    `gorm:"column:notes;type:VARCHAR(255)" json:"notes"`
+	Notes             string    `gorm:"column:notes;type:TEXT" json:"notes"`
 	WeddingDate       string    `gorm:"column:wedding_date;not null" json:"wedding_date"`
 	TransactionTime   string    `gorm:"column:transaction_time;not null" json:"transaction_time"`
 	ExpiredVa         string    `gorm:"column:expired_va;type:VARCHAR(255)" json:"expired_va"`

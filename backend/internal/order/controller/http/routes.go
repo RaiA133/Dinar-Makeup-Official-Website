@@ -16,4 +16,6 @@ func MapOrderRoutes(router *gin.RouterGroup, controller order.ControllerInterfac
 	protected.GET("/order/:orderId", controller.GetOrder())
 	protected.POST("/order/document", controller.RegisterDocument())
 	protected.GET("/order/user", controller.GetOrdersByUserId())
+	protected.PUT("/order/:id", controller.UpdateOrder())
+	protected.DELETE("/order/:id", controller.DeleteOrder())
 }

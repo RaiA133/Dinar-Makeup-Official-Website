@@ -503,7 +503,7 @@ function OrderPage() {
                           </fieldset>
                           <fieldset className="fieldset">
                             <legend className="fieldset-legend ms-1">Jumlah Tamu</legend>
-                            <input type="number" className="input w-full" placeholder="dinar.dumilah@gmail.com" name="jumlah_tamu" />
+                            <input type="number" className="input w-full" placeholder="100" name="jumlah_tamu" />
                           </fieldset>
                           <div className="fieldset">
                             <legend className="fieldset-legend ms-1">Tanggal Tech Meeting</legend>

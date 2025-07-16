@@ -279,7 +279,7 @@ func (or *orderService) Callback(ctx context.Context, notifPayload map[string]in
 		return errors.New("failed to check transaction")
 	}
 
-	dataOrder, err := or.pgRepo.GetOrderByID(ctx, orderID)
+	dataOrder, err := or.pgRepo.GetOrderByIdOrder(ctx, orderID)
 	if err != nil {
 		return errors.New("failed to fetch order data")
 	}
@@ -296,7 +296,7 @@ func (or *orderService) Callback(ctx context.Context, notifPayload map[string]in
 }
 
 func (or *orderService) ConfirmPayment(ctx context.Context, orderID string) error {
-	data, err := or.pgRepo.GetOrderByID(ctx, orderID)
+	data, err := or.pgRepo.GetOrderByIdOrder(ctx, orderID)
 	if err != nil {
 		return errors.New("failed to fetch order data")
 	}
@@ -308,7 +308,7 @@ func (or *orderService) ConfirmPayment(ctx context.Context, orderID string) erro
 }
 
 func (or *orderService) CancelPayment(ctx context.Context, orderID string) error {
-	data, err := or.pgRepo.GetOrderByID(ctx, orderID)
+	data, err := or.pgRepo.GetOrderByIdOrder(ctx, orderID)
 
 	if err != nil {
 		return errors.New("failed to fetch order data")
@@ -511,4 +511,32 @@ func (or *orderService) GetTransactionsByUserId(ctx context.Context, userId stri
 	}
 
 	return res, nil
+}
+
+func (or *orderService) UpdateTransactionById(ctx context.Context, orderID uuid.UUID, request dto.UpdateBookingWeddingRequest) error {
+	_, err := or.pgRepo.GetOrderByIdOrder(ctx, orderID.String())
+	if err != nil {
+		return errors.New("transaction id not found")
+	}
+
+	err = or.pgRepo.UpdateBookingWedding(ctx, orderID, request)
+	if err != nil {
+		return errors.New("failed to update booking wedding")
+	}
+
+	return nil
+}
+
+func (or *orderService) DeleteITransaction(ctx context.Context, orderId uuid.UUID) error {
+	_, err := or.pgRepo.GetOrderByID(ctx, orderId.String())
+	if err != nil {
+		return errors.New("transaction id not found")
+	}
+
+	err = or.pgRepo.SoftDeleteOrderManual(ctx, orderId)
+	if err != nil {
+		return errors.New("failed delete transaction data")
+	}
+
+	return nil
 }
