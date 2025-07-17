@@ -226,6 +226,19 @@ async function getAllTrasaction(params = {}) {
   }
 }
 
+// ADMIN : Function for Update transaction By ID endpoint
+async function editTransactionByID(id, data) {
+  console.log(id, data);
+  return
+  try {
+    const response = await instance.put(`/order/${id}`, data);
+    return response;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
 // ADMIN : Function for delete trasaction by ID
 async function deleteTransactionByID(id) {
   try {
@@ -244,6 +257,6 @@ export {
   getMe, GetAllMyTransaction, updateProfile, updateProfileAvatar,
   createOrder, uploadDocumentOrder,
   getAllUsers, deleteUserByID,
-  getAllTrasaction, deleteTransactionByID,
+  getAllTrasaction, editTransactionByID, deleteTransactionByID,
 };
 

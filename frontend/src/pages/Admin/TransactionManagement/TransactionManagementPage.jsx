@@ -1,15 +1,14 @@
 import { useContext } from "react";
-import { AdminContext } from "../../contexts/AdminContext";
+import { AdminContext } from "../../../contexts/AdminContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
-import DataFormBooking from "../../components/TransactionsPage/DataFormBooking";
-import { deleteTransactionByID } from "../../modules/fetch";
+import DataFormBooking from "../../../components/TransactionsPage/DataFormBooking";
+import { deleteTransactionByID } from "../../../modules/fetch";
 
 function TransactionManagementPage() {
   let location = useLocation();
   const navigate = useNavigate();
   const { transcactionState, refreshCallback } = useContext(AdminContext)
-  console.log(transcactionState);
 
   const totalPages = transcactionState?.metadata?.total_pages || 0;
   const currentPage = transcactionState?.metadata?.current_page || 1;
@@ -73,6 +72,8 @@ function TransactionManagementPage() {
                         <td>{trx.wedding_date}</td>
                         <td>{trx.transaction_information.transaction_time}</td>
                         <td className="flex gap-1">
+
+                          {/* Detail Button */}
                           <button
                             className="btn btn-xs btn-ghost"
                             onClick={() => document.getElementById(`transaction_modal_${trx.id}`).showModal()}
@@ -83,6 +84,17 @@ function TransactionManagementPage() {
                             </svg>
                           </button>
 
+                          {/* Edit Button */}
+                          <button
+                            className="btn btn-xs btn-ghost text-warning"
+                            onClick={() => navigate(`/admin/transaction-management/edit/${trx.id}`)}
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5h2m2 0h2m2 0h.01M16.5 3.5L19 6M4 20h4l10.293-10.293a1 1 0 000-1.414L14.707 6.293a1 1 0 00-1.414 0L4 15.586V20z" />
+                            </svg>
+                          </button>
+
+                          {/* Delete Button */}
                           <button
                             className="btn btn-xs btn-ghost text-error"
                             onClick={() => document.getElementById(`transaction_delete_modal_${trx.id}`).showModal()}
@@ -91,6 +103,7 @@ function TransactionManagementPage() {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
                           </button>
+
                         </td>
                       </tr>
                     ))}
@@ -100,94 +113,94 @@ function TransactionManagementPage() {
               {/* Transaction Detail Modals */}
               {transcactionState?.data?.map((trx) => (
                 <dialog key={`detail_${trx.id}`} id={`transaction_modal_${trx.id}`} className="modal modal-bottom sm:pb-10 flex justify-center">
-                <div className="modal-box max-w-5xl sm:rounded-b-2xl">
-  
-                  {/* Tombol X */}
-                  <div className="sticky top-0 z-50 flex justify-end">
-                    <form method="dialog" className="ml-auto">
-                      <button className="btn btn-sm btn-circle btn-error">✕</button>
-                    </form>
-                  </div>
-  
-                  <h3 className="font-bold mb-4 text-neutral text-center text-2xl">Detail Transaksi</h3>
-                  <div className="divider"></div>
-  
-                  <div className="bg-gradient-to-r from-primary/5 to-secondary/5 p-6 rounded-2xl border border-base-300 gap-4 mb-12">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-  
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-accent">Informasi Order</h4>
-                        <div className="divider m-0"></div>
-                        <p><span className="font-medium">Order ID :</span> <span className="badge badge-outline badge-primary">{trx.order_id}</span></p>
-                        <p><span className="font-medium">Waktu Transaksi :</span> {trx.transaction_information.transaction_time}</p>
-                        <p><span className="font-medium">Tanggal Acara :</span> {trx.data_form.detail_order.show_date}</p>
-                        <p><span className="font-medium">Paket :</span> {trx.product_information.name}</p>
-                        <p><span className="font-medium">Harga : </span>
-                          {new Intl.NumberFormat("id-ID", {
-                            style: "currency",
-                            currency: "IDR",
-                            minimumFractionDigits: 0,
-                          }).format(parseInt(trx.product_information.price) || 0)}
-                        </p>
-                      </div>
-  
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-accent">Informasi Pelanggan</h4>
-                        <div className="divider m-0"></div>
-                        <p><span className="font-medium">Nama :</span> {trx.user_information.name}</p>
-                        <p><span className="font-medium">Email :</span> {trx.user_information.email}</p>
-                        <p><span className="font-medium">Telepon :</span> {trx.user_information.phone}</p>
-                        <p><span className="font-medium">NIK :</span> {trx.user_information.nik}</p>
-                        <p><span className="font-medium">Alamat :</span> {trx.user_information.address}</p>
-                      </div>
-  
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-accent">Detail Pembayaran</h4>
-                        <div className="divider m-0"></div>
-                        <p><span className="font-medium">Metode Pembayaran :</span> {trx.transaction_information.payment_method.toUpperCase()} Virtual Account</p>
-                        <p><span className="font-medium">VA Number :</span> {trx.transaction_information.va_number}</p>
-                        <p><span className="font-medium">Status Pembayaran :</span>
-                          <span className={`badge ml-2 ${trx.transaction_information.payment_status === 'pending'
-                            ? 'badge-warning'
-                            : trx.transaction_information.payment_status === 'success'
-                              ? 'badge-success'
-                              : 'badge-error'
-                            }`}>
-                            {trx.transaction_information.payment_status.toUpperCase()}
-                          </span>
-                        </p>
-                      </div>
-  
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-accent">Rencana Down payment (DP)</h4>
-                        <div className="divider m-0"></div>
-                        <p><span className="font-medium">Rencana DP : </span>
-                          {new Intl.NumberFormat("id-ID", {
-                            style: "currency",
-                            currency: trx?.currency || "IDR",
-                            minimumFractionDigits: 0,
-                          }).format(trx.down_payment.installment_amount || 0)}
-                        </p>
-                        <p><span className="font-medium">Sisa DP : </span>
-                          {new Intl.NumberFormat("id-ID", {
-                            style: "currency",
-                            currency: trx?.currency || "IDR",
-                            minimumFractionDigits: 0,
-                          }).format(trx.down_payment.outstanding || 0)}
-                        </p>
-                        <p><span className="font-medium">Status DP :</span>
-                          <span className={`badge ml-2 ${trx.down_payment.installment_status === 'OUTSTANDING' ? 'badge-warning' : 'badge-success'}`}>
-                            {trx.down_payment.installment_status}
-                          </span>
-                        </p>
-                      </div>
-  
+                  <div className="modal-box max-w-5xl sm:rounded-b-2xl">
+
+                    {/* Tombol X */}
+                    <div className="sticky top-0 z-50 flex justify-end">
+                      <form method="dialog" className="ml-auto">
+                        <button className="btn btn-sm btn-circle btn-error">✕</button>
+                      </form>
                     </div>
+
+                    <h3 className="font-bold mb-4 text-neutral text-center text-2xl">Detail Transaksi</h3>
+                    <div className="divider"></div>
+
+                    <div className="bg-gradient-to-r from-primary/5 to-secondary/5 p-6 rounded-2xl border border-base-300 gap-4 mb-12">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-accent">Informasi Order</h4>
+                          <div className="divider m-0"></div>
+                          <p><span className="font-medium">Order ID :</span> <span className="badge badge-outline badge-primary">{trx.order_id}</span></p>
+                          <p><span className="font-medium">Waktu Transaksi :</span> {trx.transaction_information.transaction_time}</p>
+                          <p><span className="font-medium">Tanggal Acara :</span> {trx.data_form.detail_order.show_date}</p>
+                          <p><span className="font-medium">Paket :</span> {trx.product_information.name}</p>
+                          <p><span className="font-medium">Harga : </span>
+                            {new Intl.NumberFormat("id-ID", {
+                              style: "currency",
+                              currency: "IDR",
+                              minimumFractionDigits: 0,
+                            }).format(parseInt(trx.product_information.price) || 0)}
+                          </p>
+                        </div>
+
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-accent">Informasi Pelanggan</h4>
+                          <div className="divider m-0"></div>
+                          <p><span className="font-medium">Nama :</span> {trx.user_information.name}</p>
+                          <p><span className="font-medium">Email :</span> {trx.user_information.email}</p>
+                          <p><span className="font-medium">Telepon :</span> {trx.user_information.phone}</p>
+                          <p><span className="font-medium">NIK :</span> {trx.user_information.nik}</p>
+                          <p><span className="font-medium">Alamat :</span> {trx.user_information.address}</p>
+                        </div>
+
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-accent">Detail Pembayaran</h4>
+                          <div className="divider m-0"></div>
+                          <p><span className="font-medium">Metode Pembayaran :</span> {trx.transaction_information.payment_method.toUpperCase()} Virtual Account</p>
+                          <p><span className="font-medium">VA Number :</span> {trx.transaction_information.va_number}</p>
+                          <p><span className="font-medium">Status Pembayaran :</span>
+                            <span className={`badge ml-2 ${trx.transaction_information.payment_status === 'pending'
+                              ? 'badge-warning'
+                              : trx.transaction_information.payment_status === 'success'
+                                ? 'badge-success'
+                                : 'badge-error'
+                              }`}>
+                              {trx.transaction_information.payment_status.toUpperCase()}
+                            </span>
+                          </p>
+                        </div>
+
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-accent">Rencana Down payment (DP)</h4>
+                          <div className="divider m-0"></div>
+                          <p><span className="font-medium">Rencana DP : </span>
+                            {new Intl.NumberFormat("id-ID", {
+                              style: "currency",
+                              currency: trx?.currency || "IDR",
+                              minimumFractionDigits: 0,
+                            }).format(trx.down_payment.installment_amount || 0)}
+                          </p>
+                          <p><span className="font-medium">Sisa DP : </span>
+                            {new Intl.NumberFormat("id-ID", {
+                              style: "currency",
+                              currency: trx?.currency || "IDR",
+                              minimumFractionDigits: 0,
+                            }).format(trx.down_payment.outstanding || 0)}
+                          </p>
+                          <p><span className="font-medium">Status DP :</span>
+                            <span className={`badge ml-2 ${trx.down_payment.installment_status === 'OUTSTANDING' ? 'badge-warning' : 'badge-success'}`}>
+                              {trx.down_payment.installment_status}
+                            </span>
+                          </p>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <DataFormBooking trx={trx} />
+
                   </div>
-  
-                  <DataFormBooking trx={trx}/>
-  
-                </div>
                 </dialog>
               ))}
 
