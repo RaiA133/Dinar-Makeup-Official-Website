@@ -79,7 +79,7 @@ Berikan juga deskripsi pendek tentang gambar yang dibuat.
   // ====================================================================================================================================
 
   return (
-    <div className="relative right-0 top-[-50px] xl:top-0">
+    <div className="relative right-0 top-[-70px] xl:top-0">
 
 
       {dropDownOpen && (

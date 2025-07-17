@@ -79,7 +79,7 @@ Buat isi catatan singkat dan padat.
   ]
 
   return (
-    <div className="absolute right-0 top-[-50px] xl:top-0">
+    <div className="absolute right-0 top-[-70px] xl:top-0">
       {/* Dropdown Content */}
       {dropDownOpen && (
         <div className="absolute right-0 bottom-full mb-2 z-20 w-83 sm:w-96 p-0 shadow-sm rounded-xl bg-base-100">
