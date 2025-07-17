@@ -77,7 +77,7 @@ function EditTransactionManagementPage() {
 
   return (
     <div className="p-2 sm:p-10">
-      {/* <div>Edit Data Transactions : {id}</div> */}
+      <div>Edit Data Transactions : {id}</div>
 
       <h3 className="font-bold my-4 text-neutral text-center text-2xl">Edit Transaksi</h3>
       <div className="divider"></div>
