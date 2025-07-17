@@ -2,9 +2,9 @@ function ExtraForm() {
   return (
     <div className="md:mb-10">
       {/* Header */}
-      <div className="text-md sm:text-xl flex font-bold justify-center w-full my-10 mb-20 xl:mb-10">Data Opsional</div>
+      <div className="text-md sm:text-xl flex font-bold justify-center w-full my-10">Data Opsional</div>
 
-      <fieldset className="fieldset h-full mb-10 xl:mb-10">
+      <fieldset className="fieldset h-full">
         <legend className="fieldset-legend ms-1">Notes <span>(opsional)</span></legend>
         <textarea className="textarea h-48 w-full" placeholder="Masukan catatan, perubahan data atau keinginan lain dengan lengkap" name="notes"></textarea>
       </fieldset>
