@@ -226,6 +226,17 @@ async function getAllTrasaction(params = {}) {
   }
 }
 
+// ADMIN : Function for delete trasaction by ID
+async function deleteTransactionByID(id) {
+  try {
+    const response = await instance.delete(`/order/${id}`);
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
 export {
   register, login, loginGoogle,
   getAllProducts, getProductByID,
@@ -233,6 +244,6 @@ export {
   getMe, GetAllMyTransaction, updateProfile, updateProfileAvatar,
   createOrder, uploadDocumentOrder,
   getAllUsers, deleteUserByID,
-  getAllTrasaction,
+  getAllTrasaction, deleteTransactionByID,
 };
 

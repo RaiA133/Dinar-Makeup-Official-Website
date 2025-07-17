@@ -3,11 +3,13 @@ import { AdminContext } from "../../contexts/AdminContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 import DataFormBooking from "../../components/TransactionsPage/DataFormBooking";
+import { deleteTransactionByID } from "../../modules/fetch";
 
 function TransactionManagementPage() {
   let location = useLocation();
   const navigate = useNavigate();
   const { transcactionState, refreshCallback } = useContext(AdminContext)
+  console.log(transcactionState);
 
   const totalPages = transcactionState?.metadata?.total_pages || 0;
   const currentPage = transcactionState?.metadata?.current_page || 1;
@@ -199,7 +201,6 @@ function TransactionManagementPage() {
                       <form method="dialog">
                         <button className="btn">Cancel</button>
                         <button
-                          disabled
                           className="btn btn-error ml-2"
                           onClick={async () => {
                             try {
