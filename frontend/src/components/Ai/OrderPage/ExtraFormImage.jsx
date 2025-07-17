@@ -79,7 +79,7 @@ Berikan juga deskripsi pendek tentang gambar yang dibuat.
   // ====================================================================================================================================
 
   return (
-    <div className="relative">
+    <div className="relative right-0 top-[-50px] xl:top-0">
 
 
       {dropDownOpen && (
@@ -87,7 +87,7 @@ Berikan juga deskripsi pendek tentang gambar yang dibuat.
 
           {/* Header */}
           <section className="bg-error p-3 rounded-t-xl">
-            <h1 className="text-base-100 font-bold">Generate Prompt Gambar</h1>
+            <h1 className="text-base-100 font-bold">AI Wedding VIsualizer</h1>
           </section>
 
           <section className="p-3 min-h-[200px] relative">
@@ -193,14 +193,16 @@ Berikan juga deskripsi pendek tentang gambar yang dibuat.
       )}
 
       {/* Toggle Button */}
-      <button className="btn m-1 bg-neutral text-base-100" type="button" onClick={(e) => {
-        e.preventDefault();
-        setDropdownOpen(!dropDownOpen)
-      }}>
-        <div className="animate-bounce">
-          <SparklesIcon className="h-5 w-5 animate-pulse" />
-        </div>
-      </button>
+      <div className={` ${dropDownOpen ? '' : 'tooltip'} tooltip-open tooltip-left xl:tooltip-top`} data-tip="AI Wedding VIsualizer">
+        <button className="btn m-1 bg-neutral text-base-100" type="button" onClick={(e) => {
+          e.preventDefault();
+          setDropdownOpen(!dropDownOpen)
+        }}>
+          <div className="animate-bounce">
+            <SparklesIcon className="h-5 w-5 animate-pulse" />
+          </div>
+        </button>
+      </div>
     </div>
   );
 }

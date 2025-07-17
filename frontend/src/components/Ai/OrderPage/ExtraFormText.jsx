@@ -79,14 +79,14 @@ Buat isi catatan singkat dan padat.
   ]
 
   return (
-    <div className="absolute right-0 top-0">
+    <div className="absolute right-0 top-[-50px] xl:top-0">
       {/* Dropdown Content */}
       {dropDownOpen && (
         <div className="absolute right-0 bottom-full mb-2 z-20 w-83 sm:w-96 p-0 shadow-sm rounded-xl bg-base-100">
 
           {/* HEADER */}
           <section className="bg-error p-3 rounded-t-xl">
-            <h1 className="text-base-100 font-bold">Generate AI</h1>
+            <h1 className="text-base-100 font-bold">AI Wedding Planner Assistant</h1>
           </section>
 
           <section className="p-3 min-h-[200px]">
@@ -152,14 +152,16 @@ Buat isi catatan singkat dan padat.
       )}
 
       {/* Toggle Button */}
-      <button className="btn m-1 bg-neutral text-base-100" type="button" onClick={(e) => {
-        e.preventDefault();
-        setDropdownOpen(!dropDownOpen)
-      }}>
-        <div className="animate-bounce">
-          <SparklesIcon className="h-5 w-5 animate-pulse" />
-        </div>
-      </button>
+      <div className={` ${dropDownOpen ? '' : 'tooltip'} tooltip-open tooltip-left xl:tooltip-top`} data-tip="AI Wedding Planner Assistant">
+        <button className="btn m-1 bg-neutral text-base-100" type="button" onClick={(e) => {
+          e.preventDefault();
+          setDropdownOpen(!dropDownOpen)
+        }}>
+          <div className="animate-bounce">
+            <SparklesIcon className="h-5 w-5 animate-pulse" />
+          </div>
+        </button>
+      </div>
     </div>
 
   )
