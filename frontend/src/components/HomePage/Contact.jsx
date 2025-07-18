@@ -5,7 +5,7 @@ function Contact() {
     <div className="mx-4 sm:mx-8 lg:mx-20 pb-20">
       {/* Header Section */}
       <div id='header-contact' className="text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-bold text-base-900 mb-4">Kotak Kami</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-base-900 mb-4">Kontak Kami</h1>
         <p className="text-lg text-base-600 max-w-2xl mx-auto">
           Hubungi Tim Dinar Makeup
         </p>
