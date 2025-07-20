@@ -261,10 +261,12 @@ async function createAIHistory(data) {
   }
 }
 
-//AI : Function for get all AI chat history
-async function getAllAIHistory(data) {
+//AI : Function for get all AI chat history | Gell ALl / Get By user_id in params
+async function getAIHistory(params = {}) {
   try {
-    const response = await instance.get("/ai");
+    const response = await instance.get("/ai", {
+      params: params
+    });
     return response.data;
   } catch (error) {
     // console.log("Error : ", error);
@@ -283,10 +285,12 @@ async function getAllAIHistoryByID(id) {
   }
 }
 
-//AI : Function for get all AI chat history By ID
-async function deleteAllAIHistory() {
+//AI : Function for get all AI chat history || Delete All / Delet By user_id in params
+async function deleteAIHistory(params = {}) {
   try {
-    const response = await instance.delete("/ai");
+    const response = await instance.delete("/ai", {
+      params: params
+    });
     return response.data;
   } catch (error) {
     // console.log("Error : ", error);
@@ -302,6 +306,6 @@ export {
   createOrder, uploadDocumentOrder,
   getAllUsers, deleteUserByID,
   getAllTrasaction, editTransactionByID, deleteTransactionByID,
-  createAIHistory, getAllAIHistory, getAllAIHistoryByID, deleteAllAIHistory,
+  createAIHistory, getAIHistory, getAllAIHistoryByID, deleteAIHistory,
 };
 
