@@ -33,19 +33,35 @@ func (au *aiPostgresRepository) Create(ctx context.Context, data *model.AIHistor
 	return data, nil
 }
 
-func (au *aiPostgresRepository) FindAll(ctx context.Context) ([]model.AIHistory, error) {
+func (au *aiPostgresRepository) FindAll(ctx context.Context, userId string) ([]model.AIHistory, error) {
 	db := au.db.WithContext(ctx)
 
-	query := `
-		SELECT id, user_id, sender, message, timestamp
-		FROM ai_history
-		ORDER BY timestamp DESC
-	`
+	var (
+		histories []model.AIHistory
+		query     string
+		args      []interface{}
+	)
 
-	var histories []model.AIHistory
-	if err := db.Raw(query).Scan(&histories).Error; err != nil {
+	if userId > "" {
+		query = `
+			SELECT id, user_id, sender, message, timestamp
+			FROM ai_history
+			WHERE user_id = ?
+			ORDER BY timestamp DESC
+		`
+		args = append(args, userId)
+	} else {
+		query = `
+			SELECT id, user_id, sender, message, timestamp
+			FROM ai_history
+			ORDER BY timestamp DESC
+		`
+	}
+
+	if err := db.Raw(query, args...).Scan(&histories).Error; err != nil {
 		return nil, err
 	}
+
 	return histories, nil
 }
 
@@ -65,12 +81,22 @@ func (au *aiPostgresRepository) FindOne(ctx context.Context, id int) (*model.AIH
 	return &history, nil
 }
 
-func (au *aiPostgresRepository) DeleteAll(ctx context.Context) error {
+func (au *aiPostgresRepository) DeleteAll(ctx context.Context, userID string) error {
 	db := au.db.WithContext(ctx)
 
-	query := `DELETE FROM ai_history`
+	var (
+		query string
+		args  []interface{}
+	)
 
-	if err := db.Exec(query).Error; err != nil {
+	if userID > "" {
+		query = `DELETE FROM ai_history WHERE user_id = ?`
+		args = append(args, userID)
+	} else {
+		query = `DELETE FROM ai_history`
+	}
+
+	if err := db.Exec(query, args...).Error; err != nil {
 		return err
 	}
 	return nil
