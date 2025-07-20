@@ -250,6 +250,50 @@ async function deleteTransactionByID(id) {
   }
 }
 
+//AI : Function for insert AI chat history
+async function createAIHistory(data) {
+  try {
+    const response = await instance.post("/ai", data);
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
+//AI : Function for get all AI chat history
+async function getAllAIHistory(data) {
+  try {
+    const response = await instance.get("/ai");
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
+//AI : Function for get all AI chat history By ID
+async function getAllAIHistoryByID(id) {
+  try {
+    const response = await instance.get(`/ai/${id}`);
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
+//AI : Function for get all AI chat history By ID
+async function deleteAllAIHistory() {
+  try {
+    const response = await instance.delete("/ai");
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
 export {
   register, login, loginGoogle,
   getAllProducts, getProductByID,
@@ -258,5 +302,6 @@ export {
   createOrder, uploadDocumentOrder,
   getAllUsers, deleteUserByID,
   getAllTrasaction, editTransactionByID, deleteTransactionByID,
+  createAIHistory, getAllAIHistory, getAllAIHistoryByID, deleteAllAIHistory,
 };
 
