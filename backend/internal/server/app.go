@@ -25,6 +25,11 @@ import (
 	orderRoute "github.com/RianIhsan/wedding-organizer-be/internal/order/controller/http"
 	orderRepository "github.com/RianIhsan/wedding-organizer-be/internal/order/repository"
 	orderService "github.com/RianIhsan/wedding-organizer-be/internal/order/service"
+
+	aiController "github.com/RianIhsan/wedding-organizer-be/internal/ai/controller/http"
+	aiRoute "github.com/RianIhsan/wedding-organizer-be/internal/ai/controller/http"
+	aiRepository "github.com/RianIhsan/wedding-organizer-be/internal/ai/repository"
+	aiService "github.com/RianIhsan/wedding-organizer-be/internal/ai/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -39,6 +44,7 @@ func (s *Server) Bootstrap() error {
 	galleryPostgresRepo := galleryRepository.NewGalleryPostgresRepository(s.db)
 
 	orderPostgresRepo := orderRepository.NewOrderPGRepository(s.db, InitMidtrans)
+	aiPostgresRepo := aiRepository.NewAiPostgresRepository(s.db)
 
 	cldConfig, err := cloudinary.InitializeCloudinary(&s.cfg.Cloudinary)
 	if err != nil {
@@ -84,6 +90,12 @@ func (s *Server) Bootstrap() error {
 		InitMidtrans,
 	)
 
+	aiSV := aiService.NewAIService(&aiService.AIServiceConfig{
+		PgRepo: aiPostgresRepo,
+		Config: s.cfg,
+		Logger: s.logger,
+	})
+
 	// -----------------------------------------------------------------------------------------------------------
 	// create a new instance controllers
 	authController := userController.NewAuthController(&userController.ControllerConfig{
@@ -112,6 +124,12 @@ func (s *Server) Bootstrap() error {
 		Config:       s.cfg,
 		Logger:       s.logger,
 		OrderService: orderSV,
+	})
+
+	aiController := aiController.NewAiController(&aiController.ControllerConfig{
+		Config:    s.cfg,
+		Logger:    s.logger,
+		AiService: aiSV,
 	})
 	// -----------------------------------------------------------------------------------------------------------
 	// create a new instance middleware
@@ -152,6 +170,10 @@ func (s *Server) Bootstrap() error {
 			orderRoute.MapOrderRoutes(orderGroup, orderController, middlewareManager)
 		}
 
+		aiGroup := apiV1.Group("/v1")
+		{
+			aiRoute.MapAIRoutes(aiGroup, aiController)
+		}
 	}
 
 	apiV1.GET("/ping", middlewareManager.AuthJwtMiddleware(), func(ctx *gin.Context) {
