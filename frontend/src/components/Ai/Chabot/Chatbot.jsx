@@ -10,11 +10,12 @@ import 'intro.js/themes/introjs-modern.css';
 import GoogleLoginButton from '../../LoginPage/GoogleLoginButton';
 import { UserContext } from '../../../contexts/UserContext';
 import Cookies from "js-cookie";
+import { createAIHistory } from '../../../modules/fetch';
 // import { GoogleAuth } from 'google-auth-library';
 
 const Chatbot = () => {
   const navigate = useNavigate();
-  const { isLogin } = useContext(UserContext)
+  const { isLogin, userState, refreshCallback } = useContext(UserContext)
 
   const [messages, setMessages] = useState([
     { id: 1, text: 'Halo! Saya Dinar, asisten virtual Dinar Makeup. Ada yang bisa saya bantu?', sender: 'bot' }
@@ -44,6 +45,15 @@ const Chatbot = () => {
       sender: 'user'
     };
 
+    // Simpan History AI ke Database | User
+    let dataResponseAiHistory = {
+      user_id: userState.id,
+      sender: 'user',
+      message: inputValue
+    }
+    const saveAIHistory = await createAIHistory(dataResponseAiHistory)
+    if (saveAIHistory.status !== "200") console.error("AIHistory: Gagal menyimpan AI History");
+
     setMessages([...messages, newUserMessage]);
     setInputValue('');
     setIsLoading(true)
@@ -71,6 +81,16 @@ const Chatbot = () => {
         text,
         sender: 'bot'
       };
+
+      // Simpan History AI ke Database | Bot
+      let dataResponseAiHistory = {
+        user_id: userState.id,
+        sender: 'bot',
+        message: text
+      }
+      const saveAIHistory = await createAIHistory(dataResponseAiHistory)
+      if (saveAIHistory.status !== "200") console.error("AIHistory: Gagal menyimpan AI History");
+
       setMessages(prev => [...prev, botResponse]);
       setIsLoading(false);
 

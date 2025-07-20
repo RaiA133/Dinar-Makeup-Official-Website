@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { getAllProducts, getAllTrasaction, getAllUsers } from "../modules/fetch";
+import { getAIHistory, getAllProducts, getAllTrasaction, getAllUsers } from "../modules/fetch";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 
@@ -18,6 +18,8 @@ export const AdminContextProvider = ({ children }) => {
   const [usersByIDState, setUsersByIDState] = useState([]);
 
   const [transcactionState, setTranscactionState] = useState([]);
+
+  const [AIHistoryState, setAIHistoryState] = useState([]);
 
   const [refresh, setRefresh] = useState(0); // use this on useEffect that set from callback below
   
@@ -49,7 +51,7 @@ export const AdminContextProvider = ({ children }) => {
         console.error("Error : ", error);
       }
     };
-    if (location.pathname == "/admin/user-management") fetchDataUserManagement();
+    if (location.pathname == "/admin/user-management" || "/admin/ai") fetchDataUserManagement();
 
     // ----------------------------------------------------------------------------------------------------------------------------------
 
@@ -69,6 +71,20 @@ export const AdminContextProvider = ({ children }) => {
 
     // ----------------------------------------------------------------------------------------------------------------------------------
 
+    const fetchDataAI = async () => { // path = /admin/ai
+      try {
+        // console.log('refresh /admin/ai');
+        let user_id = parseInt(searchParams.get("user_id"));
+        const response = await getAIHistory(); // Fetch data
+        if (response.status === 200) setAIHistoryState(response.data); // Set state if the response is successful
+      } catch (error) {
+        console.error("Error : ", error);
+      }
+    };
+    if (location.pathname == "/admin/ai") fetchDataAI();
+
+    // ----------------------------------------------------------------------------------------------------------------------------------
+
   }, [navigate, searchParams, refresh]);
 
   const refreshCallback = useCallback(() => {
@@ -81,6 +97,7 @@ export const AdminContextProvider = ({ children }) => {
     usersState, setUsersState,
     usersByIDState, setUsersByIDState,
     transcactionState, setTranscactionState,
+    AIHistoryState, setAIHistoryState,
     refreshCallback,
   }}>{children}</AdminContext.Provider>
 }

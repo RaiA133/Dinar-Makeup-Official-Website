@@ -35,6 +35,7 @@ import PaymentPage from './pages/Order/PaymentPage';
 import Chatbot from './components/Ai/Chabot/Chatbot';
 import TransactionsPage from './pages/TransactionsPage';
 import EditTransactionManagementPage from './pages/Admin/TransactionManagement/EditTransactionManagementPage';
+import AIHistoryManagementPage from './components/Ai/Admin/AIHistoryManagementPage';
 
 // Framer Motion (Efek Transisi Faded Perpindahan Page)
 const PageMotionWrapper = ({ children }) => (
@@ -92,6 +93,8 @@ function App() {
           <Route path="/admin/transaction-management/edit/:id" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><EditTransactionManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
 
           <Route path="/admin/user-management" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><UserManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
+
+          <Route path="/admin/ai" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><AIHistoryManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
         </Routes>
       </AnimatePresence>
 
