@@ -47,8 +47,8 @@ func (a aiService) Create(ctx context.Context, dto *req.AiReq) (*req.AiResp, err
 	return response, nil
 }
 
-func (a aiService) GetList(ctx context.Context) ([]*res.AiResponse, error) {
-	data, err := a.pgRepo.FindAll(ctx)
+func (a aiService) GetList(ctx context.Context, userId string) ([]*res.AiResponse, error) {
+	data, err := a.pgRepo.FindAll(ctx, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -82,8 +82,8 @@ func (a aiService) Get(ctx context.Context, id int) (*res.AiResponse, error) {
 	}, nil
 }
 
-func (a aiService) DeleteAll(ctx context.Context) error {
-	err := a.pgRepo.DeleteAll(ctx)
+func (a aiService) DeleteAll(ctx context.Context, userId string) error {
+	err := a.pgRepo.DeleteAll(ctx, userId)
 	if err != nil {
 		return err
 	}

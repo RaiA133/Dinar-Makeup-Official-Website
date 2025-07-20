@@ -250,6 +250,54 @@ async function deleteTransactionByID(id) {
   }
 }
 
+//AI : Function for insert AI chat history
+async function createAIHistory(data) {
+  try {
+    const response = await instance.post("/ai", data);
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
+//AI : Function for get all AI chat history | Gell ALl / Get By user_id in params
+async function getAIHistory(params = {}) {
+  try {
+    const response = await instance.get("/ai", {
+      params: params
+    });
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
+//AI : Function for get all AI chat history By ID
+async function getAllAIHistoryByID(id) {
+  try {
+    const response = await instance.get(`/ai/${id}`);
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
+//AI : Function for get all AI chat history || Delete All / Delet By user_id in params
+async function deleteAIHistory(params = {}) {
+  try {
+    const response = await instance.delete("/ai", {
+      params: params
+    });
+    return response.data;
+  } catch (error) {
+    // console.log("Error : ", error);
+    throw (error || "Something went wrong");
+  }
+}
+
 export {
   register, login, loginGoogle,
   getAllProducts, getProductByID,
@@ -258,5 +306,6 @@ export {
   createOrder, uploadDocumentOrder,
   getAllUsers, deleteUserByID,
   getAllTrasaction, editTransactionByID, deleteTransactionByID,
+  createAIHistory, getAIHistory, getAllAIHistoryByID, deleteAIHistory,
 };
 

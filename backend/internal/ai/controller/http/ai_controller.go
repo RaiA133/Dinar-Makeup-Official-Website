@@ -74,7 +74,8 @@ func (a aiController) Find() gin.HandlerFunc {
 
 func (a aiController) FindAll() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		data, err := a.service.GetList(c)
+		id := c.Query("user_id")
+		data, err := a.service.GetList(c, id)
 		if err != nil {
 			utils.LogErrorResponse(c, a.logger, err)
 			response.SendErrorResponse(c, http.StatusInternalServerError, err.Error())
@@ -87,7 +88,8 @@ func (a aiController) FindAll() gin.HandlerFunc {
 
 func (a aiController) Delete() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		err := a.service.DeleteAll(c)
+		id := c.Query("user_id")
+		err := a.service.DeleteAll(c, id)
 		if err != nil {
 			utils.LogErrorResponse(c, a.logger, err)
 			response.SendErrorResponse(c, http.StatusInternalServerError, err.Error())
