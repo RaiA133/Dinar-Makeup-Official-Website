@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 import DataFormBooking from "../../../components/TransactionsPage/DataFormBooking";
 import { deleteTransactionByID } from "../../../modules/fetch";
+import RefreshButton from "../../../components/Admin/RefreshButton";
 
 function TransactionManagementPage() {
   let location = useLocation();
@@ -32,7 +33,7 @@ function TransactionManagementPage() {
                 {/* Table Header */}
                 <thead>
                   <tr>
-                    <th className="w-12">#</th>
+                    <th><RefreshButton /></th>
                     <th>Order ID</th>
                     <th>Sisa Tagihan</th>
                     <th>Status Bayar</th>
@@ -46,7 +47,7 @@ function TransactionManagementPage() {
                     ?.sort((a, b) => new Date(b.transaction_information.transaction_time) - new Date(a.transaction_information.transaction_time))
                     .map((trx, index) => (
                       <tr key={trx.id} className="hover">
-                        <td>{index + 1}</td>
+                        <th className="text-center sm:text-start">{index + 1}</th>
                         <td>
                           <span className="py-7 sm:py-0 badge badge-outline badge-primary badge-sm text-center">
                             {trx.order_id}

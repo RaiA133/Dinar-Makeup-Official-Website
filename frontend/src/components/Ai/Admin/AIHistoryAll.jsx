@@ -3,6 +3,9 @@ import { AdminContext } from "../../../contexts/AdminContext";
 import toast from 'react-hot-toast';
 import moment from "moment";
 import { deleteAIHistory } from "../../../modules/fetch";
+import MarkdownRenderer from "../../MarkdownRenderer";
+import { IoReload } from "react-icons/io5";
+import RefreshButton from "../../Admin/RefreshButton";
 
 function AIHistoryAll() {
   const { AIHistoryState, refreshCallback } = useContext(AdminContext);
@@ -19,7 +22,9 @@ function AIHistoryAll() {
           {/* head */}
           <thead>
             <tr>
-              <th>#</th>
+              <th>
+                <RefreshButton />
+              </th>
               <th>user_id</th>
               <th>Sender</th>
               <th>Message</th>
@@ -30,7 +35,7 @@ function AIHistoryAll() {
           <tbody>
             {AIHistoryState?.map((ai, index) => (
               <tr key={ai.id || index}>
-                <th>{index + 1}</th>
+                <th className="text-center sm:text-start">{index + 1}</th>
                 <td className="max-w-20 truncate whitespace-nowrap overflow-hidden">{ai.user_id}</td>
                 <td>
                   {ai.sender === 'bot' ? (
@@ -87,7 +92,7 @@ function AIHistoryAll() {
                       </tr>
                       <tr>
                         <th className="text-left">Message</th>
-                        <td>: {ai.message}</td>
+                        <td><MarkdownRenderer>{ai.message}</MarkdownRenderer></td>
                       </tr>
                       <tr>
                         <th className="text-left">Date</th>
@@ -116,7 +121,7 @@ function AIHistoryAll() {
             <p className="py-4">Apakah anda yakin untuk delete semua file?</p>
             <fieldset className="fieldset">
               <legend>Ketik "<span className="font-bold">{confirmDeleteTextKey}</span>"" jika anda yakin</legend>
-              <input type="text" className="input w-full" placeholder="Type here" 
+              <input type="text" className="input w-full" placeholder="Type here"
                 onChange={(e) => setInputDeleteAllData(e.target.value)}
               />
             </fieldset>

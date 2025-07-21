@@ -4,6 +4,8 @@ import { UserContext } from "../../../contexts/UserContext";
 import { AdminContext } from "../../../contexts/AdminContext";
 import toast from 'react-hot-toast';
 import moment from "moment";
+import MarkdownRenderer from "../../MarkdownRenderer";
+import RefreshButton from "../../Admin/RefreshButton";
 
 function AIHistoryByUser() {
   const [AIHistoryByUserID, setAIHistoryByUserID] = useState([])
@@ -14,7 +16,7 @@ function AIHistoryByUser() {
   const filteredUsers = usersState?.data?.filter(user => AllAIHistoryUserID.includes(user.id)); // filter dari semua user database, difilter sesuai AllAIHistoryUserID
 
   const checkAdminHaveAIHistory = AIHistoryState?.some(data => data.user_id === userState.id); // Cek Apakah ID di userstate ada di salah satu data AIHistoryState
-  if(checkAdminHaveAIHistory) filteredUsers.push(userState) //  jika ada, push data admin yang sedang login, karena usersState tidak get data yang sedang login
+  if (checkAdminHaveAIHistory) filteredUsers.push(userState) //  jika ada, push data admin yang sedang login, karena usersState tidak get data yang sedang login
 
   const handleClickDetailAIHistory = async (id) => {
     try {
@@ -32,7 +34,9 @@ function AIHistoryByUser() {
           {/* head */}
           <thead>
             <tr>
-              <th>#</th>
+              <th>
+                <RefreshButton/>
+              </th>
               <th>User ID</th>
               <th>Email</th>
               <th>Name</th>
@@ -42,7 +46,7 @@ function AIHistoryByUser() {
           <tbody>
             {filteredUsers?.map((user, index) => (
               <tr key={user.id || index}>
-                <th>{index + 1}</th>
+                <th className="text-center sm:text-start">{index + 1}</th>
                 <td className="max-w-20 truncate whitespace-nowrap overflow-hidden">{user.id}</td>
                 <td className="max-w-20 truncate whitespace-nowrap overflow-hidden">{user.email}</td>
                 <td className="max-w-20 truncate whitespace-nowrap overflow-hidden">{user.name}</td>
@@ -92,7 +96,7 @@ function AIHistoryByUser() {
                   <tbody>
                     {AIHistoryByUserID?.map((ai, index) => (
                       <tr key={ai.id || index}>
-                        <th>{index + 1}</th>
+                        <th className="text-center sm:text-start">{index + 1}</th>
                         <td>
                           {ai.sender === 'bot' ? (
                             <span className="badge badge-soft badge-primary badge-sm sm:badge-md">Bot</span>
@@ -148,7 +152,7 @@ function AIHistoryByUser() {
                               </tr>
                               <tr>
                                 <th className="text-left">Message</th>
-                                <td>: {ai.message}</td>
+                                <td><MarkdownRenderer>{ai.message}</MarkdownRenderer></td>
                               </tr>
                               <tr>
                                 <th className="text-left">Date</th>
@@ -196,7 +200,7 @@ function AIHistoryByUser() {
                     className="btn btn-error ml-2"
                     onClick={async () => {
                       try {
-                        const response = await deleteAIHistory({user_id: user.id});
+                        const response = await deleteAIHistory({ user_id: user.id });
                         if (response.status === 200) {
                           toast.success(response.message, { duration: 2500 });
                           refreshCallback();

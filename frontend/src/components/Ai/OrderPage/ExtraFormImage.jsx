@@ -2,10 +2,13 @@ import { useContext, useState } from 'react';
 import { PaperAirplaneIcon, SparklesIcon, ArrowDownTrayIcon } from '@heroicons/react/24/solid';
 import { ProductsContext } from '../../../contexts/ProductsContext';
 import { GoogleGenAI, Modality } from "@google/genai";
+import { createAIHistory } from '../../../modules/fetch';
+import { UserContext } from '../../../contexts/UserContext';
 
 
 function ExtraFormImage({ formData, handleValidationData, resultImage, setResultImage }) {
   const { productsByIDState } = useContext(ProductsContext);
+  const { userState } = useContext(UserContext);
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
   const [inputValue, setInputValue] = useState('');
@@ -27,6 +30,8 @@ function ExtraFormImage({ formData, handleValidationData, resultImage, setResult
     const lokasi = formData?.detail_order?.location || "Gedung / jalanan";
     const tema = inputValue || "Wedding khas indonesia";
 
+    saveAIHistoryFunc(inputValue);
+
     return `
 Gambarkan ilustrasi visual untuk kebutuhan berikut: \n\n
 
@@ -43,6 +48,11 @@ Berikan juga deskripsi pendek tentang gambar yang dibuat.
   `;
   };
 
+  // Simpan History AI ke Database | User
+  async function saveAIHistoryFunc(inputValue) {
+    const saveAIHistory = await createAIHistory({ user_id: userState?.id, sender: 'user', message: inputValue });
+    if (saveAIHistory.status !== 200) console.error("AIHistory: Gagal menyimpan AI History");
+  }
 
   // ====================================================================================================================================
 
@@ -59,7 +69,6 @@ Berikan juga deskripsi pendek tentang gambar yang dibuat.
 
       for (const part of response.candidates[0].content.parts) {
         if (part.text) {
-          console.log(contents);
           setResultImageText(contents)
         } else if (part.inlineData) {
           const imageData = part.inlineData.data;
@@ -67,6 +76,10 @@ Berikan juga deskripsi pendek tentang gambar yang dibuat.
           setResultImage(imageSrc);
         }
       }
+
+      // Simpan History AI ke Database | Bot
+      const saveAIHistory = await createAIHistory({ user_id: userState.id, sender: 'bot', message: resultImageText });
+      if (saveAIHistory.status !== 200) console.error("AIHistory: Gagal menyimpan AI History");
 
     } catch (error) {
       console.error("Gagal generate prompt:", error);

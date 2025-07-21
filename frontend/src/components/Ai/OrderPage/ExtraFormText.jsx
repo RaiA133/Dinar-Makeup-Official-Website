@@ -8,7 +8,7 @@ import { UserContext } from '../../../contexts/UserContext';
 
 function ExtraFormText({ formData, handleValidationData, resultAIText, setResultAIText }) {
   const { productsByIDState } = useContext(ProductsContext);
-  const { userState } = UserContext(UserContext);
+  const { userState } = useContext(UserContext);
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || "YOUR_API_KEY" });
 
   const [inputValue, setInputValue] = useState('');
@@ -18,14 +18,12 @@ function ExtraFormText({ formData, handleValidationData, resultAIText, setResult
   const formDataText = formData ? `${JSON.stringify(formData, null, 2)}` : "";
   const productDataText = productsByIDState ? `{JSON.stringify(productsByIDState, null, 2)}` : "";
 
-  const generatePromptText = async (inputValue, formData, productData) => {
+  const generatePromptText = (inputValue, formData, productData) => {
     const budget = productData?.price || 0;
     const lokasi = formData?.detail_order?.location || "Gedung / jalanan";
     const tema = inputValue || "Wedding khas indonesia";
 
-    // Simpan History AI ke Database | User
-    const saveAIHistory = await createAIHistory({ user_id: userState.id, sender: 'user', message: inputValue });
-    if (saveAIHistory.status !== 200) console.error("AIHistory: Gagal menyimpan AI History");
+    saveAIHistoryFunc(inputValue);
 
     return `Buatkan isi catatan tambahan untuk kebutuhan berikut: \n\n
 
@@ -41,6 +39,12 @@ Berikan langsung dalam bentuk daftar poin dan alasan singkat disetiap point. Tid
 Buat isi catatan singkat dan padat.
   `;
   };
+
+  // Simpan History AI ke Database | User
+  async function saveAIHistoryFunc(inputValue) {
+    const saveAIHistory = await createAIHistory({ user_id: userState?.id, sender: 'user', message: inputValue });
+    if (saveAIHistory.status !== 200) console.error("AIHistory: Gagal menyimpan AI History");
+  }
 
   // ====================================================================================================================================
 
@@ -78,6 +82,8 @@ Buat isi catatan singkat dan padat.
 
     } catch (error) {
       console.error("AI error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
