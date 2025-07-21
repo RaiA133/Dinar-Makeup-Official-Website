@@ -1,13 +1,11 @@
 import { useContext } from "react";
 import { AdminContext } from "../../contexts/AdminContext";
 import { deleteUserByID, getAllUsers } from "../../modules/fetch";
-import { useLocation, useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
+import RefreshButton from "../../components/Admin/RefreshButton";
 
 function UserManagementPage() {
-  let location = useLocation();
-  const navigate = useNavigate();
-  const { usersState, setUsersState, refreshCallback } = useContext(AdminContext);
+  const { usersState, refreshCallback } = useContext(AdminContext);
 
   const totalPages = usersState?.metadata?.total_pages || 0;
   const currentPage = usersState?.metadata?.current_page || 1;
@@ -30,7 +28,7 @@ function UserManagementPage() {
               {/* head */}
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th><RefreshButton/></th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Action</th>
@@ -39,7 +37,7 @@ function UserManagementPage() {
               <tbody>
                 {usersState?.data?.map((user, index) => (
                   <tr key={user.id || index}>
-                    <th>{index + 1}</th>
+                    <th className="text-center sm:text-start">{index + 1}</th>
                     <td>{user.name}</td>
                     <td>{user.email}</td>
                     <td className="flex gap-2">
