@@ -12,6 +12,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { FaCheck, FaShoppingCart, FaRegFileAlt, FaBox, FaCreditCard } from "react-icons/fa";
 import ExtraForm from "../../components/OrderPage/ExtraForm";
+import MarkdownRenderer from "../../components/MarkdownRenderer";
 
 function OrderPage() {
   const { id } = useParams();
@@ -759,7 +760,9 @@ function OrderPage() {
                           <div className="divider m-0 mb-4"></div>
                           {formData?.notes ? (
                             <div className="rounded-box w-full border border-stone-400 p-4 text-sm">
-                              {formData?.notes}
+                              <MarkdownRenderer>
+                                {formData?.notes}
+                              </MarkdownRenderer>
                             </div>
                           ) : (
                             <p className="text-sm text-gray-500">Tidak ada catatan ditambahkan.</p>
