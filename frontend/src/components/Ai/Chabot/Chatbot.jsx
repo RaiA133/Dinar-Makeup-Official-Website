@@ -15,11 +15,9 @@ import { createAIHistory } from '../../../modules/fetch';
 
 const Chatbot = () => {
   const navigate = useNavigate();
-  const { isLogin, userState, refreshCallback } = useContext(UserContext)
+  const { isLogin, userState } = useContext(UserContext)
 
-  const [messages, setMessages] = useState([
-    { id: 1, text: 'Halo! Saya Dinar, asisten virtual Dinar Makeup. Ada yang bisa saya bantu?', sender: 'bot' }
-  ]);
+  const [messages, setMessages] = useState([{ id: 1, text: 'Halo! Saya Dinar, asisten virtual Dinar Makeup. Ada yang bisa saya bantu?', sender: 'bot' }]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingChatGuide, setIsLoadingChatGuide] = useState(false);
@@ -46,14 +44,11 @@ const Chatbot = () => {
     };
 
     // Simpan History AI ke Database | User
-    let dataResponseAiHistory = {
-      user_id: userState.id,
-      sender: 'user',
-      message: inputValue
-    }
-    const saveAIHistory = await createAIHistory(dataResponseAiHistory)
-    if (saveAIHistory.status !== "200") console.error("AIHistory: Gagal menyimpan AI History");
+    const saveAIHistory = await createAIHistory({ user_id: userState.id, sender: 'user', message: inputValue });
+    if (saveAIHistory.status !== 200) console.error("AIHistory: Gagal menyimpan AI History");
 
+    setShowGuideButton(false);
+    setAskToGuideButton(false);
     setMessages([...messages, newUserMessage]);
     setInputValue('');
     setIsLoading(true)
@@ -83,13 +78,8 @@ const Chatbot = () => {
       };
 
       // Simpan History AI ke Database | Bot
-      let dataResponseAiHistory = {
-        user_id: userState.id,
-        sender: 'bot',
-        message: text
-      }
-      const saveAIHistory = await createAIHistory(dataResponseAiHistory)
-      if (saveAIHistory.status !== "200") console.error("AIHistory: Gagal menyimpan AI History");
+      const saveAIHistory = await createAIHistory({ user_id: userState.id, sender: 'bot', message: text });
+      if (saveAIHistory.status !== 200) console.error("AIHistory: Gagal menyimpan AI History");
 
       setMessages(prev => [...prev, botResponse]);
       setIsLoading(false);
@@ -134,33 +124,44 @@ const Chatbot = () => {
     }
   };
 
-  // Auto-scroll ke pesan terbaru
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  // ===============================================================================================================
+  // ====================================================================================================================================
 
   const handleUseAiTourGuide = useCallback(async () => { // HIT API AI TOURGUIDE
     setIsLoadingChatGuide(true);
+    setShowGuideButton(false)
     try {
-      let chatHistory = messages.map(msg => ({
-        role: msg.sender === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.text }]
-      }));
 
-      const fetch = await guideBot(inputValueGuide, chatHistory);
+      // let chatHistory = messages.map(msg => ({
+      //   role: msg.sender === 'user' ? 'user' : 'model',
+      //   parts: [{ text: msg.text }]
+      // }));
+
+      const fetch = await guideBot(inputValueGuide);
       const response = fetch.data;
       if (response) {
         setIntroJsSteps(response.data?.[0]);
         setShowGuideButton(true);
       }
-    } catch (err) {
-      console.error('Gagal memuat tour guide:', err);
+
+      // Simpan History AI ke Database | Bot
+      const saveAIHistory = await createAIHistory({ user_id: userState.id, sender: 'bot', message: JSON.stringify(response.data?.[0]) });
+      if (saveAIHistory.status !== 200) console.error("AIHistory: Gagal menyimpan AI History");
+
+    } catch (error) {
+      console.error('Gagal memuat tour guide:', error);
     } finally {
       setIsLoadingChatGuide(false);
     }
   }, [inputValueGuide, messages]);
+
+  // ====================================================================================================================================
+
+  // Auto-scroll ke pesan terbaru
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, askToGuideButton, showGuideButton]);
+
+  // ====================================================================================================================================
 
   const resolveSteps = (stepsFromApi) => { // GUNAKAN TARGET ELEMENT UNTUK INTROJS, YG ERROR TIDAK DIGUNAKAN
     return stepsFromApi
@@ -298,8 +299,9 @@ const Chatbot = () => {
 
                 {/* START AI TOUR GUIDE */}
                 {showGuideButton && !isLoading && (
-                  <div className="flex justify-center w-full mt-5">
+                  <div className="flex justify-center w-full mt-5 mb-3">
                     <button className='btn bg-gradient-to-br from-error to-accent text-base-100 hover:shadow-md animate-pulse hover:animate-none' onClick={startTour}>
+                    <SparklesIcon className="h-5 w-5 text-base-100 animate-pulse" />
                       Mulai AI Tour Guide
                     </button>
                   </div>

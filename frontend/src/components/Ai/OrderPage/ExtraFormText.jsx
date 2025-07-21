@@ -3,9 +3,12 @@ import { PaperAirplaneIcon, SparklesIcon } from '@heroicons/react/24/solid';
 import { ProductsContext } from '../../../contexts/ProductsContext';
 import { GoogleGenAI } from "@google/genai";
 import MarkdownRenderer from '../../MarkdownRenderer';
+import { createAIHistory } from '../../../modules/fetch';
+import { UserContext } from '../../../contexts/UserContext';
 
 function ExtraFormText({ formData, handleValidationData, resultAIText, setResultAIText }) {
   const { productsByIDState } = useContext(ProductsContext);
+  const { userState } = UserContext(UserContext);
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || "YOUR_API_KEY" });
 
   const [inputValue, setInputValue] = useState('');
@@ -15,10 +18,14 @@ function ExtraFormText({ formData, handleValidationData, resultAIText, setResult
   const formDataText = formData ? `${JSON.stringify(formData, null, 2)}` : "";
   const productDataText = productsByIDState ? `{JSON.stringify(productsByIDState, null, 2)}` : "";
 
-  const generatePromptText = (inputValue, formData, productData) => {
+  const generatePromptText = async (inputValue, formData, productData) => {
     const budget = productData?.price || 0;
     const lokasi = formData?.detail_order?.location || "Gedung / jalanan";
     const tema = inputValue || "Wedding khas indonesia";
+
+    // Simpan History AI ke Database | User
+    const saveAIHistory = await createAIHistory({ user_id: userState.id, sender: 'user', message: inputValue });
+    if (saveAIHistory.status !== 200) console.error("AIHistory: Gagal menyimpan AI History");
 
     return `Buatkan isi catatan tambahan untuk kebutuhan berikut: \n\n
 
@@ -64,6 +71,11 @@ Buat isi catatan singkat dan padat.
           setResultAIText(prev => prev + chunk.text); // update per chunk
         }
       }
+
+      // Simpan History AI ke Database | Bot
+      const saveAIHistory = await createAIHistory({ user_id: userState.id, sender: 'bot', message: finalText });
+      if (saveAIHistory.status !== 200) console.error("AIHistory: Gagal menyimpan AI History");
+
     } catch (error) {
       console.error("AI error:", error);
     }

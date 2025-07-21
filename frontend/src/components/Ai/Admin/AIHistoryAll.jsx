@@ -14,7 +14,7 @@ function AIHistoryAll() {
 
       <button className="btn btn-error btn-sm absolute top-4 right-3 sm:right-5" onClick={() => document.getElementById(`ai_delete_modal_all`).showModal()}>Hapus Semua Data</button>
 
-      <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 mb-3 w-full shadow-sm">
+      <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 mb-3 w-full shadow-sm max-h-[86vh] overflow-auto">
         <table className="table table-xs sm:table-md table-zebra">
           {/* head */}
           <thead>
