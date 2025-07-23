@@ -13,10 +13,10 @@ function AIHistoryByUser() {
   const { userState } = useContext(UserContext);
 
   const AllAIHistoryUserID = [...new Set(AIHistoryState?.map(item => item.user_id))]; // semua user_id yang punya history pakai AI
-  const filteredUsers = usersState?.data?.filter(user => AllAIHistoryUserID.includes(user.id)); // filter dari semua user database, difilter sesuai AllAIHistoryUserID
-
-  const checkAdminHaveAIHistory = AIHistoryState?.some(data => data.user_id === userState.id); // Cek Apakah ID di userstate ada di salah satu data AIHistoryState
+  const filteredUsers = usersState?.data?.filter(user => AllAIHistoryUserID.includes(user.id)) || []; // filter dari semua user database, difilter sesuai AllAIHistoryUserID
+  const checkAdminHaveAIHistory = AIHistoryState?.some(data => data.user_id === userState.id); // Cek Apakah ID admin di userstate ada di salah satu data AIHistoryState
   if (checkAdminHaveAIHistory) filteredUsers?.push(userState) //  jika ada, push data admin yang sedang login, karena usersState tidak get data yang sedang login
+
 
   const handleClickDetailAIHistory = async (id) => {
     try {
