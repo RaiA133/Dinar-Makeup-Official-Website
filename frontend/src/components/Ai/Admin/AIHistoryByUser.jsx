@@ -16,7 +16,7 @@ function AIHistoryByUser() {
   const filteredUsers = usersState?.data?.filter(user => AllAIHistoryUserID.includes(user.id)); // filter dari semua user database, difilter sesuai AllAIHistoryUserID
 
   const checkAdminHaveAIHistory = AIHistoryState?.some(data => data.user_id === userState.id); // Cek Apakah ID di userstate ada di salah satu data AIHistoryState
-  if (checkAdminHaveAIHistory) filteredUsers.push(userState) //  jika ada, push data admin yang sedang login, karena usersState tidak get data yang sedang login
+  if (checkAdminHaveAIHistory) filteredUsers?.push(userState) //  jika ada, push data admin yang sedang login, karena usersState tidak get data yang sedang login
 
   const handleClickDetailAIHistory = async (id) => {
     try {
