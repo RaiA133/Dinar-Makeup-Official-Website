@@ -47,11 +47,11 @@ const Chatbot = () => {
     const saveAIHistory = await createAIHistory({ user_id: userState.id, sender: 'user', message: inputValue });
     if (saveAIHistory.status !== 200) console.error("AIHistory: Gagal menyimpan AI History");
 
+    setMessages(prev => [...prev, newUserMessage]);
+    setInputValue('');
+    setIsLoading(true);
     setShowGuideButton(false);
     setAskToGuideButton(false);
-    setMessages([...messages, newUserMessage]);
-    setInputValue('');
-    setIsLoading(true)
 
     try {
 
@@ -301,7 +301,7 @@ const Chatbot = () => {
                 {showGuideButton && !isLoading && (
                   <div className="flex justify-center w-full mt-5 mb-3">
                     <button className='btn bg-gradient-to-br from-error to-accent text-base-100 hover:shadow-md animate-pulse hover:animate-none' onClick={startTour}>
-                    <SparklesIcon className="h-5 w-5 text-base-100 animate-pulse" />
+                      <SparklesIcon className="h-5 w-5 text-base-100 animate-pulse" />
                       Mulai AI Tour Guide
                     </button>
                   </div>
