@@ -4,7 +4,6 @@ import toast from 'react-hot-toast';
 import moment from "moment";
 import { deleteAIHistory } from "../../../modules/fetch";
 import MarkdownRenderer from "../../MarkdownRenderer";
-import { IoReload } from "react-icons/io5";
 import RefreshButton from "../../Admin/RefreshButton";
 
 function AIHistoryAll() {
