@@ -16,34 +16,54 @@ function ExtraFormText({ formData, handleValidationData, resultAIText, setResult
   const [dropDownOpen, setDropdownOpen] = useState(false);
 
   const generatePromptText = (inputValue, formData, productData) => {
+    // Extract core product and order details
     const budget = productData?.price || 0;
-    const lokasi = formData?.detail_order?.location || "Gedung / jalanan";
-    const instruksiCatatan = inputValue || "Berikan catatan penting untuk perencanaan wedding"; // Mengganti 'tema' agar lebih sesuai dengan tujuan notes
+    const lokasi = formData?.detail_order?.location || "lokasi acara yang belum ditentukan";
+    
+    // The user's specific request for the notes/recommendations
+    const instruksiCatatan = inputValue || "Berikan catatan penting untuk perencanaan wedding"; 
   
-    const clientName = formData?.client_name || "pasangan klien";
-    const packageName = productData?.name || "paket acara";
-    const eventDate = formData?.detail_order?.event_date ? new Date(formData.detail_order.event_date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : "tanggal yang akan datang";
-    const numberOfGuests = formData?.detail_order?.num_guests || "jumlah tamu yang tidak spesifik";
+    // --- Extracting more detailed client and event data from formData ---
+    const groomFullName = formData?.customer_detail?.groom_full_name || "calon pengantin pria";
+    const brideFullName = formData?.customer_detail?.bride_full_name || "calon pengantin wanita";
+    const clientIdentifier = (groomFullName && brideFullName) ? `${groomFullName} & ${brideFullName}` : "pasangan klien";
+    
+    const packageName = productData?.name || "paket acara"; // Still using productData for package name
+    
+    const akadDate = formData?.detail_order?.akad_date;
+    const showDate = formData?.detail_order?.show_date;
+    
+    // Format dates for readability in the prompt
+    const formattedAkadDate = akadDate ? moment(akadDate).format("DD MMMM YYYY") : "belum ditentukan";
+    const formattedShowDate = showDate ? moment(showDate).format("DD MMMM YYYY") : "belum ditentukan";
+    
+    const akadTime = formData?.detail_order?.akad_time || "waktu akad belum ditentukan";
+    const numberOfGuests = formData?.detail_order?.guest_count || "jumlah tamu yang tidak spesifik";
+    const techMeetingDate = formData?.detail_order?.tech_meeting ? moment(formData.detail_order.tech_meeting).format("DD MMMM YYYY") : "belum ditentukan";
   
-    saveAIHistoryFunc(inputValue);
-  
-    return `Berdasarkan permintaan "${instruksiCatatan}", buatkan daftar poin rekomendasi atau catatan tambahan yang relevan untuk perencanaan acara. Fokus pada topik seperti efisiensi biaya, pengaturan jadwal hari-H, logistik, atau hal lain yang penting sesuai dengan permintaan.
+    saveAIHistoryFunc(inputValue); 
+    
+    return `Berdasarkan permintaan "${instruksiCatatan}", buatkan daftar poin rekomendasi atau catatan tambahan yang relevan untuk perencanaan acara pernikahan. Fokus pada topik seperti efisiensi biaya, pengaturan jadwal hari-H, logistik vendor, komunikasi dengan klien, atau hal lain yang penting sesuai dengan permintaan spesifik pengguna.
   
   **Konteks Acara:**
+  * **Klien:** ${clientIdentifier}
+  * **Paket yang Dipilih:** ${packageName}
   * **Lokasi Acara:** ${lokasi}
   * **Estimasi Budget:** Rp ${budget.toLocaleString('id-ID')}
-  * **Klien:** ${clientName} (telah memilih ${packageName})
-  * **Tanggal Acara:** ${eventDate}
-  * **Jumlah Tamu:** ${numberOfGuests}
+  * **Tanggal Akad:** ${formattedAkadDate}
+  * **Waktu Akad:** ${akadTime}
+  * **Tanggal Resepsi/Acara Puncak:** ${formattedShowDate}
+  * **Jumlah Tamu yang Diperkirakan:** ${numberOfGuests}
+  * **Tanggal Technical Meeting:** ${techMeetingDate}
   
   **Instruksi Output:**
   * Berikan langsung dalam format daftar poin.
-  * Setiap poin harus berisi rekomendasi atau catatan.
-  * Sertakan alasan singkat atau penjelasan mengapa poin tersebut relevan/penting.
+  * Setiap poin harus berisi rekomendasi atau catatan yang jelas dan relevan.
+  * Sertakan alasan singkat atau penjelasan mengapa poin tersebut penting atau bermanfaat.
   * Pastikan catatannya singkat, padat, to the point, dan langsung menjawab permintaan "${instruksiCatatan}".
   * Hindari sapaan, kalimat pembuka, atau penutup. Cukup hasilkan daftar poinnya saja.
-  * Jangan tampilkan data pribadi atau JSON mentah dari form dalam catatan. Gunakan hanya informasi yang sudah diringkas dan relevan.
-    `;
+  * **Jangan tampilkan data pribadi (nama lengkap, alamat, email, Instagram) atau struktur JSON mentah dari form dalam catatan. Hanya gunakan informasi yang sudah diringkas dan relevan dengan perencanaan acara.**
+  `;
   };
 
   // Simpan History AI ke Database | User

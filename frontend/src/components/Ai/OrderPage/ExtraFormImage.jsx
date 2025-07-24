@@ -23,39 +23,57 @@ function ExtraFormImage({ formData, handleValidationData, resultImage, setResult
     "Gaun pengantin muslimah elegan dengan detail brokat dan siluet A-line.",
     "Buket bunga pengantin cascading style dengan kombinasi mawar putih dan eukaliptus.",
 ];
+const generatePromptText = (inputValue, formData, productData) => {
+  const budget = productData?.price || 0;
+  
+  // Extracting more specific details from formData
+  const groomFullName = formData?.customer_detail?.groom_full_name || "calon pengantin pria";
+  const brideFullName = formData?.customer_detail?.bride_full_name || "calon pengantin wanita";
+  const clientIdentifier = (groomFullName && brideFullName) ? `${groomFullName} & ${brideFullName}` : "pasangan klien";
+  
+  const lokasiAcara = formData?.detail_order?.location || "lokasi acara yang belum ditentukan";
+  const akadDate = formData?.detail_order?.akad_date;
+  const showDate = formData?.detail_order?.show_date;
+  const akadTime = formData?.detail_order?.akad_time || "waktu akad belum ditentukan";
+  const numberOfGuests = formData?.detail_order?.guest_count || "jumlah tamu yang tidak spesifik";
+  const techMeetingDate = formData?.detail_order?.tech_meeting;
 
-  const generatePromptText = (inputValue, formData, productData) => {
-    const budget = productData?.price || 0;
-    const lokasi = formData?.detail_order?.location || "Gedung / jalanan";
-    const tema = inputValue || "Wedding khas indonesia";
-  
-    // Ekstraksi data yang relevan (pastikan variabel ini sudah didefinisikan atau ambil dari formData / productData)
-    const clientName = formData?.client_name || "pasangan";
-    const packageName = productData?.name || "layanan wedding";
-    const eventDate = formData?.detail_order?.event_date ? new Date(formData.detail_order.event_date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : "tanggal yang akan datang";
-    const numberOfGuests = formData?.detail_order?.num_guests || "jumlah tamu yang cukup";
-    
-    saveAIHistoryFunc(inputValue);
-  
-    return `
-  Gambarkan ilustrasi visual berkualitas tinggi dan realistis untuk kebutuhan acara berikut, fokus sepenuhnya pada **visualisasi yang relevan dengan Wedding Organizer (WO)**. Ini bisa meliputi dekorasi, gaun pengantin, kartu undangan, buket bunga, setting meja, kue pengantin, atau elemen lain yang relevan dengan tema yang diberikan.
-  
-  **Tema Utama Acara:** ${tema}
-  **Lokasi Acara:** ${lokasi}
-  **Estimasi Budget:** Rp ${budget.toLocaleString('id-ID')}
-  
-  **Detail Konteks Tambahan untuk Inspirasi Visual (JANGAN TAMPILKAN SEBAGAI TEKS ATAU DATA MENTAH DALAM GAMBAR):**
-  Ini adalah ${tema} untuk ${clientName}, yang telah memilih ${packageName}. Acara diperkirakan pada ${eventDate} dengan perkiraan ${numberOfGuests} tamu. Detail ini hanya untuk memberikan konteks visual kepada Anda, bukan untuk direpresentasikan secara literal.
-  
-  **Instruksi Penting untuk Generasi Gambar:**
-  * **Fokus Visual:** Ciptakan gambar yang indah dan imersif yang menggambarkan suasana, dekorasi, **atau detail lain yang terkait dengan persiapan/pelaksanaan acara pernikahan atau event organizer**.
-  * **Keberagaman Visual:** Izinkan AI untuk bebas menentukan jenis visual yang paling sesuai dengan prompt, bisa berupa desain kartu undangan, detail gaun pengantin, pengaturan tempat, atau elemen WO lainnya.
-  * **Hindari Teks dan Data:** **JANGAN PERNAH** menampilkan teks, angka, data JSON, nama, tanggal, budget, atau informasi pribadi klien lainnya dalam bentuk apapun di dalam gambar. Ini termasuk mencegah AI membuat "placeholder" untuk data tersebut.
-  * **Relevansi Konteks:** Pastikan gambar sangat relevan dengan konteks pernikahan atau event organizer.
-  * **Gaya:** Gambar harus memiliki gaya yang elegan, profesional, dan artistik.
-  * **Deskripsi Singkat:** Setelah membuat gambar, berikan deskripsi pendek yang relevan tentang gambar yang telah Anda buat.
-    `;
-  };
+  // Formatting dates for better readability in the prompt
+  const formattedAkadDate = akadDate ? moment(akadDate).format("DD MMMM YYYY") : "belum ditentukan";
+  const formattedShowDate = showDate ? moment(showDate).format("DD MMMM YYYY") : "belum ditentukan";
+  const formattedTechMeetingDate = techMeetingDate ? moment(techMeetingDate).format("DD MMMM YYYY") : "belum ditentukan";
+
+  const packageName = productData?.name || "layanan wedding"; // Still using productData for package name
+  const temaDariInput = inputValue || "Wedding khas indonesia"; // This is the user's direct visual request
+
+
+  saveAIHistoryFunc(inputValue);
+
+  return `
+Gambarkan ilustrasi visual berkualitas tinggi dan realistis untuk kebutuhan acara berikut, fokus sepenuhnya pada **visualisasi yang relevan dengan Wedding Organizer (WO)**. Ini bisa meliputi dekorasi acara, desain gaun pengantin, inspirasi kartu undangan, buket bunga, setting meja makan, desain kue pengantin, atau elemen visual lain yang terkait dengan persiapan atau pelaksanaan acara pernikahan.
+
+**Permintaan Visual Utama:** "${temaDariInput}"
+
+**Konteks Acara untuk Inspirasi (JANGAN TAMPILKAN SEBAGAI TEKS ATAU DATA MENTAH DALAM GAMBAR):**
+* **Klien:** ${clientIdentifier}
+* **Paket yang Dipilih:** ${packageName}
+* **Lokasi Acara:** ${lokasiAcara}
+* **Estimasi Budget:** Rp ${budget.toLocaleString('id-ID')}
+* **Tanggal Akad Nikah:** ${formattedAkadDate}
+* **Waktu Akad:** ${akadTime}
+* **Tanggal Resepsi/Acara Puncak:** ${formattedShowDate}
+* **Jumlah Tamu yang Diperkirakan:** ${numberOfGuests} orang
+* **Tanggal Technical Meeting:** ${formattedTechMeetingDate}
+
+**Instruksi Penting untuk Generasi Gambar:**
+* **Fokus Visual:** Ciptakan gambar yang indah dan imersif yang menggambarkan suasana, dekorasi, **atau detail lain yang terkait dengan persiapan/pelaksanaan acara pernikahan atau event organizer** sesuai dengan "Permintaan Visual Utama" di atas.
+* **Keberagaman Visual:** Izinkan AI untuk bebas menentukan jenis visual yang paling sesuai dengan prompt, bisa berupa desain kartu undangan, detail gaun pengantin, pengaturan tempat, atau elemen WO lainnya.
+* **Hindari Teks dan Data:** **JANGAN PERNAH** menampilkan teks, angka, data JSON, nama lengkap, alamat, email, Instagram, tanggal, budget, atau informasi pribadi klien lainnya dalam bentuk apapun di dalam gambar. Ini termasuk mencegah AI membuat "placeholder" atau simbol untuk data tersebut.
+* **Relevansi Konteks:** Pastikan gambar sangat relevan dengan konteks pernikahan atau event organizer.
+* **Gaya:** Gambar harus memiliki gaya yang elegan, profesional, dan artistik.
+* **Deskripsi Singkat:** Setelah membuat gambar, berikan deskripsi pendek yang relevan tentang gambar yang telah Anda buat (ini akan menjadi hasil teks dari respons AI).
+`;
+};
 
   // Simpan History AI ke Database | User
   async function saveAIHistoryFunc(inputValue) {
