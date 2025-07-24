@@ -22,33 +22,37 @@ function ExtraFormImage({ formData, handleValidationData, resultImage, setResult
     "Desain kartu undangan bernuansa gold, elegan, modern dan simple",
   ];
 
-  const formDataText = formData ? `${JSON.stringify(formData, null, 2)}` : "";
-  const productDataText = productsByIDState ? `{JSON.stringify(productsByIDState, null, 2)}` : "";
-
   const generatePromptText = (inputValue, formData, productData) => {
     const budget = productData?.price || 0;
     const lokasi = formData?.detail_order?.location || "Gedung / jalanan";
     const tema = inputValue || "Wedding khas indonesia";
-
+  
+    // Ekstraksi data yang relevan (pastikan variabel ini sudah didefinisikan atau ambil dari formData / productData)
+    const clientName = formData?.client_name || "pasangan";
+    const packageName = productData?.name || "layanan wedding";
+    const eventDate = formData?.detail_order?.event_date ? new Date(formData.detail_order.event_date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : "tanggal yang akan datang";
+    const numberOfGuests = formData?.detail_order?.num_guests || "jumlah tamu yang cukup";
+    
     saveAIHistoryFunc(inputValue);
-
+  
     return `
-Gambarkan ilustrasi visual berkualitas tinggi dan realistis untuk kebutuhan acara berikut:
-
-**Tema Utama:** ${tema}
-**Lokasi Acara:** ${lokasi}
-**Estimasi Budget:** Rp ${budget.toLocaleString('id-ID')}
-
-**Konteks Tambahan (untuk inspirasi visual):**
-Ini adalah ${tema} untuk ${clientName} dengan menggunakan ${packageName}.
-
-**Instruksi Penting:**
-* Fokuslah sepenuhnya pada **visualisasi dekorasi atau suasana acara** sesuai tema dan konteks yang diberikan.
-* **Jangan pernah menampilkan teks, data JSON, atau informasi pribadi klien dalam gambar.**
-* Pastikan gambar sesuai dengan konteks pernikahan atau event organizer.
-* Berikan juga deskripsi singkat yang relevan tentang gambar yang telah dibuat.
-* Gaya gambar harus elegan, profesional, dan relevan dengan industri wedding organizer.
-  `;
+  Gambarkan ilustrasi visual berkualitas tinggi dan realistis untuk kebutuhan acara berikut, fokus sepenuhnya pada **visualisasi yang relevan dengan Wedding Organizer (WO)**. Ini bisa meliputi dekorasi, gaun pengantin, kartu undangan, buket bunga, setting meja, kue pengantin, atau elemen lain yang relevan dengan tema yang diberikan.
+  
+  **Tema Utama Acara:** ${tema}
+  **Lokasi Acara:** ${lokasi}
+  **Estimasi Budget:** Rp ${budget.toLocaleString('id-ID')}
+  
+  **Detail Konteks Tambahan untuk Inspirasi Visual (JANGAN TAMPILKAN SEBAGAI TEKS ATAU DATA MENTAH DALAM GAMBAR):**
+  Ini adalah ${tema} untuk ${clientName}, yang telah memilih ${packageName}. Acara diperkirakan pada ${eventDate} dengan perkiraan ${numberOfGuests} tamu. Detail ini hanya untuk memberikan konteks visual kepada Anda, bukan untuk direpresentasikan secara literal.
+  
+  **Instruksi Penting untuk Generasi Gambar:**
+  * **Fokus Visual:** Ciptakan gambar yang indah dan imersif yang menggambarkan suasana, dekorasi, **atau detail lain yang terkait dengan persiapan/pelaksanaan acara pernikahan atau event organizer**.
+  * **Keberagaman Visual:** Izinkan AI untuk bebas menentukan jenis visual yang paling sesuai dengan prompt, bisa berupa desain kartu undangan, detail gaun pengantin, pengaturan tempat, atau elemen WO lainnya.
+  * **Hindari Teks dan Data:** **JANGAN PERNAH** menampilkan teks, angka, data JSON, nama, tanggal, budget, atau informasi pribadi klien lainnya dalam bentuk apapun di dalam gambar. Ini termasuk mencegah AI membuat "placeholder" untuk data tersebut.
+  * **Relevansi Konteks:** Pastikan gambar sangat relevan dengan konteks pernikahan atau event organizer.
+  * **Gaya:** Gambar harus memiliki gaya yang elegan, profesional, dan artistik.
+  * **Deskripsi Singkat:** Setelah membuat gambar, berikan deskripsi pendek yang relevan tentang gambar yang telah Anda buat.
+    `;
   };
 
   // Simpan History AI ke Database | User
