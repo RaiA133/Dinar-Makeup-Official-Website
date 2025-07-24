@@ -33,18 +33,21 @@ function ExtraFormImage({ formData, handleValidationData, resultImage, setResult
     saveAIHistoryFunc(inputValue);
 
     return `
-Gambarkan ilustrasi visual untuk kebutuhan berikut: \n\n
+Gambarkan ilustrasi visual berkualitas tinggi dan realistis untuk kebutuhan acara berikut:
 
-Tema: ${tema} \n
-Lokasi Acara: ${lokasi} \n
-Budget: Rp ${budget.toLocaleString('id-ID')} \n
+**Tema Utama:** ${tema}
+**Lokasi Acara:** ${lokasi}
+**Estimasi Budget:** Rp ${budget.toLocaleString('id-ID')}
 
-Data Tambahan Lain : \n\n
-Data form pribadi : ${formDataText} \n\n
-Data produk yang dibeli: ${productDataText} \n\n
-  
-Fokus pada elemen visual sesuai tema yang disebutkan. Gambar harus sesuai konteks pernikahan atau wedding organizer. Hindari teks dalam gambar. Tidak perlu tunjukkan data pribadi klien.\n
-Berikan juga deskripsi pendek tentang gambar yang dibuat.
+**Konteks Tambahan (untuk inspirasi visual):**
+Ini adalah ${tema} untuk ${clientName} dengan menggunakan ${packageName}.
+
+**Instruksi Penting:**
+* Fokuslah sepenuhnya pada **visualisasi dekorasi atau suasana acara** sesuai tema dan konteks yang diberikan.
+* **Jangan pernah menampilkan teks, data JSON, atau informasi pribadi klien dalam gambar.**
+* Pastikan gambar sesuai dengan konteks pernikahan atau event organizer.
+* Berikan juga deskripsi singkat yang relevan tentang gambar yang telah dibuat.
+* Gaya gambar harus elegan, profesional, dan relevan dengan industri wedding organizer.
   `;
   };
 
