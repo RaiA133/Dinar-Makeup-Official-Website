@@ -26,15 +26,19 @@ const Chatbot = () => {
   const [inputValueGuide, setInputValueGuide] = useState('');
   const [askToGuideButton, setAskToGuideButton] = useState(false);
   const [showGuideButton, setShowGuideButton] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [introJsSteps, setIntroJsSteps] = useState([])
 
   const messagesEndRef = useRef(null);
 
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || "YOUR_API_KEY" });
 
-  const handleSendMessage = async (e) => {
+  
+  const handleSendMessage_old = async (e) => {
     e.preventDefault();
-    if (inputValue.trim() === '' || isLoading) return;
+
+    // 
+    if (inputValue.trim() === '' || isLoading || isProcessing) return;
 
     // pesan USER
     const newUserMessage = {
@@ -67,7 +71,7 @@ const Chatbot = () => {
       const result = chatbotAPI.data;
 
       let text = ''
-      if (result.status == "200") text = result.data;
+      if (result.status == 200) text = result.data;
       else text = 'Terjadi masalah, coba lagi nanti';
 
       // Tambahkan response AI chat
@@ -123,6 +127,98 @@ const Chatbot = () => {
       setIsLoadingChatGuide(false)
     }
   };
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    
+    // Tambahkan flag untuk mencegah double execution
+    if (inputValue.trim() === '' || isLoading || isProcessing) return;
+    
+    setIsProcessing(true); // Flag baru untuk mencegah overlap
+    setIsLoading(true);
+    
+    try {
+      // pesan USER
+      const newUserMessage = {
+        id: messages.length + 1, // Gunakan timestamp untuk ID unik
+        text: inputValue,
+        sender: 'user'
+      };
+
+      // Simpan History AI ke Database | User
+      const saveAIHistory = await createAIHistory({user_id: userState.id, sender: 'user', message: inputValue});
+      
+      if (saveAIHistory.status !== 200) {
+        console.error("AIHistory: Gagal menyimpan AI History");
+      }
+
+      setMessages(prev => [...prev, newUserMessage]);
+      setInputValue('');
+      setShowGuideButton(false);
+      setAskToGuideButton(false);
+
+      // Persiapan chat history
+      const chatHistory = messages.map(msg => ({
+        role: msg.sender === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.text }]
+      }));
+
+      // Hit API Chatbot
+      const chatbotAPI = await chatBot(inputValue, chatHistory);
+      const result = chatbotAPI.data;
+
+      const text = result.status === 200 ? result.data : 'Terjadi masalah, coba lagi nanti';
+
+      // Response AI chat
+      const botResponse = {
+        id: messages.length + 1, // ID unik
+        text,
+        sender: 'bot'
+      };
+
+      // Simpan History Bot
+      const saveBotHistory = await createAIHistory({user_id: userState.id, sender: 'bot', message: text});
+      
+      if (saveBotHistory.status !== 200) {
+        console.error("AIHistory: Gagal menyimpan AI History");
+      }
+
+      setMessages(prev => [...prev, botResponse]);
+      setIsLoading(false);
+
+      // Decision Maker
+      const decision = ai.chats.create({
+        model: "gemini-2.5-flash",
+        history: [{
+          role: "model",
+          parts: [{
+            text: `Output 'chat' atau 'tour'. Jika pertanyaan tentang letak halaman atau info lokasi tampilan di website output 'tour', selain itu 'chat'`
+          }],
+        }],
+      });
+
+      const decisionResponse = await decision.sendMessage({ message: inputValue });
+
+      if (decisionResponse.text === "tour") {
+        setInputValueGuide(inputValue);
+        setAskToGuideButton(true);
+        setIntroJsSteps([]);
+        setShowGuideButton(false);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      const errorMessage = {
+        id: Date.now(),
+        text: 'Maaf, terjadi kesalahan. Silakan coba lagi nanti.',
+        sender: 'bot'
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+      setIsProcessing(false); // Reset flag
+      setIsLoadingChatGuide(false);
+    }
+};
 
   // ====================================================================================================================================
 
@@ -187,8 +283,6 @@ const Chatbot = () => {
 
   const startTour = useCallback(() => { // INTROJS
     setShowChatbot(false);
-    // console.log("introJsSteps", introJsSteps.step);
-    // console.log("steps", resolveSteps(introJsSteps.step));
     navigate(introJsSteps.url);
     setTimeout(() => {
       introJs()
@@ -203,8 +297,6 @@ const Chatbot = () => {
         .start();
     }, 1000);
   }, [introJsSteps]);
-
-
 
   return (
     <div className="">
