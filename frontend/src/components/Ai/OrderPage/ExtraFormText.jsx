@@ -15,29 +15,35 @@ function ExtraFormText({ formData, handleValidationData, resultAIText, setResult
   const [isLoading, setIsLoading] = useState(false);
   const [dropDownOpen, setDropdownOpen] = useState(false);
 
-  const formDataText = formData ? `${JSON.stringify(formData, null, 2)}` : "";
-  const productDataText = productsByIDState ? `{JSON.stringify(productsByIDState, null, 2)}` : "";
-
   const generatePromptText = (inputValue, formData, productData) => {
     const budget = productData?.price || 0;
     const lokasi = formData?.detail_order?.location || "Gedung / jalanan";
-    const tema = inputValue || "Wedding khas indonesia";
-
+    const instruksiCatatan = inputValue || "Berikan catatan penting untuk perencanaan wedding"; // Mengganti 'tema' agar lebih sesuai dengan tujuan notes
+  
+    const clientName = formData?.client_name || "pasangan klien";
+    const packageName = productData?.name || "paket acara";
+    const eventDate = formData?.detail_order?.event_date ? new Date(formData.detail_order.event_date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : "tanggal yang akan datang";
+    const numberOfGuests = formData?.detail_order?.num_guests || "jumlah tamu yang tidak spesifik";
+  
     saveAIHistoryFunc(inputValue);
-
-    return `Buatkan isi catatan tambahan untuk kebutuhan berikut: \n\n
-
-Tema: ${tema} \n
-Lokasi Acara: ${lokasi} \n
-Budget: Rp ${budget.toLocaleString('id-ID')} \n
-
-Data Tambahan Lain : \n\n
-Data form pribadi : ${formDataText} \n\n
-Data produk yang dibeli: ${productDataText} \n\n
-
-Berikan langsung dalam bentuk daftar poin dan alasan singkat disetiap point. Tidak perlu menyapa, atau menambahkan kalimat pembuka — cukup tampilkan hasil catatannya secara langsung, singkat, dan to the point.\n\n
-Buat isi catatan singkat dan padat.
-  `;
+  
+    return `Berdasarkan permintaan "${instruksiCatatan}", buatkan daftar poin rekomendasi atau catatan tambahan yang relevan untuk perencanaan acara. Fokus pada topik seperti efisiensi biaya, pengaturan jadwal hari-H, logistik, atau hal lain yang penting sesuai dengan permintaan.
+  
+  **Konteks Acara:**
+  * **Lokasi Acara:** ${lokasi}
+  * **Estimasi Budget:** Rp ${budget.toLocaleString('id-ID')}
+  * **Klien:** ${clientName} (telah memilih ${packageName})
+  * **Tanggal Acara:** ${eventDate}
+  * **Jumlah Tamu:** ${numberOfGuests}
+  
+  **Instruksi Output:**
+  * Berikan langsung dalam format daftar poin.
+  * Setiap poin harus berisi rekomendasi atau catatan.
+  * Sertakan alasan singkat atau penjelasan mengapa poin tersebut relevan/penting.
+  * Pastikan catatannya singkat, padat, to the point, dan langsung menjawab permintaan "${instruksiCatatan}".
+  * Hindari sapaan, kalimat pembuka, atau penutup. Cukup hasilkan daftar poinnya saja.
+  * Jangan tampilkan data pribadi atau JSON mentah dari form dalam catatan. Gunakan hanya informasi yang sudah diringkas dan relevan.
+    `;
   };
 
   // Simpan History AI ke Database | User
@@ -90,11 +96,12 @@ Buat isi catatan singkat dan padat.
   // ====================================================================================================================================
 
   const templateNotes = [
-    "Tambahan Dokumentasi",
-    "Kursi VIP Keluarga",
-    "Transportasi Keluarga",
-    "Efisiensi Biaya",
-  ]
+    "Rekomendasi Efisiensi Biaya Pernikahan",
+    "Daftar Perlengkapan Hari-H yang Krusial",
+    "Panduan Mengatur Jadwal Acara Hari-H",
+    "Tips Memilih Vendor Tambahan",
+    "Poin Penting untuk Rapat Terakhir dengan Klien",
+  ];
 
   return (
     <div className="absolute right-0 top-[-70px] xl:top-0">
@@ -120,7 +127,7 @@ Buat isi catatan singkat dan padat.
               <div className="grid gap-2">
                 {templateNotes.map((template, index) => {
                   return (
-                    <button className="btn btn-sm py-5"
+                    <button className="btn btn-sm h-fit btn-outline py-1"
                       key={index}
                       disabled={isLoading}
                       onClick={async (e) => {

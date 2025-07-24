@@ -17,10 +17,12 @@ function ExtraFormImage({ formData, handleValidationData, resultImage, setResult
   const [dropDownOpen, setDropdownOpen] = useState(false);
 
   const templatePrompts = [
-    "Dekorasi Wedding tema klasik elegan, nuansa di indonesia, warna putih dan hitam",
-    "Dekorasi pernikahan outdoor, tema alam, tradisional indonesia, namun elegan",
-    "Desain kartu undangan bernuansa gold, elegan, modern dan simple",
-  ];
+    "Dekorasi pernikahan klasik elegan di ballroom, dominasi warna putih, emas, dan sentuhan kristal.",
+    "Dekorasi pernikahan outdoor dengan tema bohemian rustic, banyak bunga liar dan lampu peri.",
+    "Desain kartu undangan digital modern minimalis dengan aksen floral dan palet warna pastel.",
+    "Gaun pengantin muslimah elegan dengan detail brokat dan siluet A-line.",
+    "Buket bunga pengantin cascading style dengan kombinasi mawar putih dan eukaliptus.",
+];
 
   const generatePromptText = (inputValue, formData, productData) => {
     const budget = productData?.price || 0;
@@ -123,7 +125,7 @@ function ExtraFormImage({ formData, handleValidationData, resultImage, setResult
               <div className="grid gap-2">
                 {templatePrompts.map((template, index) => {
                   return (
-                    <button className="btn btn-sm py-5"
+                    <button className="btn btn-sm h-fit btn-outline py-1"
                       key={index}
                       disabled={isLoading}
                       onClick={async (e) => {
