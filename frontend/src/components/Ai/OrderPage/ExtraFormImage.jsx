@@ -47,8 +47,7 @@ const generatePromptText = (inputValue, formData, productData) => {
   const packageName = productData?.name || "layanan wedding"; // Still using productData for package name
   const temaDariInput = inputValue || "Wedding khas indonesia"; // This is the user's direct visual request
 
-
-  saveAIHistoryFunc(inputValue);
+  saveAIHistoryFunc(inputValue || "Output Gambar Visual");
 
   return `
 Gambarkan ilustrasi visual berkualitas tinggi dan realistis untuk kebutuhan acara berikut, fokus sepenuhnya pada **visualisasi yang relevan dengan Wedding Organizer (WO)**. Ini bisa meliputi dekorasi acara, desain gaun pengantin, inspirasi kartu undangan, buket bunga, setting meja makan, desain kue pengantin, atau elemen visual lain yang terkait dengan persiapan atau pelaksanaan acara pernikahan.
