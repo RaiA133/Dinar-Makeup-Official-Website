@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import { PaperAirplaneIcon, SparklesIcon, ArrowDownTrayIcon } from '@heroicons/react/24/solid';
 import { ProductsContext } from '../../../contexts/ProductsContext';
 import { GoogleGenAI, Modality } from "@google/genai";
 import { createAIHistory } from '../../../modules/fetch';
