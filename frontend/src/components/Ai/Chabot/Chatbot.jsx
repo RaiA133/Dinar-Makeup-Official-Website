@@ -192,7 +192,9 @@ const Chatbot = () => {
         history: [{
           role: "model",
           parts: [{
-            text: `Output 'chat' atau 'tour'. Jika pertanyaan tentang letak halaman atau info lokasi tampilan di website output 'tour', selain itu 'chat'`
+            text: `beri saya output simple saja berupa 'chat' atau 'tour'. tentukan dari pesan yg akan diinput. Jika pertanyaan menyangkut 
+              pertanyaan seperti letak halaman, keinginan untuk dipandu, cara pesan dan info lain yang bisa memungkinkan fitur tour guide website berjalan 
+              di website output adalah 'tour' saja, tapi jika konversesi biasa berikan output 'chat' saja`
           }],
         }],
       });
