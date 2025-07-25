@@ -5,6 +5,7 @@ import { GoogleGenAI } from "@google/genai";
 import MarkdownRenderer from '../../MarkdownRenderer';
 import { createAIHistory } from '../../../modules/fetch';
 import { UserContext } from '../../../contexts/UserContext';
+import moment from "moment";
 
 function ExtraFormText({ formData, handleValidationData, resultAIText, setResultAIText }) {
   const { productsByIDState } = useContext(ProductsContext);
