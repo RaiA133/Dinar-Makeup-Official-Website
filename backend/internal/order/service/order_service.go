@@ -49,7 +49,7 @@ func NewOrderService(config *ServiceConfig, coreMidtrans coreapi.Client) order.S
 
 func (or *orderService) CreateOrder(ctx context.Context, userId string, req *dto.CreateBookingWeddingRequest) (interface{}, error) {
 	if req.Amount == 0 {
-		return nil, errors.New("masukan dana minimal 25%")
+		return nil, errors.New("Minimal pembayaran 25%")
 	}
 	productIdUUID, err := utils.ParseUUID(req.ProductId)
 	if err != nil {
