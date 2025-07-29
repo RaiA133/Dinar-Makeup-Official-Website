@@ -37,6 +37,8 @@ import TransactionsPage from './pages/TransactionsPage';
 import EditTransactionManagementPage from './pages/Admin/TransactionManagement/EditTransactionManagementPage';
 import AIHistoryManagementPage from './components/Ai/Admin/AIHistoryManagementPage';
 
+import { Analytics } from "@vercel/analytics/react"
+
 // Framer Motion (Efek Transisi Faded Perpindahan Page)
 const PageMotionWrapper = ({ children }) => (
   <motion.div
@@ -56,6 +58,9 @@ function App() {
 
   return (
     <div data-theme={import.meta.env.VITE_FRONTEND_DAISYUI_THEME || 'winter'} className='bg-base-100 font-poppins'>
+
+      {/*  for count visitor every this component is render in Vercel Analytics  */}
+      <Analytics />
 
       {/* NAVBAR */}
       <AnimatePresence mode="wait" initial={false}>

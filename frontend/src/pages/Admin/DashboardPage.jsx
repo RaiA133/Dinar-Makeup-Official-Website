@@ -1,6 +1,9 @@
 import { useContext, useEffect } from "react";
 import { UserContext } from "../../contexts/UserContext";
+import { AdminContext } from "../../contexts/AdminContext";
 import { Chart } from "chart.js/auto";
+import moment from "moment";
+import "moment/locale/id";
 
 // Sample mock data
 const top10Orders = Array.from({ length: 10 }, (_, i) => ({
@@ -17,22 +20,55 @@ const top10Products = Array.from({ length: 10 }, (_, i) => ({
   addedDate: `2025-06-${10 - i}`,
 }));
 
+
 function DashboardPage() {
+
   const { userState } = useContext(UserContext);
+  const { transcactionState, productsState, usersState } = useContext(AdminContext)
+
+  // CHART | onthly New Order
+  const monthlyCounts = {};
+  transcactionState?.data?.forEach(trx => {
+    const month = moment(trx.transaction_information.transaction_time).format("MMM"); // contoh: "Jul"
+    if (!monthlyCounts[month]) monthlyCounts[month] = 1;
+    else monthlyCounts[month]++;
+  });
+  const allMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const chart1Labels = allMonths;
+  const chart1Data = allMonths.map(month => monthlyCounts[month] || 0);
+
+  // CHART | Paid Orders
+  const totalOrders = transcactionState?.data?.length;
+  const paidOrders = transcactionState?.data?.filter(
+    (trx) => trx.transaction_information.payment_status === "success"
+  );
+  const unpaidOrders = totalOrders - paidOrders?.length;
+  const paidPercentage = totalOrders > 0 ? Math.round((paidOrders?.length / totalOrders) * 100) : 0;
+
+  // DATA Stat | Paid Orders
+  const paidCountPerMonth = {};
+  paidOrders?.forEach((trx) => {
+    const month = moment(trx.transaction_information.transaction_time).format("MMM"); // contoh: "Jul"
+    paidCountPerMonth[month] = (paidCountPerMonth[month] || 0) + 1;
+  });
+  const chart2Labels = Object.keys(paidCountPerMonth);         // ['Jul', 'Aug', ...]
+  const chart2Data = Object.values(paidCountPerMonth);
+  console.log('paidOrders?.length :>> ', paidOrders?.length);
+
 
   useEffect(() => {
     // Destroy any existing charts
     Chart.getChart("chart-users")?.destroy();
     Chart.getChart("chart-tasks")?.destroy();
 
-    // Chart: Monthly Active Users
+    // Chart: Monthly New Order
     new Chart(document.getElementById("chart-users"), {
       type: "line",
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        labels: chart1Labels,
         datasets: [{
-          label: "Active Users",
-          data: [65, 59, 80, 81, 56, 55, 40],
+          label: "New Orders",
+          data: chart1Data,
           borderColor: 'rgb(75, 192, 192)',
           fill: false,
           tension: 0.3
@@ -40,19 +76,19 @@ function DashboardPage() {
       }
     });
 
-    // Chart: Tasks Done
+    // Chart: Paid Orders
     new Chart(document.getElementById("chart-tasks"), {
       type: "bar",
       data: {
-        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        labels: chart2Labels,
         datasets: [{
-          label: "Tasks Done",
-          data: [12, 19, 3, 5],
+          label: "Paid Orders",
+          data: chart2Data,
           backgroundColor: 'rgb(153, 102, 255)',
         }]
       }
     });
-  }, []);
+  }, [monthlyCounts]);
 
   return (
     <div className="p-5">
@@ -77,7 +113,7 @@ function DashboardPage() {
           </div>
           <div className="stat-title">Total Page Views</div>
           <div className="stat-value">89,400</div>
-          <div className="stat-desc">Jan 1st - Feb 1st</div>
+          <div className="stat-desc">All time</div>
         </div>
 
         <div className="stat shadow">
@@ -97,11 +133,11 @@ function DashboardPage() {
             </svg>
           </div>
           <div className="stat-title">New Users</div>
-          <div className="stat-value">4,200</div>
-          <div className="stat-desc">↗︎ 400 (22%)</div>
+          <div className="stat-value">{usersState?.data?.length}</div>
+          <div className="stat-desc">All time</div>
         </div>
 
-        <div className="stat shadow">
+        <div className="stat shadow" title="User that have no Phone Number, Address & Age">
           <div className="stat-figure text-secondary">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -118,8 +154,16 @@ function DashboardPage() {
             </svg>
           </div>
           <div className="stat-title">New Registers</div>
-          <div className="stat-value">1,200</div>
-          <div className="stat-desc">↘︎ 90 (14%)</div>
+          <div className="stat-value">
+            {
+              usersState?.data?.filter(user =>
+                (!user.phone_number || user.phone_number.trim() === "") &&
+                (!user.address || user.address.trim() === "") &&
+                (!user.age || user.age.trim() === "")
+              ).length.toLocaleString("id-ID")
+            }
+          </div>
+          <div className="stat-desc">All time</div>
         </div>
 
         <div className="stat shadow">
@@ -130,22 +174,22 @@ function DashboardPage() {
               </div>
             </div>
           </div>
-          <div className="stat-value">86%</div>
-          <div className="stat-title">Tasks done</div>
-          <div className="stat-desc text-secondary">31 tasks remaining</div>
+          <div className="stat-value">{paidPercentage}%</div>
+          <div className="stat-title">Paid Orders</div>
+          <div className="stat-desc text-secondary">{unpaidOrders} order unpaid</div>
         </div>
       </div>
 
       {/* CHART */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mb-5">
         <div className="shadow p-5">
-          <div className="font-bold">Monthly Active Users</div>
+          <div className="font-bold">Monthly New Order</div>
           <div className="divider"></div>
           <canvas id="chart-users" width="400" height="200"></canvas>
         </div>
 
         <div className="shadow p-5">
-          <div className="font-bold">Tasks Done</div>
+          <div className="font-bold">Paid Orders</div>
           <div className="divider"></div>
           <canvas id="chart-tasks" width="400" height="200"></canvas>
         </div>
@@ -163,15 +207,22 @@ function DashboardPage() {
               </tr>
             </thead>
             <tbody>
-              {top10Orders.map(order => (
+              {transcactionState?.data?.slice(0, 10).map(order => (
                 <tr key={order.id}>
-                  <td>{order.id}</td>
-                  <td>{order.customer}</td>
-                  <td>{order.total}</td>
-                  <td>{order.date}</td>
+                  <td>{order.order_id}</td>
+                  <td>{order.user_information.name}</td>
+                  <td>
+                    {new Intl.NumberFormat("id-ID", {
+                      style: "currency",
+                      currency: order.product_information.currency || "IDR",
+                      minimumFractionDigits: 0,
+                    }).format(order.down_payment.installment_amount || 0)}
+                  </td>
+                  <td>{moment(order.transaction_information.transaction_time).locale("id").format("LL")}</td>
                 </tr>
               ))}
             </tbody>
+
           </table>
         </div>
 
@@ -182,18 +233,24 @@ function DashboardPage() {
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Category</th>
+                <th>Detail</th>
                 <th>Stock</th>
                 <th>Added</th>
               </tr>
             </thead>
             <tbody>
-              {top10Products.map((product, idx) => (
-                <tr key={idx}>
+              {productsState?.data?.slice(0, 10).map((product, idx) => (
+                <tr key={product.id}>
                   <td>{product.name}</td>
-                  <td>{product.category}</td>
-                  <td>{product.stock}</td>
-                  <td>{product.addedDate}</td>
+                  <td>{product.detail_groups.map(group => group.name).join(", ")}</td>
+                  <td>
+                    {new Intl.NumberFormat("id-ID", {
+                      style: "currency",
+                      currency: product.currency || "IDR",
+                      minimumFractionDigits: 0,
+                    }).format(product.price || 0)}
+                  </td>
+                  <td>{moment().subtract(idx, "days").locale("id").format("LL")}</td>
                 </tr>
               ))}
             </tbody>
