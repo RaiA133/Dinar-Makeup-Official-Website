@@ -33,7 +33,7 @@ export const AdminContextProvider = ({ children }) => {
         console.error("Error : ", error);
       }
     };
-    if (location.pathname == "/admin/product-management") fetchDataProductManagement();
+    if (location.pathname == "/admin/product-management" || "/admin" || "/admin/dashboard") fetchDataProductManagement();
 
     // ----------------------------------------------------------------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ export const AdminContextProvider = ({ children }) => {
         console.error("Error : ", error);
       }
     };
-    if (location.pathname == "/admin/user-management") fetchDataUserManagement();
+    if (location.pathname == "/admin/user-management" || "/admin" || "/admin/dashboard") fetchDataUserManagement();
 
     // ----------------------------------------------------------------------------------------------------------------------------------
 
@@ -65,7 +65,7 @@ export const AdminContextProvider = ({ children }) => {
         console.error("Error : ", error);
       }
     };
-    if (location.pathname == "/admin/transaction-management") fetchDataTransactionManagement();
+    if (location.pathname == "/admin/transaction-management" || "/admin" || "/admin/dashboard") fetchDataTransactionManagement();
 
     // ----------------------------------------------------------------------------------------------------------------------------------
 
