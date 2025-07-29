@@ -54,7 +54,8 @@ function App() {
   return (
     <div data-theme={import.meta.env.VITE_FRONTEND_DAISYUI_THEME || 'winter'} className='bg-base-100 font-poppins'>
 
-      <Analytics /> // for count visitor every this component is render in Vercel Analytics 
+      {/*  for count visitor every this component is render in Vercel Analytics  */}
+      <Analytics />
 
       {/* NAVBAR */}
       <AnimatePresence mode="wait" initial={false}>
