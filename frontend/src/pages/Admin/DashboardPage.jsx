@@ -47,13 +47,13 @@ function DashboardPage() {
 
   // DATA Stat | Paid Orders
   const paidCountPerMonth = {};
-  paidOrders?.forEach((tx) => {
-    const month = moment(tx.transaction_information.transaction_time).format("MMM"); // contoh: "Jul"
-    if (!paidCountPerMonth[month]) paidCountPerMonth[month] = 0;
-    else paidCountPerMonth[month]++;
+  paidOrders?.forEach((trx) => {
+    const month = moment(trx.transaction_information.transaction_time).format("MMM"); // contoh: "Jul"
+    paidCountPerMonth[month] = (paidCountPerMonth[month] || 0) + 1;
   });
   const chart2Labels = Object.keys(paidCountPerMonth);         // ['Jul', 'Aug', ...]
   const chart2Data = Object.values(paidCountPerMonth);
+  console.log('paidOrders?.length :>> ', paidOrders?.length);
 
 
   useEffect(() => {
