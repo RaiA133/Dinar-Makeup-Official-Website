@@ -2,7 +2,6 @@ import { useContext, useEffect } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { AdminContext } from "../../contexts/AdminContext";
 import { Chart } from "chart.js/auto";
-import { Analytics } from "@vercel/analytics/react"
 import moment from "moment";
 import "moment/locale/id";
 
@@ -93,8 +92,6 @@ function DashboardPage() {
 
   return (
     <div className="p-5">
-
-      <Analytics />
 
       {/* STAT */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full mb-5">

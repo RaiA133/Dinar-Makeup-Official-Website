@@ -33,6 +33,8 @@ import PaymentPage from './pages/Order/PaymentPage';
 import TransactionsPage from './pages/TransactionsPage';
 import EditTransactionManagementPage from './pages/Admin/TransactionManagement/EditTransactionManagementPage';
 
+import { Analytics } from "@vercel/analytics/react"
+
 // Framer Motion (Efek Transisi Faded Perpindahan Page)
 const PageMotionWrapper = ({ children }) => (
   <motion.div
@@ -51,6 +53,8 @@ function App() {
 
   return (
     <div data-theme={import.meta.env.VITE_FRONTEND_DAISYUI_THEME || 'winter'} className='bg-base-100 font-poppins'>
+
+      <Analytics /> // for count visitor every this component is render in Vercel Analytics 
 
       {/* NAVBAR */}
       <AnimatePresence mode="wait" initial={false}>
@@ -79,7 +83,7 @@ function App() {
           {/* Admin Route */}
           <Route path="/admin/" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><DashboardPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
           <Route path="/admin/dashboard" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><DashboardPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
-          
+
           <Route path="/admin/product-management" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><ProductManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
           <Route path="/admin/product-management/edit/:id" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><EditProductManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
           <Route path="/admin/product-management/create" element={<LoginRoute><AdminRoute><AdminSidebar><PageMotionWrapper><CreateProductManagementPage /></PageMotionWrapper></AdminSidebar></AdminRoute></LoginRoute>} />
