@@ -39,7 +39,7 @@ function UserManagementPage() {
               <tbody>
                 {usersState?.data?.map((user, index) => (
                   <tr key={user.id || index}>
-                    <th className="text-center sm:text-start">{index + 1}</th>
+                    <th className="text-center sm:text-start">{(index + 1) + (currentPage * 10) - 10}</th>
                     <td>{user.name}</td>
                     <td>{user.email}</td>
                     <td className="flex gap-2">

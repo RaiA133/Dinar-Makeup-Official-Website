@@ -46,7 +46,7 @@ function TransactionManagementPage() {
                     ?.sort((a, b) => new Date(b.transaction_information.transaction_time) - new Date(a.transaction_information.transaction_time))
                     .map((trx, index) => (
                       <tr key={trx.id} className="hover">
-                        <th className="text-center sm:text-start">{index + 1}</th>
+                        <th className="text-center sm:text-start">{(index + 1) + (currentPage * 10) - 10}</th>
                         <td>
                           <span className="py-7 sm:py-0 badge badge-outline badge-primary badge-sm text-center">
                             {trx.order_id}

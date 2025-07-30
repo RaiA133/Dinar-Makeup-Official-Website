@@ -6,8 +6,10 @@ import toast from 'react-hot-toast';
 import moment from "moment";
 import MarkdownRenderer from "../../MarkdownRenderer";
 import RefreshButton from "../../Admin/RefreshButton";
+import { useNavigate } from "react-router-dom";
 
 function AIHistoryByUser() {
+  const navigate = useNavigate();
   const [AIHistoryByUserID, setAIHistoryByUserID] = useState([])
   const { usersState, AIHistoryState, refreshCallback } = useContext(AdminContext);
   const { userState } = useContext(UserContext);
@@ -49,7 +51,7 @@ function AIHistoryByUser() {
             <tbody>
               {filteredUsers?.map((user, index) => (
                 <tr key={user.id || index}>
-                  <th className="text-center sm:text-start">{index + 1}</th>
+                  <th className="text-center sm:text-start">{(index + 1) + (currentPage * 10) - 10}</th>
                   <td className="max-w-20 truncate whitespace-nowrap overflow-hidden">{user.id}</td>
                   <td className="max-w-20 truncate whitespace-nowrap overflow-hidden">{user.email}</td>
                   <td className="max-w-20 truncate whitespace-nowrap overflow-hidden">{user.name}</td>
@@ -223,6 +225,7 @@ function AIHistoryByUser() {
 
         </div>
       </section>
+
       <div className="w-full text-center text-sm stat-desc mb-3">1-10 item Show of 100</div>
 
       <div className="flex justify-center">
