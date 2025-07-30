@@ -43,8 +43,8 @@ export const AdminContextProvider = ({ children }) => {
       try {
         // console.log('refresh /admin/user-management');
         let page = parseInt(searchParams.get("page"));
-        let limit = parseInt(searchParams.get("limit")); 
-        // limit = 1 // custom limit
+        let limit = parseInt(searchParams.get("limit")); // default = 1000
+        limit = 10 // custom limit
         const response = await getAllUsers({page, limit}); // Fetch data
         if (response.status === 200) setUsersState(response.data); // Set state if the response is successful
       } catch (error) {
@@ -59,8 +59,8 @@ export const AdminContextProvider = ({ children }) => {
       try {
         // console.log('refresh /admin/transaction-management');
         let page = parseInt(searchParams.get("page"));
-        let limit = parseInt(searchParams.get("limit")); 
-        // limit = 1 // custom limit
+        let limit = parseInt(searchParams.get("limit")); // default = 1000
+        limit = 10 // custom limit
         const response = await getAllTrasaction({page, limit: 10}); // Fetch data
         if (response.status === 200) setTranscactionState(response.data); // Set state if the response is successful
       } catch (error) {
