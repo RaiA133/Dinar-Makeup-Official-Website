@@ -1,13 +1,12 @@
 import { useContext } from "react";
 import { AdminContext } from "../../../contexts/AdminContext";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 import DataFormBooking from "../../../components/TransactionsPage/DataFormBooking";
 import { deleteTransactionByID } from "../../../modules/fetch";
 import RefreshButton from "../../../components/Admin/RefreshButton";
 
 function TransactionManagementPage() {
-  let location = useLocation();
   const navigate = useNavigate();
   const { transcactionState, refreshCallback } = useContext(AdminContext)
 

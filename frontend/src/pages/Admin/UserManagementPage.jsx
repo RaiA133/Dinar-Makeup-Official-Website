@@ -3,8 +3,10 @@ import { AdminContext } from "../../contexts/AdminContext";
 import { deleteUserByID, getAllUsers } from "../../modules/fetch";
 import toast, { Toaster } from 'react-hot-toast';
 import RefreshButton from "../../components/Admin/RefreshButton";
+import { useNavigate } from "react-router-dom";
 
 function UserManagementPage() {
+  const navigate = useNavigate();
   const { usersState, refreshCallback } = useContext(AdminContext);
 
   const totalPages = usersState?.metadata?.total_pages || 0;
