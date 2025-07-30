@@ -27,7 +27,7 @@ function TransactionManagementPage() {
         />
 
         <div className="flex justify-center">
-          <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 mb-3 w-full shadow-sm">
+          <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 mb-3 w-full shadow-sm shadow-sm max-h-[86vh] overflow-auto">
             <div className="overflow-x-auto">
               <table className="table table-xs sm:table-md table-zebra">
                 {/* Table Header */}
