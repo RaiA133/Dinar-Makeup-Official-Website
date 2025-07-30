@@ -44,8 +44,9 @@ export const AdminContextProvider = ({ children }) => {
         // console.log('refresh /admin/user-management');
         let page = parseInt(searchParams.get("page"));
         let limit = parseInt(searchParams.get("limit")); // default = 1000
-        if (location.pathname ==  "/admin" || "/admin/dashboard") limit = 99999999999999 // custom limit
-        const response = await getAllUsers({page, limit: 10}); // Fetch data | limit 10
+        if (location.pathname ==  "/user-management") limit = 10 // custom limit
+        
+        const response = await getAllUsers({page, limit}); // Fetch data
         if (response.status === 200) setUsersState(response.data); // Set state if the response is successful
       } catch (error) {
         console.error("Error : ", error);
@@ -60,8 +61,9 @@ export const AdminContextProvider = ({ children }) => {
         // console.log('refresh /admin/transaction-management');
         let page = parseInt(searchParams.get("page"));
         let limit = parseInt(searchParams.get("limit")); // default = 1000
-        if (location.pathname ==  "/admin" || "/admin/dashboard") limit = 99999999999999  // custom limit
-        const response = await getAllTrasaction({page, limit: 10}); // Fetch data | limit 10
+        if (location.pathname ==  "/transaction-management") limit = 10  // custom limit
+
+        const response = await getAllTrasaction({page, limit}); // Fetch data
         if (response.status === 200) setTranscactionState(response.data); // Set state if the response is successful
       } catch (error) {
         console.error("Error : ", error);
