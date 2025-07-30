@@ -14,6 +14,8 @@ function AIHistoryByUser() {
   const { usersState, AIHistoryState, refreshCallback } = useContext(AdminContext);
   const { userState } = useContext(UserContext);
 
+  const [selectedAI, setSelectedAI] = useState(null);
+
   const AllAIHistoryUserID = [...new Set(AIHistoryState?.map(item => item.user_id))]; // semua user_id yang punya history pakai AI
   const filteredUsers = usersState?.data?.filter(user => AllAIHistoryUserID.includes(user.id)) || []; // filter dari semua user database, difilter sesuai AllAIHistoryUserID
   const checkAdminHaveAIHistory = AIHistoryState?.some(data => data.user_id === userState.id); // Cek Apakah ID admin di userstate ada di salah satu data AIHistoryState
@@ -112,7 +114,10 @@ function AIHistoryByUser() {
                           <td className="max-w-xs truncate whitespace-nowrap overflow-hidden">{ai.message}</td>
                           <td className="truncate">{moment(ai.timestamp).utc().format('YYYY-MM-DD HH:mm:ss')}</td>
                           <td>
-                            <button className="btn btn-xs btn-ghost" onClick={() => document.getElementById(`ai_modal_by_user_id_${ai.id}`).showModal()}>
+                            <button className="btn btn-xs btn-ghost" onClick={() => {
+                              setSelectedAI(ai);
+                              document.getElementById(`ai_modal_by_user_id_single`).showModal()
+                            }}>
                               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -125,30 +130,30 @@ function AIHistoryByUser() {
                   </table>
 
                   {/* ai Detail Modals */}
-                  {AIHistoryState?.map((ai) => (
-                    <dialog key={`detail_${ai.id}`} id={`ai_modal_by_user_id_${ai.id}`} className="modal">
-                      <div className="modal-box max-w-2xl">
-                        <h3 className="font-bold text-lg mb-4 text-primary">Details</h3>
+                  <dialog id={`ai_modal_by_user_id_single`} className="modal">
+                    <div className="modal-box max-w-2xl">
+                      <h3 className="font-bold text-lg mb-4 text-primary">Details</h3>
 
-                        <div className="space-y-2">
-                          <h4 className="font-semibold text-accent">Information AI History</h4>
-                          <div className="divider m-0"></div>
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-accent">Information AI History</h4>
+                        <div className="divider m-0"></div>
 
-                          <div className="overflow-x-auto">
+                        <div className="overflow-x-auto">
+                          {selectedAI && (
                             <table className="table w-full">
                               <tbody>
                                 <tr>
                                   <th className="text-left">ID</th>
-                                  <td>: {ai.id}</td>
+                                  <td>: {selectedAI.id}</td>
                                 </tr>
                                 <tr>
                                   <th className="text-left">User ID</th>
-                                  <td>: {ai.user_id}</td>
+                                  <td>: {selectedAI.user_id}</td>
                                 </tr>
                                 <tr>
                                   <th className="text-left">Sender</th>
                                   <td>
-                                    {ai.sender === 'bot' ? (
+                                    {selectedAI.sender === 'bot' ? (
                                       <span className="badge badge-soft badge-primary">Bot</span>
                                     ) : (
                                       <span className="badge badge-soft badge-success">User</span>
@@ -157,27 +162,27 @@ function AIHistoryByUser() {
                                 </tr>
                                 <tr>
                                   <th className="text-left">Message</th>
-                                  <td><MarkdownRenderer>{ai.message}</MarkdownRenderer></td>
+                                  <td><MarkdownRenderer>{selectedAI.message}</MarkdownRenderer></td>
                                 </tr>
                                 <tr>
                                   <th className="text-left">Date</th>
-                                  <td>: {moment(ai.timestamp).utc().format('YYYY-MM-DD HH:mm:ss')}</td>
+                                  <td>: {moment(selectedAI.timestamp).utc().format('YYYY-MM-DD HH:mm:ss')}</td>
                                 </tr>
                               </tbody>
                             </table>
-                          </div>
-
-                        </div>
-
-                        <div className="modal-action">
-                          <form method="dialog">
-                            <button className="btn">Close</button>
-                          </form>
+                          )}
                         </div>
 
                       </div>
-                    </dialog>
-                  ))}
+
+                      <div className="modal-action">
+                        <form method="dialog">
+                          <button className="btn">Close</button>
+                        </form>
+                      </div>
+
+                    </div>
+                  </dialog>
 
                 </div>
 
