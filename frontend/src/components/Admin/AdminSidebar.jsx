@@ -17,7 +17,7 @@ function AdminSidebar({ children }) {
           <li><a className={location.pathname == '/admin/product-management' ? 'menu-active' : ''} onClick={() => navigate('/admin/product-management')}>Product Management</a></li>
           <li><a className={location.pathname == '/admin/transaction-management' ? 'menu-active' : ''} onClick={() => navigate('/admin/transaction-management')}>Transaction Management</a></li>
           <li><a className={location.pathname == '/admin/user-management' ? 'menu-active' : ''} onClick={() => navigate('/admin/user-management')}>User Management</a></li>
-          <li><a className={location.pathname == '/admin/ai' ? 'menu-active' : ''} onClick={() => navigate('/admin/ai')}>AI History Management</a></li>
+          <li><a className={location.pathname == '/admin/ai' ? 'menu-active' : ''} onClick={() => navigate('/admin/ai?limit=10')}>AI History Management</a></li>
         </ul>
       </div>
     </div>
