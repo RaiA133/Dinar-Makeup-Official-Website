@@ -135,7 +135,7 @@ function TransactionsPage() {
 
                 {trx.notes && (
                   <div className="mt-3 text-sm">
-                    <div className="rounded-xl w-full border border-stone-300 p-4 text-sm truncate">
+                    <div className="rounded-xl w-full border border-stone-300 p-4 text-sm max-h-[100px] overflow-hidden text-ellipsis line-clamp-3">
                       <MarkdownRenderer>
                         {trx.notes}
                       </MarkdownRenderer>
